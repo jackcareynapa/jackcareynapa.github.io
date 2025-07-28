@@ -3,53 +3,74 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jack Carey – Computer Science</title>
+  <title>Jack Carey – CS Portfolio</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans">
-  <div class="max-w-3xl mx-auto p-6">
-    <!-- Header -->
-    <header class="text-center">
-      <h1 class="text-4xl font-bold">Your Name</h1>
-      <p class="text-lg mt-2">Computer Science @ Duke • AI & ML Enthusiast • Builder</p>
-      <div class="mt-4 space-x-4">
-        <a href="mailto:jack.carey.napa@gmail.com" class="text-blue-500 hover:underline">Email</a>
-        <a href="https://github.com/jackcareynapa" class="text-blue-500 hover:underline">GitHub</a>
-        <a href="https://linkedin.com/in/yourusername" class="text-blue-500 hover:underline">LinkedIn</a>
+<body class="bg-gray-100 bg-repeat" style="background-image: url('cubes.png');">
+  <!-- Navigation Bar -->
+  <nav class="fixed w-full top-0 bg-white shadow z-10">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between">
+      <div class="text-xl font-bold">Jack Carey</div>
+      <div class="space-x-6">
+        <a href="#home" class="text-blue-600 font-semibold hover:underline">About Me</a>
+        <a href="#projects" class="text-blue-600 font-semibold hover:underline">Projects</a>
+        <a href="#resume" class="text-blue-600 font-semibold hover:underline">Resume</a>
+        <a href="#contact" class="text-blue-600 font-semibold hover:underline">Contact</a>
       </div>
-    </header>
+    </div>
+  </nav>
 
-    <!-- About -->
-    <section class="mt-10">
-      <h2 class="text-2xl font-semibold mb-2">About Me</h2>
-      <p>
-        I'm a CS student passionate about artificial intelligence, video game design, and building fun, impactful tools. Currently working on a game where AI bosses learn from player interactions.
+  <!-- Page Content -->
+  <main class="pt-24 max-w-4xl mx-auto px-4">
+
+    <!-- Home -->
+    <section id="home" class="py-16">
+      <h1 class="text-4xl font-bold mb-4">Hi, I'm Jack</h1>
+      <p class="text-lg">
+        I'm a computer science student passionate about AI, systems, and building tech that matters. Welcome to my portfolio.
       </p>
     </section>
 
     <!-- Projects -->
-    <section class="mt-10">
-      <h2 class="text-2xl font-semibold mb-2">Projects</h2>
-      <ul class="space-y-4">
-        <li>
-          <strong>Singularity</strong> – A mobile game where players train and fight AI-generated bosses that learn via self-play.
-          <br /><a href="#" class="text-blue-500 hover:underline">[GitHub]</a>
-        </li>
-      </ul>
+    <section id="projects" class="py-16">
+      <h2 class="text-3xl font-semibold mb-6">Projects</h2>
+      <div class="space-y-4">
+        <div>
+          <h3 class="text-xl font-bold">Singularity</h3>
+          <p>A game where players fight AI bosses that learn from how you fight them. Built with Unity and reinforcement learning techniques.</p>
+        </div>
+      </div>
     </section>
 
     <!-- Resume -->
-    <section class="mt-10">
-      <h2 class="text-2xl font-semibold mb-2">Resume</h2>
+    <section id="resume" class="py-16">
+      <h2 class="text-3xl font-semibold mb-6">Resume</h2>
       <p>
-        Download my resume <a href="/resume.pdf" class="text-blue-500 hover:underline">here</a>.
+        Download my resume <a href="resume.pdf" class="text-blue-600 underline">here</a>.
+      </p>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="py-16">
+      <h2 class="text-3xl font-semibold mb-6">Contact</h2>
+      <p>Email me at <a href="mailto:jack.carey.napa@gmail.com" class="text-blue-600 underline">you@example.com</a></p>
+      <p class="mt-2">
+        <a href="https://github.com/jackcareynapa" class="text-blue-600 underline">GitHub</a> |
+        <a href="https://linkedin.com/in/yourusername" class="text-blue-600 underline">LinkedIn</a>
       </p>
     </section>
 
     <!-- Footer -->
-    <footer class="mt-16 text-center text-sm text-gray-500">
-      &copy; 2025 Jack Carey. Built with ❤️
+    <footer class="text-center text-sm text-gray-500 py-8">
+      &copy; 2025 Your Name. Built with ❤️
     </footer>
-  </div>
+  </main>
+</body>
+</html>
 </body>
 </html>
