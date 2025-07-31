@@ -7,7 +7,14 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     html {
-      scroll-behavior: smooth;
+    scroll-behavior: smooth;
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-hide {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;     /* Firefox */
     }
   </style>
 </head>
@@ -34,6 +41,113 @@
       <p class="text-lg">
         I'm a computer science student passionate about video game design, AI, and building tech that matters. I study at Duke University where I'm involved in improv and theater. Welcome to my portfolio.
       </p>
+    </section>
+
+    <!-- Relevant Coursework with Carousel -->
+    <section id="coursework" class="py-16 text-white">
+      <h2 class="text-4xl font-semibold mb-6">Relevant Coursework</h2>
+      <div class="overflow-x-auto whitespace-nowrap space-x-6 flex scrollbar-hide px-2">
+    
+        <!-- STA 230 -->
+        <div class="inline-block w-80 shrink-0 bg-violet-500/30 backdrop-blur-md rounded-2xl p-6">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-bold">STA 230: Probability</h3>
+            <span class="text-xs bg-green-500 text-white px-2 py-1 rounded-full">Completed</span>
+          </div>
+          <p class="text-sm mb-2 text-violet-100"><strong>Institution:</strong> Duke University</p>
+          <p class="text-sm mb-3">Covers foundational concepts in probability theory including random variables, distributions, expectation, and the law of large numbers.</p>
+          <a href="#" class="text-violet-300 underline text-sm">View Course Outline</a>
+        </div>
+    
+        <!-- MATH 22 -->
+        <div class="inline-block w-80 shrink-0 bg-violet-500/30 backdrop-blur-md rounded-2xl p-6">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-bold">MATH 22: Introductory Calculus II</h3>
+            <span class="text-xs bg-green-500 text-white px-2 py-1 rounded-full">Completed</span>
+          </div>
+          <p class="text-sm mb-2 text-violet-100"><strong>Institution:</strong> Duke University</p>
+          <p class="text-sm mb-3">Continuation of single-variable calculus, covering integration techniques, series, and applications to physical systems.</p>
+          <a href="#" class="text-violet-300 underline text-sm">View Course Outline</a>
+        </div>
+    
+        <!-- MATH 221 -->
+        <div class="inline-block w-80 shrink-0 bg-violet-500/30 backdrop-blur-md rounded-2xl p-6">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-bold">MATH 221: Linear Algebra & Applications</h3>
+            <span class="text-xs bg-green-500 text-white px-2 py-1 rounded-full">Completed</span>
+          </div>
+          <p class="text-sm mb-2 text-violet-100"><strong>Institution:</strong> Duke University</p>
+          <p class="text-sm mb-3">Explores matrices, vector spaces, eigenvalues, and linear transformations with applications in data science and computer graphics.</p>
+          <a href="#" class="text-violet-300 underline text-sm">View Course Outline</a>
+        </div>
+    
+        <!-- MATH 222 -->
+        <div class="inline-block w-80 shrink-0 bg-violet-500/30 backdrop-blur-md rounded-2xl p-6">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-bold">MATH 222: Advanced Multivariable Calculus</h3>
+            <span class="text-xs bg-green-500 text-white px-2 py-1 rounded-full">Completed</span>
+          </div>
+          <p class="text-sm mb-2 text-violet-100"><strong>Institution:</strong> Duke University</p>
+          <p class="text-sm mb-3">Delves into partial derivatives, multiple integrals, and vector calculus with a focus on physical interpretation and rigor.</p>
+          <a href="#" class="text-violet-300 underline text-sm">View Course Outline</a>
+        </div>
+    
+        <!-- COMPSCI 201 -->
+        <div class="inline-block w-80 shrink-0 bg-violet-500/30 backdrop-blur-md rounded-2xl p-6">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-bold">COMPSCI 201: Data Structures and Algorithms</h3>
+            <span class="text-xs bg-green-500 text-white px-2 py-1 rounded-full">Completed</span>
+          </div>
+          <p class="text-sm mb-2 text-violet-100"><strong>Institution:</strong> Duke University</p>
+          <p class="text-sm mb-3">Analyzes time and space efficiency of algorithms with deep dives into trees, heaps, graphs, and dynamic programming.</p>
+          <a href="#" class="text-violet-300 underline text-sm">View Course Outline</a>
+        </div>
+    
+        <!-- COMPSCI 210D -->
+        <div class="inline-block w-80 shrink-0 bg-violet-500/30 backdrop-blur-md rounded-2xl p-6">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-bold">COMPSCI 210D: Intro to Computer Systems</h3>
+            <span class="text-xs bg-yellow-500 text-white px-2 py-1 rounded-full">In Progress</span>
+          </div>
+          <p class="text-sm mb-2 text-violet-100"><strong>Institution:</strong> Duke University</p>
+          <p class="text-sm mb-3">Covers computer architecture, memory, assembly, and how code runs under the hood with hands-on C programming.</p>
+          <a href="#" class="text-violet-300 underline text-sm">View Course Outline</a>
+        </div>
+    
+        <!-- COMPSCI 290 -->
+        <div class="inline-block w-80 shrink-0 bg-violet-500/30 backdrop-blur-md rounded-2xl p-6">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-bold">COMPSCI 290: Topics in Computer Science</h3>
+            <span class="text-xs bg-yellow-500 text-white px-2 py-1 rounded-full">In Progress</span>
+          </div>
+          <p class="text-sm mb-2 text-violet-100"><strong>Institution:</strong> Duke University</p>
+          <p class="text-sm mb-3">Explores emerging areas in computing. Topics vary by semester and may include ethics, AI, security, or web systems.</p>
+          <a href="#" class="text-violet-300 underline text-sm">View Course Outline</a>
+        </div>
+    
+        <!-- COMPSCI 342 -->
+        <div class="inline-block w-80 shrink-0 bg-violet-500/30 backdrop-blur-md rounded-2xl p-6">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-bold">COMPSCI 342: Information and the Internet</h3>
+            <span class="text-xs bg-yellow-500 text-white px-2 py-1 rounded-full">In Progress</span>
+          </div>
+          <p class="text-sm mb-2 text-violet-100"><strong>Institution:</strong> Duke University</p>
+          <p class="text-sm mb-3">Interdisciplinary course on the technical, social, and political dimensions of information in the age of the Internet.</p>
+          <a href="#" class="text-violet-300 underline text-sm">View Course Outline</a>
+        </div>
+    
+        <!-- COMPSCI 356 -->
+        <div class="inline-block w-80 shrink-0 bg-violet-500/30 backdrop-blur-md rounded-2xl p-6">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-bold">COMPSCI 356: Computer Network Architecture</h3>
+            <span class="text-xs bg-yellow-500 text-white px-2 py-1 rounded-full">In Progress</span>
+          </div>
+          <p class="text-sm mb-2 text-violet-100"><strong>Institution:</strong> Duke University</p>
+          <p class="text-sm mb-3">In-depth study of networking layers, protocols, and architectures. Includes hands-on TCP/IP and socket programming.</p>
+          <a href="#" class="text-violet-300 underline text-sm">View Course Outline</a>
+        </div>
+    
+      </div>
     </section>
 
     <!-- Projects -->
