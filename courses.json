@@ -84,7 +84,7 @@
     "name": "Design & Analysis of Algorithms",
     "institution": "Duke University",
     "description": "Efficient algorithm design including divide-and-conquer, dynamic programming, graph algorithms, randomization, and NP-completeness.",
-    "status": "wip",
+    "status": "done",
     "url": "https://sites.duke.edu/spring25compsci330/"
   },
   {
@@ -92,7 +92,7 @@
     "name": "Introduction to Artificial Intelligence",
     "institution": "Duke University",
     "description": "Algorithms and representations for intelligent systems — search, game trees, Bayesian networks, reinforcement learning, and machine learning.",
-    "status": "wip",
+    "status": "done",
     "url": "https://sites.duke.edu/compsci_370d_001_sp24/"
   }
 ]
