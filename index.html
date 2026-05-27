@@ -1,731 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Jack Carey — CS student at Duke University. Portfolio showcasing coursework, projects, and experience in AI, game design, and systems.">
   <title>Jack Carey — Portfolio</title>
+  <link rel="icon" href="cubes.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --ink: #1a1625;
-      --cream: #f0eef8;
-      --rust: #7c5cbf;
-      --muted: #9187a8;
-      --card: #e5e0f5;
-      --border: #cdc7e8;
-      --green: #3d6b7a;
-      --amber: #6b4fa8;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; font-size: 16px; }
-
-    body {
-      background-color: var(--cream);
-      color: var(--ink);
-      font-family: 'DM Mono', monospace;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: var(--ink);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2.5rem;
-      height: 52px;
-    }
-
-    .nav-logo {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 1rem;
-      color: var(--cream);
-      letter-spacing: 0.05em;
-      text-decoration: none;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--muted);
-      text-decoration: none;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--cream); }
-
-    /* ── LAYOUT ── */
-    main {
-      padding-top: 52px;
-    }
-
-    section {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 6rem 2.5rem;
-    }
-
-    .section-label {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--rust);
-      margin-bottom: 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .section-label::after {
-      content: '';
-      display: block;
-      height: 1px;
-      width: 3rem;
-      background: var(--rust);
-    }
-
-    /* ── HERO ── */
-    #home {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 5rem;
-    }
-
-    .hero-left {}
-
-    .hero-name {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(3.5rem, 6vw, 5.5rem);
-      line-height: 1.0;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.25rem;
-    }
-
-    .hero-title {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 0.8rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-top: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .hero-right {
-      padding-top: 0.5rem;
-    }
-
-    .hero-bio {
-      font-size: 0.95rem;
-      color: var(--ink);
-      line-height: 1.8;
-      margin-bottom: 2rem;
-      max-width: 38ch;
-    }
-
-    .hero-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .tag {
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      border: 1px solid var(--border);
-      padding: 0.3rem 0.7rem;
-      border-radius: 2px;
-      color: var(--muted);
-    }
-
-    /* ── COURSEWORK ── */
-    #coursework {
-      border-bottom: 1px solid var(--border);
-    }
-
-    .coursework-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1px;
-      border: 1px solid var(--border);
-      background: var(--border);
-      margin-top: 2.5rem;
-    }
-
-    .course-card {
-      background: var(--cream);
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      transition: background 0.2s;
-    }
-
-    .course-card:hover { background: var(--card); }
-
-    .course-number {
-      font-size: 0.6rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--rust);
-    }
-
-    .course-name {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1rem;
-      line-height: 1.3;
-      color: var(--ink);
-    }
-
-    .course-inst {
-      font-size: 0.65rem;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      text-transform: uppercase;
-    }
-
-    .course-desc {
-      font-size: 0.75rem;
-      line-height: 1.6;
-      color: var(--ink);
-      opacity: 0.75;
-      flex: 1;
-    }
-
-    .course-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 0.75rem;
-      padding-top: 0.75rem;
-      border-top: 1px solid var(--border);
-    }
-
-    .status {
-      font-size: 0.6rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      font-weight: 500;
-    }
-
-    .status.done { color: var(--green); }
-    .status.wip  { color: var(--amber); }
-
-    .course-link {
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-decoration: none;
-      border-bottom: 1px solid var(--border);
-      transition: color 0.2s, border-color 0.2s;
-    }
-
-    .course-link:hover {
-      color: var(--rust);
-      border-color: var(--rust);
-    }
-
-    /* ── PROJECTS ── */
-    #projects {
-      border-bottom: 1px solid var(--border);
-    }
-
-    .projects-list {
-      margin-top: 2.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      border: 1px solid var(--border);
-    }
-
-    .project-item {
-      padding: 2rem 1.75rem;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 1.5rem;
-      align-start: start;
-      border-bottom: 1px solid var(--border);
-      transition: background 0.2s;
-    }
-
-    .project-item:last-child { border-bottom: none; }
-    .project-item:hover { background: var(--card); }
-
-    .project-index {
-      font-size: 0.6rem;
-      letter-spacing: 0.15em;
-      color: var(--muted);
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-
-    .project-name {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.6rem;
-      line-height: 1.1;
-      margin-bottom: 0.75rem;
-    }
-
-    .project-desc {
-      font-size: 0.8rem;
-      line-height: 1.7;
-      color: var(--ink);
-      opacity: 0.75;
-      max-width: 55ch;
-    }
-
-    .project-meta {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 0.75rem;
-      padding-top: 0.2rem;
-    }
-
-    .project-status {
-      font-size: 0.6rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--amber);
-      border: 1px solid var(--amber);
-      padding: 0.25rem 0.6rem;
-      border-radius: 2px;
-    }
-
-    .btn-github {
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--cream);
-      background: var(--ink);
-      text-decoration: none;
-      padding: 0.4rem 0.9rem;
-      border-radius: 2px;
-      transition: background 0.2s;
-      white-space: nowrap;
-    }
-
-    .btn-github:hover { background: var(--rust); }
-
-    /* ── RESUME ── */
-    #resume {
-      border-bottom: 1px solid var(--border);
-    }
-
-    .resume-block {
-      margin-top: 2.5rem;
-      border: 1px solid var(--border);
-      padding: 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 2rem;
-      background: var(--card);
-    }
-
-    .resume-text {
-      font-size: 0.85rem;
-      line-height: 1.7;
-      color: var(--ink);
-      opacity: 0.75;
-    }
-
-    .btn-download {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--cream);
-      background: var(--rust);
-      text-decoration: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 2px;
-      white-space: nowrap;
-      transition: background 0.2s;
-    }
-
-    .btn-download:hover { background: var(--ink); }
-
-    /* ── CONTACT ── */
-    #contact {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .contact-headline {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(2rem, 4vw, 3rem);
-      line-height: 1.1;
-    }
-
-    .contact-headline em {
-      font-style: italic;
-      color: var(--rust);
-    }
-
-    .contact-links {
-      padding-top: 0.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-
-    .contact-row {
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-    }
-
-    .contact-label {
-      font-size: 0.6rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .contact-value {
-      font-size: 0.9rem;
-      color: var(--ink);
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
-      transition: border-color 0.2s, color 0.2s;
-    }
-
-    .contact-value:hover {
-      color: var(--rust);
-      border-color: var(--rust);
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--ink);
-      color: var(--muted);
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      text-align: center;
-      padding: 1.25rem;
-    }
-
-    /* ── SECTION HEADING ── */
-    .section-heading {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(2.2rem, 4vw, 3rem);
-      line-height: 1.1;
-      color: var(--ink);
-    }
-
-    /* ── MOBILE ── */
-    @media (max-width: 700px) {
-      nav { padding: 0 1.25rem; }
-      .nav-links { gap: 1rem; }
-      .nav-links a { font-size: 0.6rem; }
-
-      section { padding: 4rem 1.25rem; }
-
-      #home {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-
-      .hero-name { font-size: 3rem; }
-
-      #contact {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-
-      .project-item {
-        grid-template-columns: 1fr;
-      }
-
-      .project-meta {
-        flex-direction: row;
-        align-items: center;
-      }
-
-      .resume-block {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
-
-    /* ── ENTRANCE ANIMATION ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .hero-name, .hero-title, .hero-bio, .hero-tags {
-      animation: fadeUp 0.7s ease both;
-    }
-    .hero-title { animation-delay: 0.05s; }
-    .hero-bio   { animation-delay: 0.1s; }
-    .hero-tags  { animation-delay: 0.15s; }
-
-  </style>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a href="#home" class="nav-logo">Jack Carey</a>
-    <ul class="nav-links">
-      <li><a href="#home">About</a></li>
-      <li><a href="#coursework">Courses</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#resume">Resume</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
+  <svg class="svg-defs" aria-hidden="true" focusable="false">
+    <defs>
+      <filter id="lightning" x="-20%" y="-20%" width="140%" height="140%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="2" result="noise">
+          <animate attributeName="baseFrequency" dur="3s" values="0.85;1.1;0.85" repeatCount="indefinite"/>
+        </feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <canvas id="cube-floor" aria-hidden="true"></canvas>
+
+  <header class="site-header">
+    <nav>
+      <a href="#home" class="nav-logo">jack carey</a>
+      <ul class="nav-links">
+        <li><a href="#home" data-nav="home" class="bracket-hover">about</a></li>
+        <li><a href="#coursework" data-nav="coursework" class="bracket-hover">courses</a></li>
+        <li><a href="#projects" data-nav="projects" class="bracket-hover">projects</a></li>
+        <li><a href="#resume" data-nav="resume" class="bracket-hover">resume</a></li>
+        <li><a href="#contact" data-nav="contact" class="bracket-hover">contact</a></li>
+      </ul>
+    </nav>
+  </header>
 
   <main>
 
-    <!-- HOME -->
-    <section id="home">
+    <section id="home" class="reveal-section">
       <div class="hero-left">
-        <div class="section-label">About</div>
+        <p class="section-label">// about</p>
         <h1 class="hero-name">Jack<br>Carey</h1>
         <p class="hero-title">Computer Science · Duke University</p>
       </div>
       <div class="hero-right">
         <p class="hero-bio">
-          CS student passionate about video game design, AI, and building technology that matters. At Duke I'm involved in improv and theater. I believe creativity and computation belong together. Welcome to my portfolio.
+          CS student passionate about video game design, AI, and building technology that matters. At Duke I'm involved in improv and theater. I believe creativity and computation belong together.
         </p>
         <div class="hero-tags">
-          <span class="tag">AI / ML</span>
-          <span class="tag">Game Design</span>
-          <span class="tag">Systems</span>
-          <span class="tag">Networks</span>
-          <span class="tag">Improv</span>
+          <span class="tag surface-hover bracket-hover">AI / ML</span>
+          <span class="tag surface-hover bracket-hover">Game Design</span>
+          <span class="tag surface-hover bracket-hover">Systems</span>
+          <span class="tag surface-hover bracket-hover">Networks</span>
+          <span class="tag surface-hover bracket-hover">Improv</span>
         </div>
       </div>
     </section>
 
-    <!-- COURSEWORK -->
-    <section id="coursework">
-      <div class="section-label">Academic Background</div>
+    <section id="coursework" class="reveal-section">
+      <p class="section-label">// coursework</p>
       <h2 class="section-heading">Relevant Coursework</h2>
-
-      <div class="coursework-grid">
-
-        <div class="course-card">
-          <div class="course-number">MATH 230</div>
-          <div class="course-name">Probability</div>
-          <div class="course-inst">Duke University</div>
-          <div class="course-desc">Random variables, distributions, expectation, and the law of large numbers.</div>
-          <div class="course-footer">
-            <span class="status done">✓ Completed</span>
-            <a href="https://math.duke.edu/courses/probability-2" target="_blank" rel="noopener" class="course-link">Outline ↗</a>
-          </div>
-        </div>
-
-        <div class="course-card">
-          <div class="course-number">MATH 221</div>
-          <div class="course-name">Linear Algebra &amp; Applications</div>
-          <div class="course-inst">Duke University</div>
-          <div class="course-desc">Matrices, vector spaces, eigenvalues, and linear transformations with data science applications.</div>
-          <div class="course-footer">
-            <span class="status done">✓ Completed</span>
-            <a href="https://sites.math.duke.edu/~alevine/221-F2019.html" target="_blank" rel="noopener" class="course-link">Outline ↗</a>
-          </div>
-        </div>
-
-        <div class="course-card">
-          <div class="course-number">MATH 222</div>
-          <div class="course-name">Advanced Multivariable Calculus</div>
-          <div class="course-inst">Duke University</div>
-          <div class="course-desc">Partial derivatives, multiple integrals, and vector calculus with physical rigor.</div>
-          <div class="course-footer">
-            <span class="status done">✓ Completed</span>
-            <a href="https://math.duke.edu/courses/advanced-multivariable-calculus-0" target="_blank" rel="noopener" class="course-link">Outline ↗</a>
-          </div>
-        </div>
-
-        <div class="course-card">
-          <div class="course-number">COMPSCI 201</div>
-          <div class="course-name">Data Structures &amp; Algorithms</div>
-          <div class="course-inst">Duke University</div>
-          <div class="course-desc">Trees, heaps, graphs, and dynamic programming — time and space complexity throughout.</div>
-          <div class="course-footer">
-            <span class="status done">✓ Completed</span>
-            <a href="https://courses.cs.duke.edu/fall16/compsci201/" target="_blank" rel="noopener" class="course-link">Outline ↗</a>
-          </div>
-        </div>
-
-        <div class="course-card">
-          <div class="course-number">COMPSCI 210</div>
-          <div class="course-name">Intro to Computer Systems</div>
-          <div class="course-inst">Duke University</div>
-          <div class="course-desc">Architecture, memory, assembly, and hands-on C programming.</div>
-          <div class="course-footer">
-            <span class="status done">✓ Completed</span>
-            <a href="https://courses.cs.duke.edu/spring24/compsci210d/" target="_blank" rel="noopener" class="course-link">Outline ↗</a>
-          </div>
-        </div>
-
-        <div class="course-card">
-          <div class="course-number">COMPSCI 290</div>
-          <div class="course-name">Applied Machine Learning</div>
-          <div class="course-inst">Duke University</div>
-          <div class="course-desc">Regression, classification, and clustering with scikit-learn and real-world datasets.</div>
-          <div class="course-footer">
-            <span class="status done">✓ Completed</span>
-            <a href="https://sites.duke.edu/compsci_290_02_f24/" target="_blank" rel="noopener" class="course-link">Outline ↗</a>
-          </div>
-        </div>
-
-        <div class="course-card">
-          <div class="course-number">COMPSCI 342</div>
-          <div class="course-name">Information and the Internet</div>
-          <div class="course-inst">Duke University</div>
-          <div class="course-desc">Technical, social, and political dimensions of information in the internet age.</div>
-          <div class="course-footer">
-            <span class="status done">✓ Completed</span>
-            <a href="https://courses.cs.duke.edu/compsci342/spring25/dev/" target="_blank" rel="noopener" class="course-link">Outline ↗</a>
-          </div>
-        </div>
-
-        <div class="course-card">
-          <div class="course-number">COMPSCI 356</div>
-          <div class="course-name">Computer Network Architecture</div>
-          <div class="course-inst">Duke University</div>
-          <div class="course-desc">Networking layers, protocols, TCP/IP, and socket programming.</div>
-          <div class="course-footer">
-            <span class="status done">✓ Completed</span>
-            <a href="https://courses.cs.duke.edu/spring25/compsci356/" target="_blank" rel="noopener" class="course-link">Outline ↗</a>
-          </div>
-        </div>
-
-        <div class="course-card">
-          <div class="course-number">MATH 1064</div>
-          <div class="course-name">Discrete Mathematics for Computation</div>
-          <div class="course-inst">University of Sydney</div>
-          <div class="course-desc">Logic, sets, combinatorics, graph theory, and proof techniques for algorithmic reasoning.</div>
-          <div class="course-footer">
-            <span class="status done">✓ Completed</span>
-            <a href="https://www.sydney.edu.au/units/MATH1064/2025-S2C-ND-CC" target="_blank" rel="noopener" class="course-link">Outline ↗</a>
-          </div>
-        </div>
-
-        <div class="course-card">
-          <div class="course-number">COMP 4318</div>
-          <div class="course-name">Machine Learning &amp; Data Mining</div>
-          <div class="course-inst">University of Sydney</div>
-          <div class="course-desc">Modern ML algorithms, supervised and unsupervised learning, and model evaluation in Python.</div>
-          <div class="course-footer">
-            <span class="status done">✓ Completed</span>
-            <a href="https://www.sydney.edu.au/units/COMP4318/2025-S1C-NE-CC" target="_blank" rel="noopener" class="course-link">Outline ↗</a>
-          </div>
-        </div>
-
-        <div class="course-card">
-          <div class="course-number">COMPSCI 330</div>
-          <div class="course-name">Design &amp; Analysis of Algorithms</div>
-          <div class="course-inst">Duke University</div>
-          <div class="course-desc">Efficient algorithm design including divide-and-conquer, dynamic programming, graph algorithms, randomization, and NP-completeness.</div>
-          <div class="course-footer">
-            <span class="status wip">↻ In Progress</span>
-            <a href="https://sites.duke.edu/spring25compsci330/" target="_blank" rel="noopener" class="course-link">Outline ↗</a>
-          </div>
-        </div>
-
-        <div class="course-card">
-          <div class="course-number">COMPSCI 370</div>
-          <div class="course-name">Introduction to Artificial Intelligence</div>
-          <div class="course-inst">Duke University</div>
-          <div class="course-desc">Algorithms and representations for intelligent systems — search, game trees, Bayesian networks, reinforcement learning, and machine learning.</div>
-          <div class="course-footer">
-            <span class="status wip">↻ In Progress</span>
-            <a href="https://sites.duke.edu/compsci_370d_001_sp24/" target="_blank" rel="noopener" class="course-link">Outline ↗</a>
-          </div>
-        </div>
-
-      </div>
+      <div class="coursework-grid"></div>
     </section>
 
-    <!-- PROJECTS -->
-    <section id="projects">
-      <div class="section-label">Selected Work</div>
+    <section id="projects" class="reveal-section">
+      <p class="section-label">// projects</p>
       <h2 class="section-heading">Projects</h2>
 
       <div class="projects-list">
 
-        <div class="project-item">
+        <article class="project-item surface-hover reveal-item bracket-hover">
           <div>
             <div class="project-index">01</div>
-            <h3 class="project-name">Comparison Platform<br>for TerraBid</h3>
-            <p class="project-desc">An MVP comparison platform for solar developers in Germany, built for the startup TerraBid. Designed to help users evaluate and select between solar project opportunities at scale.</p>
+            <h3 class="project-name">Napa Valley Vineyard</h3>
+            <p class="project-desc">A vineyard showcase site built with modern web tooling — estate storytelling, responsive layout, and a polished front-end experience deployed on Vercel.</p>
           </div>
           <div class="project-meta">
-            <span class="project-status">In Progress</span>
-            <a href="https://github.com/jackcareynapa/comparison-platform" target="_blank" rel="noopener" class="btn-github">GitHub ↗</a>
+            <div class="project-links">
+              <a href="https://napavalleyvineyard.vercel.app/" target="_blank" rel="noopener" class="btn-primary bracket-hover">Live ↗</a>
+              <a href="https://github.com/jackcareynapa/napavalleyvineyard" target="_blank" rel="noopener" class="btn-ghost bracket-hover">GitHub ↗</a>
+            </div>
           </div>
-        </div>
+        </article>
 
-        <div class="project-item">
+        <article class="project-item surface-hover reveal-item bracket-hover">
           <div>
             <div class="project-index">02</div>
-            <h3 class="project-name">Singularity</h3>
-            <p class="project-desc">A game where players fight AI bosses that learn from how you fight them. Built with Unity and reinforcement learning techniques — the enemy adapts, so brute-forcing never works twice.</p>
+            <h3 class="project-name">Serverless Meme Generator</h3>
+            <p class="project-desc">A serverless meme generator using cloud functions and a lightweight front end — upload, caption, and share memes with zero backend maintenance.</p>
           </div>
           <div class="project-meta">
-            <span class="project-status">In Progress</span>
+            <div class="project-links">
+              <a href="https://serverless-meme-generator.vercel.app/" target="_blank" rel="noopener" class="btn-primary bracket-hover">Live ↗</a>
+              <a href="https://github.com/jackcareynapa/serverless-meme-generator" target="_blank" rel="noopener" class="btn-ghost bracket-hover">GitHub ↗</a>
+            </div>
           </div>
-        </div>
+        </article>
 
       </div>
     </section>
 
-    <!-- RESUME -->
-    <section id="resume">
-      <div class="section-label">Documentation</div>
+    <section id="resume" class="reveal-section">
+      <p class="section-label">// resume</p>
       <h2 class="section-heading">Resume</h2>
-      <div class="resume-block">
+      <div class="resume-block surface-hover reveal-item">
         <p class="resume-text">Full work history, skills, and experience — available as a PDF.</p>
-        <a href="Jack-Carey-Resume.pdf" class="btn-download">Download PDF ↓</a>
+        <a href="Jack-Carey-Resume.pdf" class="btn-primary bracket-hover">Download PDF ↓</a>
       </div>
     </section>
 
-    <!-- CONTACT -->
-    <section id="contact">
+    <section id="contact" class="reveal-section">
       <div>
-        <div class="section-label">Get in Touch</div>
+        <p class="section-label">// contact</p>
         <h2 class="contact-headline">Let's<br><em>connect.</em></h2>
       </div>
       <div class="contact-links">
-        <div class="contact-row">
+        <div class="contact-row surface-hover reveal-item">
           <span class="contact-label">Email</span>
           <a href="mailto:jack.carey.napa@gmail.com" class="contact-value">jack.carey.napa@gmail.com</a>
-        <div class="contact-row">
+        </div>
+        <div class="contact-row surface-hover reveal-item">
           <span class="contact-label">GitHub</span>
           <a href="https://github.com/jackcareynapa" target="_blank" rel="noopener" class="contact-value">github.com/jackcareynapa</a>
         </div>
-        <div class="contact-row">
+        <div class="contact-row surface-hover reveal-item">
           <span class="contact-label">LinkedIn</span>
           <a href="https://linkedin.com/in/jack-carey-50386b379" target="_blank" rel="noopener" class="contact-value">linkedin.com/in/jack-carey-50386b379</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>&copy; 2026 Jack Carey</footer>
+
+  <script src="cube-floor.js" defer></script>
+  <script src="ui.js" defer></script>
+</body>
+</html>

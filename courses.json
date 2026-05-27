@@ -1,0 +1,98 @@
+[
+  {
+    "id": "MATH 230",
+    "name": "Probability",
+    "institution": "Duke University",
+    "description": "Random variables, distributions, expectation, and the law of large numbers.",
+    "status": "done",
+    "url": "https://math.duke.edu/courses/probability-2"
+  },
+  {
+    "id": "MATH 221",
+    "name": "Linear Algebra & Applications",
+    "institution": "Duke University",
+    "description": "Matrices, vector spaces, eigenvalues, and linear transformations with data science applications.",
+    "status": "done",
+    "url": "https://sites.math.duke.edu/~alevine/221-F2019.html"
+  },
+  {
+    "id": "MATH 222",
+    "name": "Advanced Multivariable Calculus",
+    "institution": "Duke University",
+    "description": "Partial derivatives, multiple integrals, and vector calculus with physical rigor.",
+    "status": "done",
+    "url": "https://math.duke.edu/courses/advanced-multivariable-calculus-0"
+  },
+  {
+    "id": "COMPSCI 201",
+    "name": "Data Structures & Algorithms",
+    "institution": "Duke University",
+    "description": "Trees, heaps, graphs, and dynamic programming — time and space complexity throughout.",
+    "status": "done",
+    "url": "https://courses.cs.duke.edu/fall16/compsci201/"
+  },
+  {
+    "id": "COMPSCI 210",
+    "name": "Intro to Computer Systems",
+    "institution": "Duke University",
+    "description": "Architecture, memory, assembly, and hands-on C programming.",
+    "status": "done",
+    "url": "https://courses.cs.duke.edu/spring24/compsci210d/"
+  },
+  {
+    "id": "COMPSCI 290",
+    "name": "Applied Machine Learning",
+    "institution": "Duke University",
+    "description": "Regression, classification, and clustering with scikit-learn and real-world datasets.",
+    "status": "done",
+    "url": "https://sites.duke.edu/compsci_290_02_f24/"
+  },
+  {
+    "id": "COMPSCI 342",
+    "name": "Information and the Internet",
+    "institution": "Duke University",
+    "description": "Technical, social, and political dimensions of information in the internet age.",
+    "status": "done",
+    "url": "https://courses.cs.duke.edu/compsci342/spring25/dev/"
+  },
+  {
+    "id": "COMPSCI 356",
+    "name": "Computer Network Architecture",
+    "institution": "Duke University",
+    "description": "Networking layers, protocols, TCP/IP, and socket programming.",
+    "status": "done",
+    "url": "https://courses.cs.duke.edu/spring25/compsci356/"
+  },
+  {
+    "id": "MATH 1064",
+    "name": "Discrete Mathematics for Computation",
+    "institution": "University of Sydney",
+    "description": "Logic, sets, combinatorics, graph theory, and proof techniques for algorithmic reasoning.",
+    "status": "done",
+    "url": "https://www.sydney.edu.au/units/MATH1064/2025-S2C-ND-CC"
+  },
+  {
+    "id": "COMP 4318",
+    "name": "Machine Learning & Data Mining",
+    "institution": "University of Sydney",
+    "description": "Modern ML algorithms, supervised and unsupervised learning, and model evaluation in Python.",
+    "status": "done",
+    "url": "https://www.sydney.edu.au/units/COMP4318/2025-S1C-NE-CC"
+  },
+  {
+    "id": "COMPSCI 330",
+    "name": "Design & Analysis of Algorithms",
+    "institution": "Duke University",
+    "description": "Efficient algorithm design including divide-and-conquer, dynamic programming, graph algorithms, randomization, and NP-completeness.",
+    "status": "wip",
+    "url": "https://sites.duke.edu/spring25compsci330/"
+  },
+  {
+    "id": "COMPSCI 370",
+    "name": "Introduction to Artificial Intelligence",
+    "institution": "Duke University",
+    "description": "Algorithms and representations for intelligent systems — search, game trees, Bayesian networks, reinforcement learning, and machine learning.",
+    "status": "wip",
+    "url": "https://sites.duke.edu/compsci_370d_001_sp24/"
+  }
+]
