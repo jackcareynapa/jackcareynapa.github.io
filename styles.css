@@ -446,6 +446,29 @@ section:last-of-type {
   margin-bottom: 0.75rem;
 }
 
+.project-featured {
+  padding: 2.25rem 2rem;
+  border-color: rgba(var(--accent-rgb), 0.35);
+}
+
+.featured-badge {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+}
+
 .project-name {
   font-family: var(--font-sans);
   font-size: 1.5rem;
