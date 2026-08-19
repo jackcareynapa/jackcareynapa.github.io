@@ -137,20 +137,33 @@
   }
 
   /* Measured once per layout change and stored in *document* space, so a
-     scroll costs no getBoundingClientRect at all — only a subtraction. */
+     scroll costs no re-measure at all — only a subtraction.
+
+     A block's own bounding box is as wide as its longest line and as tall
+     as every line stacked — ragged edges and short lines (a two-word title,
+     a wrapped paragraph) leave bare stock padding inside that box with
+     nothing printed over it. A Range fragments the same way text actually
+     wraps, one rect per line, so the hold-back hugs the type instead of a
+     rectangle around it. */
   function refreshFootprints() {
     const sy = window.scrollY;
     const els = document.querySelectorAll('.occludes');
-    footprintRects = new Float64Array(els.length * 4);
-    visibleRects = new Float64Array(els.length * 4);
-    let i = 0;
+    const rects = [];
+    const range = document.createRange();
     els.forEach((el) => {
-      const r = el.getBoundingClientRect();
-      footprintRects[i++] = r.left - FOOTPRINT_PAD;
-      footprintRects[i++] = r.top + sy - FOOTPRINT_PAD;
-      footprintRects[i++] = r.right + FOOTPRINT_PAD;
-      footprintRects[i++] = r.bottom + sy + FOOTPRINT_PAD;
+      range.selectNodeContents(el);
+      for (const r of range.getClientRects()) {
+        if (r.width <= 0 || r.height <= 0) continue;
+        rects.push(
+          r.left - FOOTPRINT_PAD,
+          r.top + sy - FOOTPRINT_PAD,
+          r.right + FOOTPRINT_PAD,
+          r.bottom + sy + FOOTPRINT_PAD
+        );
+      }
     });
+    footprintRects = new Float64Array(rects);
+    visibleRects = new Float64Array(rects.length);
   }
 
   /* Everything off screen is irrelevant to this frame. */
