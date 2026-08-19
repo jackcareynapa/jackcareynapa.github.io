@@ -228,6 +228,59 @@ section {
 
 .billing .reg { display: block; }
 
+/* ── Halftone name ───────────────────────────────────────────────────────
+   The letterforms are filled with the same diamond screen as the floor:
+   solid at the top of each line, breaking into dots towards the baseline.
+   Real text underneath, so it stays selectable and readable to a screen
+   reader; only the paint is a screen. */
+
+/* The ink pass has to be an inline child, not the element's own background:
+   an element background paints *below* its negative-z-index pseudo-elements,
+   which would put both spot plates on top of the ink. A descendant's
+   background paints after them. */
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .billing .reg-ink,
+  .billing .reg::before,
+  .billing .reg::after {
+    background-repeat: repeat;
+    /* em, so the screen stays proportional to the type — a fixed pixel
+       screen is far too coarse once the name shrinks on a phone. */
+    background-position: 0 0, 0.034em 0.034em, 0 0;
+    background-size: 0.125em 0.125em, 0.068em 0.068em, 100% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .billing .reg-ink {
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Cpath d='M11 0 L22 11 L11 22 L0 11 Z' fill='%23181A17'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M6 1.4 L10.6 6 L6 10.6 L1.4 6 Z' fill='%23181A17'/%3E%3C/svg%3E"),
+      linear-gradient(180deg, var(--ink) 0%, var(--ink) 30%, transparent 96%);
+  }
+
+  /* Held back: with a screened ink pass, the plates show through every gap
+     rather than only at the offset edge, which muddies the letterforms. */
+  .billing .reg::before { opacity: 0.72; }
+  .billing .reg::after { opacity: 0.55; }
+
+  .billing .reg::before {
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Cpath d='M11 0 L22 11 L11 22 L0 11 Z' fill='%23FF4FA3'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M6 1.4 L10.6 6 L6 10.6 L1.4 6 Z' fill='%23FF4FA3'/%3E%3C/svg%3E"),
+      linear-gradient(180deg, var(--pink) 0%, var(--pink) 30%, transparent 96%);
+  }
+
+  .billing .reg::after {
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Cpath d='M11 0 L22 11 L11 22 L0 11 Z' fill='%232440C4'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M6 1.4 L10.6 6 L6 10.6 L1.4 6 Z' fill='%232440C4'/%3E%3C/svg%3E"),
+      linear-gradient(180deg, var(--blue) 0%, var(--blue) 30%, transparent 96%);
+  }
+}
+
 .credit {
   font-family: var(--font-data);
   font-size: clamp(0.66rem, 1.6vw, 0.78rem);
@@ -557,6 +610,44 @@ a.index-name:hover { border-bottom-color: var(--ink); }
   font-size: 0.68rem;
   letter-spacing: 0.06em;
   color: var(--fade);
+}
+
+/* ── Live type ──────────────────────────────────────────────────────────
+   Hovering any block of copy slips its plate, the same misprint the
+   headlines get. text-shadow rather than a pseudo-element, so it wraps with
+   the text and costs nothing in markup. */
+
+.credit,
+.intro,
+.eyebrow,
+.bill-meta,
+.bill-desc,
+.facts-key,
+.facts-value,
+.index-school,
+.index-name,
+.index-desc,
+.hail-note,
+.elsewhere-key {
+  transition: text-shadow 0.22s ease, color 0.22s ease;
+}
+
+.credit:hover,
+.intro:hover,
+.eyebrow:hover,
+.bill-meta:hover,
+.bill-desc:hover,
+.facts-key:hover,
+.facts-value:hover,
+.index-school:hover,
+.index-desc:hover,
+.hail-note:hover,
+.elsewhere-key:hover {
+  text-shadow: 2px 1.5px 0 var(--pink), -1px -1px 0 rgba(36, 64, 196, 0.55);
+}
+
+a.index-name:hover {
+  text-shadow: 2px 1.5px 0 var(--pink);
 }
 
 /* ── Focus ── */

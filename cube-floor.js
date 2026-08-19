@@ -28,7 +28,12 @@
   const TILE_W = 38;
   const TILE_H = 19;
   const WAVE_RADIUS_PX = 170;
-  const FOOTPRINT_PAD = 14;
+  const FOOTPRINT_PAD = 2;
+  const FEATHER = 60;       // how far a block's hold-back reaches
+  const PAD = 4;            // breathing room around the type itself
+  const UNDER_TEXT = 0.34;  // ink still laid down beneath type
+  const KNOCK_SCALE = 0.4;  // the hold-back buffer is low-res; it is only blur
+  const KNOCK_BLUR = 17;
   const MAX_LIFT = reducedMotion ? 0 : 10;   // peak coverage, in arbitrary units
   const LERP = reducedMotion ? 1 : 0.16;
   const GRID_MARGIN = lowQuality ? 1.1 : 1.2;
@@ -59,10 +64,14 @@
   let animating = false;
   let lastWaveTiles = [];
   let activeTiles = new Set();
-  let footprintRects = [];
-  let cachedOverSurface = null;
-  let lastPointerQueryX = -9999;
-  let lastPointerQueryY = -9999;
+  let footprintRects = new Float64Array(0);
+  let visibleRects = new Float64Array(0);
+  let visibleCount = 0;
+  let fieldCanvas = null;
+  let fieldCtx = null;
+  const knockCanvas = document.createElement('canvas');
+  const knockCtx = knockCanvas.getContext('2d');
+  const canBlur = typeof ctx.filter === 'string';
 
   function viewportSize() {
     const vv = window.visualViewport;
@@ -127,68 +136,67 @@
     return t * t * (3 - 2 * t);
   }
 
-  /* Outside the block, the closest point on its edge. Inside it, the closest
-     way *out* — so reading a paragraph squeezes ink from under the type
-     instead of killing the wave entirely. */
-  function nearestPointOnRect(px, py, rect) {
-    const cx = Math.max(rect.left, Math.min(px, rect.right));
-    const cy = Math.max(rect.top, Math.min(py, rect.bottom));
-    if (cx !== px || cy !== py) return { x: cx, y: cy };
-
-    const dl = px - rect.left;
-    const dr = rect.right - px;
-    const dt = py - rect.top;
-    const db = rect.bottom - py;
-    const nearest = Math.min(dl, dr, dt, db);
-
-    if (nearest === dl) return { x: rect.left, y: py };
-    if (nearest === dr) return { x: rect.right, y: py };
-    if (nearest === dt) return { x: px, y: rect.top };
-    return { x: px, y: rect.bottom };
-  }
-
+  /* Measured once per layout change and stored in *document* space, so a
+     scroll costs no getBoundingClientRect at all — only a subtraction. */
   function refreshFootprints() {
-    footprintRects = [];
-    document.querySelectorAll('.occludes').forEach((el) => {
-      footprintRects.push(el.getBoundingClientRect());
+    const sy = window.scrollY;
+    const els = document.querySelectorAll('.occludes');
+    footprintRects = new Float64Array(els.length * 4);
+    visibleRects = new Float64Array(els.length * 4);
+    let i = 0;
+    els.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      footprintRects[i++] = r.left - FOOTPRINT_PAD;
+      footprintRects[i++] = r.top + sy - FOOTPRINT_PAD;
+      footprintRects[i++] = r.right + FOOTPRINT_PAD;
+      footprintRects[i++] = r.bottom + sy + FOOTPRINT_PAD;
     });
   }
 
-  function isInsideFootprint(tx, ty) {
-    for (const rect of footprintRects) {
-      if (
-        tx >= rect.left - FOOTPRINT_PAD &&
-        tx <= rect.right + FOOTPRINT_PAD &&
-        ty >= rect.top - FOOTPRINT_PAD &&
-        ty <= rect.bottom + FOOTPRINT_PAD
-      ) {
-        return true;
-      }
+  /* Everything off screen is irrelevant to this frame. */
+  function collectVisibleRects(topDoc, bottomDoc) {
+    visibleCount = 0;
+    for (let i = 0; i < footprintRects.length; i += 4) {
+      if (footprintRects[i + 3] < topDoc || footprintRects[i + 1] > bottomDoc) continue;
+      visibleRects[visibleCount++] = footprintRects[i];
+      visibleRects[visibleCount++] = footprintRects[i + 1];
+      visibleRects[visibleCount++] = footprintRects[i + 2];
+      visibleRects[visibleCount++] = footprintRects[i + 3];
     }
-    return false;
   }
 
-  function refreshPointerHit() {
-    if (pointerX === lastPointerQueryX && pointerY === lastPointerQueryY) return;
-    lastPointerQueryX = pointerX;
-    lastPointerQueryY = pointerY;
-    if (pointerX < 0) {
-      cachedOverSurface = null;
-      return;
-    }
-    const hit = document.elementFromPoint(pointerX, pointerY);
-    cachedOverSurface = hit && hit.closest('.occludes');
-  }
+  /* Ink is not knocked out from under type — it runs underneath and is held
+     back by painting stock over it, blurred so there is no edge to see.
 
-  /* Over a block of type the wave slides to the block's edge, so ink pools
-     against the knockout instead of vanishing under it. */
-  function getWaveOrigin() {
-    if (pointerX < 0) return { x: 0, y: 0 };
-    if (cachedOverSurface) {
-      const rect = cachedOverSurface.getBoundingClientRect();
-      return nearestPointOnRect(pointerX, pointerY, rect);
+     The hold-back is composed on its own buffer first: drawn straight onto
+     the sheet, two text blocks near each other would each apply their own
+     alpha and the overlap would wash out to bare stock. Opaque rects on a
+     scratch buffer union instead of compounding. */
+  function drawKnockback(sy, w, h) {
+    if (!visibleCount) return;
+
+    const kw = Math.max(1, Math.round(w * KNOCK_SCALE));
+    const kh = Math.max(1, Math.round(h * KNOCK_SCALE));
+    if (knockCanvas.width !== kw) knockCanvas.width = kw;
+    if (knockCanvas.height !== kh) knockCanvas.height = kh;
+
+    knockCtx.setTransform(KNOCK_SCALE, 0, 0, KNOCK_SCALE, 0, 0);
+    knockCtx.clearRect(0, 0, w, h);
+    knockCtx.fillStyle = STOCK;
+    for (let i = 0; i < visibleCount; i += 4) {
+      knockCtx.fillRect(
+        visibleRects[i] - PAD,
+        visibleRects[i + 1] - sy - PAD,
+        visibleRects[i + 2] - visibleRects[i] + PAD * 2,
+        visibleRects[i + 3] - visibleRects[i + 1] + PAD * 2
+      );
     }
-    return { x: pointerX, y: pointerY };
+
+    ctx.save();
+    if (canBlur) ctx.filter = `blur(${KNOCK_BLUR}px)`;
+    ctx.globalAlpha = 1 - UNDER_TEXT;
+    ctx.drawImage(knockCanvas, 0, 0, w, h);
+    ctx.restore();
   }
 
   function buildSpatialIndex() {
@@ -214,7 +222,6 @@
         if (!bucket) continue;
         for (const tile of bucket) {
           const { x, y } = tileCenter(tile.col, tile.row);
-          if (isInsideFootprint(x, y)) continue;
           const dx = originX - x;
           const dy = originY - y;
           const distSq = dx * dx + dy * dy;
@@ -229,14 +236,13 @@
     }
   }
 
-  function addDiamond(cx, cy, scale) {
+  function addDiamondTo(target, cx, cy, scale) {
     const hw = (TILE_W / 2) * scale;
     const hh = TILE_H * scale;
-    ctx.moveTo(cx, cy - hh);
-    ctx.lineTo(cx + hw, cy);
-    ctx.lineTo(cx, cy + hh);
-    ctx.lineTo(cx - hw, cy);
-    ctx.closePath();
+    target.moveTo(cx, cy - hh);
+    target.lineTo(cx + hw, cy);
+    target.lineTo(cx, cy + hh);
+    target.lineTo(cx - hw, cy);
   }
 
   function computeExtent(w, h) {
@@ -279,6 +285,7 @@
     }
     buildSpatialIndex();
     refreshFootprints();
+    buildField();
   }
 
   function updateHover() {
@@ -290,9 +297,7 @@
 
     if (pointerX < 0 || MAX_LIFT <= 0) return;
 
-    refreshPointerHit();
-    const origin = getWaveOrigin();
-    applyWaveAt(origin.x, origin.y, WAVE_RADIUS_PX, lastWaveTiles);
+    applyWaveAt(pointerX, pointerY, WAVE_RADIUS_PX, lastWaveTiles);
 
     for (const tile of lastWaveTiles) {
       activeTiles.add(tile);
@@ -324,48 +329,88 @@
     return needsFrame;
   }
 
+  /* The resting screen never changes between resizes, so it is rasterised
+     once and blitted. Building its path costs ~18k canvas calls; doing that
+     every frame was the whole cost of the animation. */
+  function buildField() {
+    const { w, h } = viewportSize();
+    let dpr = window.devicePixelRatio || 1;
+    if (lowQuality) dpr = Math.min(dpr, 2);
+
+    if (!fieldCanvas) {
+      fieldCanvas = document.createElement('canvas');
+      fieldCtx = fieldCanvas.getContext('2d');
+    }
+    fieldCanvas.width = w * dpr;
+    fieldCanvas.height = h * dpr;
+    fieldCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    fieldCtx.clearRect(0, 0, w, h);
+
+    const padX = TILE_W;
+    const padY = TILE_H * 2;
+    const hw = TILE_W / 2;
+    const hh = TILE_H / 2;
+
+    fieldCtx.globalAlpha = INK_ALPHA;
+    fieldCtx.fillStyle = BLUE;
+    fieldCtx.beginPath();
+    for (const tile of tiles) {
+      const x = offsetX + (tile.col - tile.row) * hw;
+      if (x < -padX || x > w + padX) continue;
+      const y = offsetY + (tile.col + tile.row) * hh;
+      if (y < -padY || y > h + padY) continue;
+      addDiamondTo(fieldCtx, x + tile.jx, y + tile.jy, restScale(tile));
+    }
+    fieldCtx.fill();
+    fieldCtx.globalAlpha = 1;
+  }
+
   function render() {
     const { w, h } = viewportSize();
+    const sy = window.scrollY;
 
     ctx.globalAlpha = 1;
     ctx.fillStyle = STOCK;
     ctx.fillRect(0, 0, w, h);
+    if (fieldCanvas) ctx.drawImage(fieldCanvas, 0, 0, w, h);
 
-    const padX = TILE_W;
-    const padY = TILE_H * 2;
+    collectVisibleRects(sy - FEATHER, sy + h + FEATHER);
 
-    // Ink pass: every visible dot, one path, one fill.
-    ctx.globalAlpha = INK_ALPHA;
-    ctx.fillStyle = BLUE;
-    ctx.beginPath();
-    for (const tile of tiles) {
-      const { x, y } = tileCenter(tile.col, tile.row);
-      if (x < -padX || x > w + padX || y < -padY || y > h + padY) continue;
-      // Under type the screen thins out rather than stopping dead — a hard
-      // rectangular void reads as a bug, a pale one reads as a knockout.
-      const scale = isInsideFootprint(x, y)
-        ? restScale(tile) * KNOCKOUT
-        : tileScale(tile, coverageIntensity(tile.elevation));
-      addDiamond(x + tile.jx, y + tile.jy, scale);
-    }
-    ctx.fill();
+    const hw = TILE_W / 2;
+    const hh = TILE_H / 2;
 
-    // Second impression: pink, off register, only where ink is moving.
+    /* Only disturbed tiles are path-drawn — a few hundred inside the wave
+       radius rather than every dot on screen. */
     if (activeTiles.size) {
+      ctx.globalAlpha = INK_ALPHA;
+      ctx.fillStyle = BLUE;
+      ctx.beginPath();
+      for (const tile of activeTiles) {
+        const intensity = coverageIntensity(tile.elevation);
+        if (intensity < 0.02) continue;
+        const x = offsetX + (tile.col - tile.row) * hw;
+        const y = offsetY + (tile.col + tile.row) * hh;
+        addDiamondTo(ctx, x + tile.jx, y + tile.jy, tileScale(tile, intensity));
+      }
+      ctx.fill();
+
+      // Second impression: pink, off register.
       ctx.globalAlpha = PINK_ALPHA;
       ctx.fillStyle = PINK;
       ctx.beginPath();
       for (const tile of activeTiles) {
         const intensity = coverageIntensity(tile.elevation);
         if (intensity < 0.06) continue;
-        const { x, y } = tileCenter(tile.col, tile.row);
-        if (isInsideFootprint(x, y)) continue;
-        addDiamond(x + tile.jx + MISREG_X, y + tile.jy + MISREG_Y, tileScale(tile, intensity) * 0.7);
+        const x = offsetX + (tile.col - tile.row) * hw;
+        const y = offsetY + (tile.col + tile.row) * hh;
+        addDiamondTo(ctx, x + tile.jx + MISREG_X, y + tile.jy + MISREG_Y,
+          tileScale(tile, intensity) * 0.7);
       }
       ctx.fill();
     }
 
     ctx.globalAlpha = 1;
+    drawKnockback(sy, w, h);
   }
 
   function frame() {
@@ -390,15 +435,12 @@
   function onPointerMove(e) {
     pointerX = e.clientX;
     pointerY = e.clientY;
-    lastPointerQueryX = -9999;
     requestFrame();
   }
 
   function onPointerLeave() {
     pointerX = -1;
     pointerY = -1;
-    lastPointerQueryX = -9999;
-    cachedOverSurface = null;
     requestFrame();
   }
 
@@ -406,14 +448,12 @@
     if (!e.touches.length) return;
     pointerX = e.touches[0].clientX;
     pointerY = e.touches[0].clientY;
-    lastPointerQueryX = -9999;
     requestFrame();
   }
 
+  /* Footprints are already in document space, so a scroll only needs a
+     repaint — no re-measure, no layout flush. */
   function onScroll() {
-    refreshFootprints();
-    lastPointerQueryX = -9999;
-    updateHover();
     render();
     requestFrame();
   }
