@@ -115,6 +115,41 @@ body::after {
   transform: translate(calc(var(--rx) * -0.5), calc(var(--ry) * -0.6));
 }
 
+/* ── Glitch ───────────────────────────────────────────────────────────────
+   Hovering a headline doesn't just slip the plates further out of register —
+   it jams. steps(1, jump-end) holds each position instead of easing through
+   it, so the pink and blue passes jump-cut independently of each other and
+   of the base type, which never moves. */
+@keyframes glitch-pink {
+  0%   { transform: translate(var(--rx), var(--ry)); }
+  15%  { transform: translate(calc(var(--rx) * 3.2), calc(var(--ry) * -2)); }
+  30%  { transform: translate(calc(var(--rx) * -1.4), calc(var(--ry) * 2.6)); }
+  45%  { transform: translate(calc(var(--rx) * 2.1), calc(var(--ry) * 0.3)); }
+  60%  { transform: translate(var(--rx), var(--ry)); }
+  75%  { transform: translate(calc(var(--rx) * -2.6), calc(var(--ry) * -1.1)); }
+  90%  { transform: translate(calc(var(--rx) * 1.6), calc(var(--ry) * 1.8)); }
+  100% { transform: translate(var(--rx), var(--ry)); }
+}
+
+@keyframes glitch-blue {
+  0%   { transform: translate(calc(var(--rx) * -0.5), calc(var(--ry) * -0.6)); }
+  18%  { transform: translate(calc(var(--rx) * -2.4), calc(var(--ry) * 1.7)); }
+  36%  { transform: translate(calc(var(--rx) * 1.1), calc(var(--ry) * -2.3)); }
+  54%  { transform: translate(calc(var(--rx) * -0.5), calc(var(--ry) * -0.6)); }
+  72%  { transform: translate(calc(var(--rx) * 2.8), calc(var(--ry) * 0.5)); }
+  90%  { transform: translate(calc(var(--rx) * -1.6), calc(var(--ry) * -1.9)); }
+  100% { transform: translate(calc(var(--rx) * -0.5), calc(var(--ry) * -0.6)); }
+}
+
+.billing:hover .reg::before,
+.bill-item:hover .bill-title .reg::before {
+  animation: glitch-pink 0.38s steps(1, jump-end) infinite;
+}
+
+.billing:hover .reg::after {
+  animation: glitch-blue 0.5s steps(1, jump-end) infinite;
+}
+
 /* ── Skip link ── */
 .skip {
   position: absolute;
@@ -683,6 +718,10 @@ a.index-name:hover {
 
   .reg::before,
   .reg::after { transition: none; }
+
+  .billing:hover .reg::before,
+  .bill-item:hover .bill-title .reg::before,
+  .billing:hover .reg::after { animation: none; }
 
   .bill-item:hover .bill-title .reg { --rx: 3px; --ry: 2px; }
 }
