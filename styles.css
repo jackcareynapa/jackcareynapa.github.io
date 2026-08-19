@@ -198,7 +198,7 @@ section {
   position: relative;
   max-width: var(--measure);
   margin: 0 auto;
-  padding: clamp(3.5rem, 9vw, 7rem) var(--gutter);
+  padding: clamp(2.5rem, 6vw, 4.5rem) var(--gutter);
 }
 
 /* Eyebrows double as the section headings — a printed running order
@@ -209,9 +209,7 @@ section {
   font-weight: 500;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--fade);
-  padding-bottom: 0.7rem;
-  border-bottom: 1px solid var(--ink);
+  color: var(--ink);
   margin-bottom: clamp(2rem, 5vw, 3.5rem);
 }
 
@@ -236,100 +234,104 @@ section {
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--fade);
-  margin-top: clamp(1.5rem, 3vw, 2.25rem);
-  padding-top: 1rem;
-  border-top: 1px solid var(--ink);
+  margin-top: clamp(1.25rem, 2.5vw, 1.75rem);
 }
 
-.opening-columns {
-  margin-top: clamp(2.25rem, 5vw, 3.25rem);
-}
-
-@media (min-width: 62rem) {
-  .opening-columns {
-    display: grid;
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
-    gap: clamp(2.5rem, 6vw, 5rem);
-    align-items: start;
-  }
-}
-
-.bio {
-  font-size: clamp(1.15rem, 2.4vw, 1.4rem);
-  line-height: 1.45;
-  max-width: 34ch;
+.intro {
+  font-size: clamp(1.05rem, 2vw, 1.2rem);
+  line-height: 1.55;
+  max-width: 48ch;
+  margin-top: clamp(1.75rem, 4vw, 2.5rem);
   text-wrap: pretty;
 }
 
-.bio em {
-  font-style: italic;
+/* ── Tonal ramp ──────────────────────────────────────────────────────────
+   Section rules are a halftone ramp, not a hairline: large diamonds die out
+   first, small ones carry further right. Two layers so the falloff reads as
+   dot gain rather than a fade. */
+
+.ramp {
+  position: relative;
+  height: 20px;
+  margin-bottom: 0.5rem;
+  pointer-events: none;
 }
 
-/* ── Cast list ──────────────────────────────────────────────────────────
-   One name, six parts. The dot leaders are drawn, not typed. */
-
-.cast { margin-top: clamp(2.5rem, 6vw, 3.5rem); }
-
-@media (min-width: 62rem) {
-  .cast { margin-top: 0.35rem; }
-}
-
-.cast-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-bottom: 0.6rem;
-  border-bottom: 1px solid var(--ink);
-  margin-bottom: 0.4rem;
-}
-
-.cast-head h2 {
-  font-family: var(--font-data);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--ink);
-}
-
-.cast-head span {
-  font-family: var(--font-body);
-  font-style: italic;
-  font-size: 0.85rem;
-  color: var(--fade);
-}
-
-.cast-list { list-style: none; }
-
-.cast-row {
-  display: flex;
-  align-items: baseline;
-  width: 100%;
-  padding: 0.5rem 0;
-  font-size: 1rem;
-}
-
-.cast-who {
-  display: flex;
-  align-items: baseline;
-  flex: 1 1 auto;
-  min-width: 0;
-  color: var(--fade);
-}
-
-.cast-who::after {
+.ramp::before,
+.ramp::after {
   content: '';
-  flex: 1 1 auto;
-  min-width: 1.5rem;
-  margin: 0 0.75rem;
-  border-bottom: 1px dotted var(--rule);
-  transform: translateY(-0.3em);
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat-x;
+  background-position: 0 50%;
 }
 
-.cast-role {
-  flex: 0 1 auto;
-  text-align: right;
+/* Large diamonds hold the left end and are gone by 40%. */
+.ramp::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpath d='M10 1 L19 10 L10 19 L1 10 Z' fill='%232440C4'/%3E%3C/svg%3E");
+  background-size: 20px 20px;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 11%, transparent 40%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 11%, transparent 40%);
+}
+
+/* Small ones fade in where the large ones die, sit in the gaps between them,
+   and carry the ramp out to nothing. */
+.ramp::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='20'%3E%3Cpath d='M5 7 L8 10 L5 13 L2 10 Z' fill='%232440C4'/%3E%3C/svg%3E");
+  background-size: 10px 20px;
+  background-position: 5px 50%;
+  -webkit-mask-image: linear-gradient(90deg, transparent 6%, #000 26%, #000 42%, transparent 94%);
+  mask-image: linear-gradient(90deg, transparent 6%, #000 26%, #000 42%, transparent 94%);
+}
+
+/* A shorter, lighter ramp between items in a list */
+.ramp-thin {
+  height: 12px;
+  /* the divider needs air above it, not just below */
+  margin: clamp(1.75rem, 4vw, 2.5rem) 0 0;
+}
+
+.ramp-thin::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M6 1 L11 6 L6 11 L1 6 Z' fill='%232440C4'/%3E%3C/svg%3E");
+  background-size: 12px 12px;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, transparent 26%);
+  mask-image: linear-gradient(90deg, #000 0%, transparent 26%);
+}
+
+.ramp-thin::after {
+  background-size: 7px 12px;
+  background-position: 3.5px 50%;
+  -webkit-mask-image: linear-gradient(90deg, transparent 4%, #000 18%, #000 30%, transparent 78%);
+  mask-image: linear-gradient(90deg, transparent 4%, #000 18%, #000 30%, transparent 78%);
+}
+
+/* ── Facts ── */
+.facts {
+  list-style: none;
+  margin-bottom: clamp(2.25rem, 5vw, 3.25rem);
+  max-width: 44rem;
+}
+
+.facts li {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--rule-soft);
+}
+
+.facts-key {
+  flex: 0 0 8rem;
+  font-family: var(--font-data);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fade);
+}
+
+.facts-value {
+  flex: 1 1 auto;
+  font-size: 0.98rem;
   color: var(--ink);
 }
 
@@ -337,11 +339,10 @@ section {
 .bill { display: flex; flex-direction: column; }
 
 .bill-item {
-  padding: clamp(2rem, 4.5vw, 3rem) 0;
-  border-top: 1px solid var(--rule-soft);
+  padding: clamp(2rem, 4.5vw, 3rem) 0 0;
 }
 
-.bill-item:first-child { border-top: none; padding-top: 0; }
+.bill-item:first-child { padding-top: 0; }
 .bill-item:last-child { padding-bottom: 0; }
 
 .bill-title {
@@ -571,10 +572,8 @@ a.index-name:hover { border-bottom-color: var(--ink); }
 
 /* ── Responsive ── */
 @media (max-width: 620px) {
-  .cast-row { display: block; padding: 0.6rem 0; border-bottom: 1px solid var(--rule-soft); }
-  .cast-who::after { display: none; }
-  .cast-who { display: inline; }
-  .cast-role { display: block; text-align: left; margin-top: 0.1rem; }
+  .facts li { display: block; }
+  .facts-key { display: block; margin-bottom: 0.15rem; }
   .elsewhere-list li { display: block; }
   .elsewhere-key { display: block; margin-bottom: 0.2rem; }
   .bill-links { gap: 1rem 1.25rem; }

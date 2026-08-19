@@ -1,7 +1,7 @@
 # jackcareynapa.github.io
 
-Personal site for [jackcareynapa.github.io](https://jackcareynapa.github.io) — laid
-out as a cheaply printed two-colour program.
+Personal site for [jackcareynapa.github.io](https://jackcareynapa.github.io) — set
+as a two-colour halftone print.
 
 ## The design system
 
@@ -21,7 +21,18 @@ it), dots on the press floor, and acting as a *background* for ink-coloured type
 which measures 5.8:1 the other way round.
 
 Type is set in Bricolage Grotesque (display), Newsreader (body), and DM Mono
-(codes, meta rows, the running order).
+(codes, meta rows, navigation).
+
+### Tonal ramps
+
+Section rules are halftone ramps, not hairlines. `.ramp` layers two diamond
+patterns: large diamonds hold the left end and die out by 40%, small ones fade in
+where the large ones stop, sit in the gaps between them, and carry the ramp out to
+nothing. Each layer is a background image with its own mask gradient, which is why
+they need separate pseudo-elements rather than one multi-layer background.
+
+`.ramp-thin` is the same device at a smaller scale, used between list items. Both
+are `aria-hidden` — they are rules, not content.
 
 ### Misregistration
 
@@ -87,7 +98,7 @@ automatically — no HTML changes needed.
 |------|---------|
 | `index.html` | Page structure |
 | `styles.css` | Tokens, type scale, misregistration, layout |
-| `ui.js` | Running order, registration drift, the training index |
+| `ui.js` | Navigation, registration drift, the course index |
 | `cube-floor.js` | The press floor |
 | `courses.json` | Coursework data |
 | `favicon.svg` | Misregistered `JC` |

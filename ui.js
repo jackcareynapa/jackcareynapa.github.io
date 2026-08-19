@@ -75,7 +75,7 @@
     }, { passive: true });
   }
 
-  /* ── Training index ────────────────────────────────────────────────── */
+  /* ── Education index ────────────────────────────────────────────────── */
 
   function createTextEl(tag, className, text) {
     const el = document.createElement(tag);

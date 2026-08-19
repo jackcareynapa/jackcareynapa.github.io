@@ -25,8 +25,8 @@
     document.documentElement.classList.add('reduced-fx');
   }
 
-  const TILE_W = 44;
-  const TILE_H = 22;
+  const TILE_W = 38;
+  const TILE_H = 19;
   const WAVE_RADIUS_PX = 170;
   const FOOTPRINT_PAD = 14;
   const MAX_LIFT = reducedMotion ? 0 : 10;   // peak coverage, in arbitrary units
@@ -36,16 +36,16 @@
 
   /* Ink. Coverage is carried by dot size, not alpha, so each pass is a
      single path and a single fill. */
-  const REST_COVER = 0.28;
+  const REST_COVER = 0.24;
   /* Capped well below 1 so neighbouring dots never touch. A halftone that
      floods to solid stops being a halftone and starts being a blob. */
   const MAX_COVER = 0.58;
   const KNOCKOUT = 0.34;   // ink left under a block of type
-  const INK_ALPHA = 0.30;
-  const PINK_ALPHA = 0.16;  // a fringe, not a second colour
+  const INK_ALPHA = 0.22;
+  const PINK_ALPHA = 0.14;  // a fringe, not a second colour
   const MISREG_X = 3;
   const MISREG_Y = -2.5;
-  const JITTER = 3.2;      // the screen was not laid out by a machine
+  const JITTER = 2.6;      // the screen was not laid out by a machine
 
   let STOCK = '#DEDAD0';
   let BLUE = '#2440C4';
