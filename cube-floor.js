@@ -31,7 +31,7 @@
   const FOOTPRINT_PAD = 2;
   const FEATHER = 60;       // how far a block's hold-back reaches
   const PAD = 4;            // breathing room around the type itself
-  const UNDER_TEXT = 0.34;  // ink still laid down beneath type
+  const UNDER_TEXT = 0.08;  // ink still laid down beneath type
   const KNOCK_SCALE = 0.4;  // the hold-back buffer is low-res; it is only blur
   const KNOCK_BLUR = 17;
   const MAX_LIFT = reducedMotion ? 0 : 10;   // peak coverage, in arbitrary units
