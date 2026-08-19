@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" fill="#DEDAD0"/>
+  <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="700" font-size="38" letter-spacing="-2">
+    <text x="30" y="46" text-anchor="middle" fill="#FF4FA3">JC</text>
+    <text x="27" y="43" text-anchor="middle" fill="#2440C4">JC</text>
+    <text x="28" y="44" text-anchor="middle" fill="#181A17">JC</text>
+  </g>
+</svg>

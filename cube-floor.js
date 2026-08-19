@@ -1,3 +1,14 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   The press floor.
+
+   An isometric field of ink dots. The wave physics are unchanged from the
+   original cube grid — spatial buckets, smoothstep falloff, footprint
+   occlusion — but `elevation` no longer means height. It means ink
+   coverage: how wide each diamond opens. Push the pointer across the sheet
+   and the screen gains, exactly the way a cheap duplicator does. Where type
+   sits, the ink is knocked out.
+   ═══════════════════════════════════════════════════════════════════════ */
+
 (function () {
   'use strict';
 
@@ -14,21 +25,31 @@
     document.documentElement.classList.add('reduced-fx');
   }
 
-  const TILE_W = 48;
-  const TILE_H = 24;
-  const WAVE_RADIUS_PX = 130;
-  const PULSE_RADIUS_PX = WAVE_RADIUS_PX * 1.5;
-  const PULSE_MS = 400;
-  const FOOTPRINT_PAD = 4;
-  const MAX_LIFT = reducedMotion ? 0 : (coarsePointer ? 8 : 10);
-  const LERP = reducedMotion ? 1 : 0.14;
-  const GRID_MARGIN = lowQuality ? 1.1 : 1.4;
-  const SIDE_LIFT_MIN = lowQuality ? 2 : 0.5;
+  const TILE_W = 44;
+  const TILE_H = 22;
+  const WAVE_RADIUS_PX = 170;
+  const FOOTPRINT_PAD = 14;
+  const MAX_LIFT = reducedMotion ? 0 : 10;   // peak coverage, in arbitrary units
+  const LERP = reducedMotion ? 1 : 0.16;
+  const GRID_MARGIN = lowQuality ? 1.1 : 1.2;
   const BUCKET_SIZE = TILE_W;
 
-  let BASE = { r: 247, g: 245, b: 250 };
-  let BG = '#f7f5fa';
-  let accent = '#a855f7';
+  /* Ink. Coverage is carried by dot size, not alpha, so each pass is a
+     single path and a single fill. */
+  const REST_COVER = 0.28;
+  /* Capped well below 1 so neighbouring dots never touch. A halftone that
+     floods to solid stops being a halftone and starts being a blob. */
+  const MAX_COVER = 0.58;
+  const KNOCKOUT = 0.34;   // ink left under a block of type
+  const INK_ALPHA = 0.30;
+  const PINK_ALPHA = 0.16;  // a fringe, not a second colour
+  const MISREG_X = 3;
+  const MISREG_Y = -2.5;
+  const JITTER = 3.2;      // the screen was not laid out by a machine
+
+  let STOCK = '#DEDAD0';
+  let BLUE = '#2440C4';
+  let PINK = '#FF4FA3';
   let tiles = [];
   let spatialBuckets = new Map();
   let offsetX = 0;
@@ -42,8 +63,6 @@
   let cachedOverSurface = null;
   let lastPointerQueryX = -9999;
   let lastPointerQueryY = -9999;
-  let pulseUntil = 0;
-  let pulseOrigin = null;
 
   function viewportSize() {
     const vv = window.visualViewport;
@@ -53,31 +72,11 @@
     };
   }
 
-  function parseCssColor(value) {
-    const fallback = { r: 247, g: 245, b: 250, hex: '#f7f5fa' };
-    if (!value) return fallback;
-    const raw = value.trim();
-    if (raw.startsWith('#')) {
-      const h = raw.slice(1);
-      const full = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
-      if (full.length === 6) {
-        return {
-          r: parseInt(full.slice(0, 2), 16),
-          g: parseInt(full.slice(2, 4), 16),
-          b: parseInt(full.slice(4, 6), 16),
-          hex: `#${full}`,
-        };
-      }
-    }
-    return fallback;
-  }
-
   function readColorsFromCss() {
     const styles = getComputedStyle(document.documentElement);
-    accent = styles.getPropertyValue('--accent').trim() || accent;
-    const bg = parseCssColor(styles.getPropertyValue('--bg').trim());
-    BASE = { r: bg.r, g: bg.g, b: bg.b };
-    BG = bg.hex;
+    STOCK = styles.getPropertyValue('--stock').trim() || STOCK;
+    BLUE = styles.getPropertyValue('--blue').trim() || BLUE;
+    PINK = styles.getPropertyValue('--pink').trim() || PINK;
   }
 
   function hash(x, y) {
@@ -100,24 +99,26 @@
     return a + (b - a) * ux + (c - a) * uy + (a - b - c + d) * ux * uy;
   }
 
-  function tileCenter(col, row, elevation) {
+  function tileCenter(col, row) {
     return {
       x: offsetX + (col - row) * (TILE_W / 2),
-      y: offsetY + (col + row) * (TILE_H / 2) - elevation,
+      y: offsetY + (col + row) * (TILE_H / 2),
     };
   }
 
-  function tileTopPoints(cx, cy) {
-    return [
-      { x: cx, y: cy - TILE_H },
-      { x: cx + TILE_W / 2, y: cy },
-      { x: cx, y: cy + TILE_H },
-      { x: cx - TILE_W / 2, y: cy },
-    ];
+  function coverageIntensity(elevation) {
+    return MAX_LIFT > 0 ? Math.min(1, elevation / MAX_LIFT) : 0;
   }
 
-  function elevationIntensity(elevation) {
-    return MAX_LIFT > 0 ? Math.min(1, elevation / MAX_LIFT) : 0;
+  /* Rest coverage varies with the noise field so the screen looks bitten,
+     not machine-perfect. */
+  function restScale(tile) {
+    return REST_COVER * (0.25 + tile.baseShade * 1.5);
+  }
+
+  function tileScale(tile, intensity) {
+    const rest = restScale(tile);
+    return rest + (MAX_COVER - rest) * intensity;
   }
 
   function waveFalloff(normalizedDist) {
@@ -126,16 +127,29 @@
     return t * t * (3 - 2 * t);
   }
 
+  /* Outside the block, the closest point on its edge. Inside it, the closest
+     way *out* — so reading a paragraph squeezes ink from under the type
+     instead of killing the wave entirely. */
   function nearestPointOnRect(px, py, rect) {
-    return {
-      x: Math.max(rect.left, Math.min(px, rect.right)),
-      y: Math.max(rect.top, Math.min(py, rect.bottom)),
-    };
+    const cx = Math.max(rect.left, Math.min(px, rect.right));
+    const cy = Math.max(rect.top, Math.min(py, rect.bottom));
+    if (cx !== px || cy !== py) return { x: cx, y: cy };
+
+    const dl = px - rect.left;
+    const dr = rect.right - px;
+    const dt = py - rect.top;
+    const db = rect.bottom - py;
+    const nearest = Math.min(dl, dr, dt, db);
+
+    if (nearest === dl) return { x: rect.left, y: py };
+    if (nearest === dr) return { x: rect.right, y: py };
+    if (nearest === dt) return { x: px, y: rect.top };
+    return { x: px, y: rect.bottom };
   }
 
   function refreshFootprints() {
     footprintRects = [];
-    document.querySelectorAll('.surface-hover').forEach((el) => {
+    document.querySelectorAll('.occludes').forEach((el) => {
       footprintRects.push(el.getBoundingClientRect());
     });
   }
@@ -163,9 +177,11 @@
       return;
     }
     const hit = document.elementFromPoint(pointerX, pointerY);
-    cachedOverSurface = hit && hit.closest('.surface-hover');
+    cachedOverSurface = hit && hit.closest('.occludes');
   }
 
+  /* Over a block of type the wave slides to the block's edge, so ink pools
+     against the knockout instead of vanishing under it. */
   function getWaveOrigin() {
     if (pointerX < 0) return { x: 0, y: 0 };
     if (cachedOverSurface) {
@@ -178,7 +194,7 @@
   function buildSpatialIndex() {
     spatialBuckets.clear();
     for (const tile of tiles) {
-      const { x, y } = tileCenter(tile.col, tile.row, 0);
+      const { x, y } = tileCenter(tile.col, tile.row);
       const key = `${Math.floor(x / BUCKET_SIZE)},${Math.floor(y / BUCKET_SIZE)}`;
       if (!spatialBuckets.has(key)) spatialBuckets.set(key, []);
       spatialBuckets.get(key).push(tile);
@@ -197,14 +213,13 @@
         const bucket = spatialBuckets.get(`${bx},${by}`);
         if (!bucket) continue;
         for (const tile of bucket) {
-          const { x, y } = tileCenter(tile.col, tile.row, 0);
+          const { x, y } = tileCenter(tile.col, tile.row);
           if (isInsideFootprint(x, y)) continue;
           const dx = originX - x;
           const dy = originY - y;
           const distSq = dx * dx + dy * dy;
           if (distSq > radiusSq) continue;
-          const dist = Math.sqrt(distSq);
-          const lift = MAX_LIFT * waveFalloff(dist / radiusPx);
+          const lift = MAX_LIFT * waveFalloff(Math.sqrt(distSq) / radiusPx);
           if (lift > tile.targetElevation) {
             tile.targetElevation = lift;
             outTiles.push(tile);
@@ -214,72 +229,19 @@
     }
   }
 
-  function shadeColor(baseShade, elevation, intensity) {
-    const noiseOffset = (baseShade - 0.5) * 10;
-    const liftBright = elevation * 1.2;
-    const glowBright = intensity * 10;
-    const v = Math.min(255, Math.max(0, BASE.r + noiseOffset + liftBright + glowBright));
-    const g = Math.min(255, Math.max(0, BASE.g + noiseOffset + liftBright + glowBright));
-    const b = Math.min(255, Math.max(0, BASE.b + noiseOffset + liftBright + glowBright));
-    return `rgb(${v | 0},${g | 0},${b | 0})`;
-  }
-
-  function sideColor(baseShade, darken) {
-    const noiseOffset = (baseShade - 0.5) * 8;
-    const v = Math.max(0, BASE.r + noiseOffset - darken);
-    const g = Math.max(0, BASE.g + noiseOffset - darken);
-    const b = Math.max(0, BASE.b + noiseOffset - darken);
-    return `rgb(${v | 0},${g | 0},${b | 0})`;
-  }
-
-  function drawPolygon(points, fill, stroke, glowIntensity) {
-    ctx.beginPath();
-    ctx.moveTo(points[0].x, points[0].y);
-    for (let i = 1; i < points.length; i++) {
-      ctx.lineTo(points[i].x, points[i].y);
-    }
+  function addDiamond(cx, cy, scale) {
+    const hw = (TILE_W / 2) * scale;
+    const hh = TILE_H * scale;
+    ctx.moveTo(cx, cy - hh);
+    ctx.lineTo(cx + hw, cy);
+    ctx.lineTo(cx, cy + hh);
+    ctx.lineTo(cx - hw, cy);
     ctx.closePath();
-    if (fill) {
-      ctx.fillStyle = fill;
-      ctx.fill();
-    }
-    if (stroke) {
-      ctx.save();
-      if (glowIntensity > 0.02) {
-        ctx.strokeStyle = accent;
-        ctx.globalAlpha = 0.25 + glowIntensity * 0.55;
-        ctx.lineWidth = 0.6 + glowIntensity * 1.2;
-      } else {
-        ctx.strokeStyle = stroke;
-        ctx.globalAlpha = 1;
-        ctx.lineWidth = 0.5;
-      }
-      ctx.stroke();
-      ctx.restore();
-    }
-  }
-
-  function drawTile(tile) {
-    const intensity = elevationIntensity(tile.elevation);
-    const { x: cx, y: cy } = tileCenter(tile.col, tile.row, tile.elevation);
-    const top = tileTopPoints(cx, cy);
-    const elev = tile.elevation;
-
-    if (elev > SIDE_LIFT_MIN) {
-      const bottom = tileTopPoints(cx, cy + elev);
-      drawPolygon([top[3], top[0], bottom[0], bottom[3]], sideColor(tile.baseShade, 18), null, 0);
-      drawPolygon([top[2], top[1], bottom[1], bottom[2]], sideColor(tile.baseShade, 28), null, 0);
-    }
-
-    const fill = shadeColor(tile.baseShade, tile.elevation, intensity);
-    const stroke = `rgba(12,12,15,${0.04 + tile.baseShade * 0.015})`;
-    const glowIntensity = !reducedMotion && MAX_LIFT > 0 ? intensity : 0;
-    drawPolygon(top, fill, stroke, glowIntensity);
   }
 
   function computeExtent(w, h) {
-    const reachX = (w / 2 + TILE_W / 2 + MAX_LIFT) / (TILE_W / 2);
-    const reachY = (h / 2 + TILE_H * 3 + MAX_LIFT) / (TILE_H / 2);
+    const reachX = (w / 2 + TILE_W) / (TILE_W / 2);
+    const reachY = (h / 2 + TILE_H * 3) / (TILE_H / 2);
     return Math.ceil(Math.max(reachX, reachY) * GRID_MARGIN);
   }
 
@@ -308,12 +270,13 @@
           col: c,
           row: r,
           baseShade: noise2D(c * 0.35, r * 0.35),
+          jx: (hash(c, r) - 0.5) * JITTER,
+          jy: (hash(r, c) - 0.5) * JITTER * 0.6,
           elevation: 0,
           targetElevation: 0,
         });
       }
     }
-    tiles.sort((a, b) => a.col + a.row - (b.col + b.row));
     buildSpatialIndex();
     refreshFootprints();
   }
@@ -330,16 +293,6 @@
     refreshPointerHit();
     const origin = getWaveOrigin();
     applyWaveAt(origin.x, origin.y, WAVE_RADIUS_PX, lastWaveTiles);
-
-    if (pulseUntil > performance.now() && pulseOrigin) {
-      const pulseStrength = (pulseUntil - performance.now()) / PULSE_MS;
-      applyWaveAt(
-        pulseOrigin.x,
-        pulseOrigin.y,
-        PULSE_RADIUS_PX * pulseStrength,
-        lastWaveTiles
-      );
-    }
 
     for (const tile of lastWaveTiles) {
       activeTiles.add(tile);
@@ -368,21 +321,51 @@
       activeTiles.delete(tile);
     }
 
-    if (pulseUntil > performance.now()) {
-      needsFrame = true;
-    }
-
     return needsFrame;
   }
 
   function render() {
     const { w, h } = viewportSize();
-    ctx.fillStyle = BG;
+
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = STOCK;
     ctx.fillRect(0, 0, w, h);
 
+    const padX = TILE_W;
+    const padY = TILE_H * 2;
+
+    // Ink pass: every visible dot, one path, one fill.
+    ctx.globalAlpha = INK_ALPHA;
+    ctx.fillStyle = BLUE;
+    ctx.beginPath();
     for (const tile of tiles) {
-      drawTile(tile);
+      const { x, y } = tileCenter(tile.col, tile.row);
+      if (x < -padX || x > w + padX || y < -padY || y > h + padY) continue;
+      // Under type the screen thins out rather than stopping dead — a hard
+      // rectangular void reads as a bug, a pale one reads as a knockout.
+      const scale = isInsideFootprint(x, y)
+        ? restScale(tile) * KNOCKOUT
+        : tileScale(tile, coverageIntensity(tile.elevation));
+      addDiamond(x + tile.jx, y + tile.jy, scale);
     }
+    ctx.fill();
+
+    // Second impression: pink, off register, only where ink is moving.
+    if (activeTiles.size) {
+      ctx.globalAlpha = PINK_ALPHA;
+      ctx.fillStyle = PINK;
+      ctx.beginPath();
+      for (const tile of activeTiles) {
+        const intensity = coverageIntensity(tile.elevation);
+        if (intensity < 0.06) continue;
+        const { x, y } = tileCenter(tile.col, tile.row);
+        if (isInsideFootprint(x, y)) continue;
+        addDiamond(x + tile.jx + MISREG_X, y + tile.jy + MISREG_Y, tileScale(tile, intensity) * 0.7);
+      }
+      ctx.fill();
+    }
+
+    ctx.globalAlpha = 1;
   }
 
   function frame() {
@@ -427,14 +410,6 @@
     requestFrame();
   }
 
-  function onTouchEnd() {
-    pointerX = -1;
-    pointerY = -1;
-    lastPointerQueryX = -9999;
-    cachedOverSurface = null;
-    requestFrame();
-  }
-
   function onScroll() {
     refreshFootprints();
     lastPointerQueryX = -9999;
@@ -443,53 +418,38 @@
     requestFrame();
   }
 
-  function onSurfaceEnter(e) {
-    if (reducedMotion || MAX_LIFT <= 0) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    pulseOrigin = {
-      x: rect.left + rect.width / 2,
-      y: rect.top + rect.height / 2,
-    };
-    pulseUntil = performance.now() + PULSE_MS;
-    requestFrame();
-  }
-
   let resizeTimer;
   function onResize() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
-      readColorsFromCss();
       buildGrid();
       render();
       requestFrame();
     }, 150);
   }
 
-  function bindSurfacePulse() {
-    document.querySelectorAll('.surface-hover:not([data-pulse-bound])').forEach((el) => {
-      el.setAttribute('data-pulse-bound', '');
-      el.addEventListener('mouseenter', onSurfaceEnter);
-    });
-  }
-
   readColorsFromCss();
   buildGrid();
   render();
-  bindSurfacePulse();
+
+  // Web fonts land after first paint and reflow the type, which moves every
+  // knockout. Re-measure once the sheet has settled.
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      refreshFootprints();
+      render();
+    });
+  }
 
   window.addEventListener('mousemove', onPointerMove);
   window.addEventListener('mouseleave', onPointerLeave);
   window.addEventListener('touchstart', onTouchStart, { passive: true });
-  window.addEventListener('touchend', onTouchEnd, { passive: true });
-  window.addEventListener('touchcancel', onTouchEnd, { passive: true });
+  window.addEventListener('touchend', onPointerLeave, { passive: true });
+  window.addEventListener('touchcancel', onPointerLeave, { passive: true });
   window.addEventListener('resize', onResize);
   if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', onResize);
   }
 
-  window.CubeFloor = {
-    refreshFootprints,
-    bindSurfacePulse,
-    onScroll,
-  };
+  window.CubeFloor = { refreshFootprints, onScroll, render };
 })();

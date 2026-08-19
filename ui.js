@@ -1,19 +1,18 @@
 (function () {
   'use strict';
 
-  const navLinks = document.querySelectorAll('.nav-links a[data-nav]');
-  const sections = [...navLinks]
-    .map((link) => ({
-      id: link.dataset.nav,
-      el: document.getElementById(link.dataset.nav),
-    }))
-    .filter((item) => item.el);
-
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── Running order ─────────────────────────────────────────────────── */
+
+  const navLinks = document.querySelectorAll('.running-order a[data-nav]');
+  const sections = [...navLinks]
+    .map((link) => ({ id: link.dataset.nav, el: document.getElementById(link.dataset.nav) }))
+    .filter((item) => item.el);
 
   function getHeaderOffset() {
     return parseInt(
-      getComputedStyle(document.documentElement).getPropertyValue('--header-h') || '56',
+      getComputedStyle(document.documentElement).getPropertyValue('--mast-h') || '54',
       10
     ) + 8;
   }
@@ -23,7 +22,7 @@
       const isActive = link.dataset.nav === id;
       link.classList.toggle('active', isActive);
       if (isActive) {
-        link.setAttribute('aria-current', 'page');
+        link.setAttribute('aria-current', 'true');
       } else {
         link.removeAttribute('aria-current');
       }
@@ -32,7 +31,9 @@
 
   function updateScrollSpy() {
     const scrollY = window.scrollY + getHeaderOffset();
-    let current = sections[0]?.id || 'home';
+    // The opening has no entry in the running order, so nothing is marked
+    // until the reader has actually reached the first act.
+    let current = null;
 
     for (const section of sections) {
       if (scrollY >= section.el.offsetTop) {
@@ -42,6 +43,39 @@
 
     setActiveNav(current);
   }
+
+  /* ── Registration drift ────────────────────────────────────────────────
+     The hero's plates slide with the pointer. Everything else registers
+     on :hover in CSS. */
+
+  const opening = document.getElementById('top');
+  let driftTicking = false;
+
+  function applyDrift(e) {
+    const w = window.innerWidth || 1;
+    const h = window.innerHeight || 1;
+    const x = (e.clientX / w - 0.5) * 2;   // -1 … 1
+    const y = (e.clientY / h - 0.5) * 2;
+    // em, not px, so the slip stays proportional to whatever it's printed at.
+    opening.style.setProperty('--rx', (0.012 + x * 0.038).toFixed(4) + 'em');
+    opening.style.setProperty('--ry', (0.012 + y * 0.028).toFixed(4) + 'em');
+  }
+
+  function initDrift() {
+    if (reducedMotion || !opening) return;
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+
+    window.addEventListener('pointermove', (e) => {
+      if (driftTicking) return;
+      driftTicking = true;
+      requestAnimationFrame(() => {
+        applyDrift(e);
+        driftTicking = false;
+      });
+    }, { passive: true });
+  }
+
+  /* ── Training index ────────────────────────────────────────────────── */
 
   function createTextEl(tag, className, text) {
     const el = document.createElement(tag);
@@ -54,116 +88,100 @@
     return typeof url === 'string' && url.startsWith('https://');
   }
 
-  function createCourseCard(course, index) {
-    const isDone = course.status === 'done';
-    const statusClass = isDone ? 'done' : 'wip';
-    const statusLabel = isDone ? '✓ Completed' : '↻ In Progress';
+  function createCourseRow(course) {
+    const row = document.createElement('li');
+    row.className = 'index-row occludes';
 
-    const article = document.createElement('article');
-    article.className = 'course-card surface-hover reveal-item lightning-card';
-    if (!reducedMotion) {
-      article.style.transitionDelay = `${0.04 + index * 0.03}s`;
-    }
+    const head = document.createElement('div');
+    head.className = 'index-head';
+    head.appendChild(createTextEl('span', 'index-code', course.id));
 
-    article.appendChild(createTextEl('div', 'course-number', course.id));
-    article.appendChild(createTextEl('h3', 'course-name', course.name));
-    article.appendChild(createTextEl('div', 'course-inst', course.institution));
-    article.appendChild(createTextEl('p', 'course-desc', course.description));
-
-    const footer = document.createElement('div');
-    footer.className = 'course-footer';
-
-    const status = createTextEl('span', `status ${statusClass}`, statusLabel);
-    footer.appendChild(status);
-
+    // The syllabus link is the whole point of a course title, so the title
+    // is the link when there is one — no separate "Outline ↗" affordance.
     if (isSafeUrl(course.url)) {
-      const link = document.createElement('a');
-      link.className = 'course-link';
+      const link = createTextEl('a', 'index-name', course.name);
       link.href = course.url;
       link.target = '_blank';
       link.rel = 'noopener';
-      link.textContent = 'Outline ↗';
-      footer.appendChild(link);
+      head.appendChild(link);
     } else {
-      const link = document.createElement('span');
-      link.className = 'course-link course-link-disabled';
-      link.setAttribute('aria-disabled', 'true');
-      link.textContent = 'Outline unavailable';
-      footer.appendChild(link);
+      head.appendChild(createTextEl('span', 'index-name', course.name));
     }
 
-    article.appendChild(footer);
-    return article;
+    if (course.status === 'wip') {
+      head.appendChild(createTextEl('span', 'index-wip', 'In progress'));
+    }
+
+    row.appendChild(head);
+
+    if (course.description) {
+      row.appendChild(createTextEl('p', 'index-desc', course.description));
+    }
+
+    return row;
   }
 
-  function showCourseMessage(grid, className, text) {
-    grid.replaceChildren(createTextEl('p', className, text));
+  function createGroup(institution, courses) {
+    const group = document.createElement('div');
+    group.className = 'index-group';
+    group.appendChild(createTextEl('h3', 'index-school occludes', institution));
+
+    const list = document.createElement('ul');
+    list.className = 'index-list';
+    list.append(...courses.map(createCourseRow));
+    group.appendChild(list);
+
+    return group;
+  }
+
+  function groupByInstitution(courses) {
+    const groups = new Map();
+    for (const course of courses) {
+      const key = course.institution || 'Elsewhere';
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(course);
+    }
+    return groups;
+  }
+
+  function showIndexMessage(root, className, text) {
+    root.replaceChildren(createTextEl('p', className, text));
   }
 
   async function renderCourses() {
-    const grid = document.querySelector('.coursework-grid');
-    if (!grid) return;
+    const root = document.querySelector('.index');
+    if (!root) return;
 
-    grid.setAttribute('aria-busy', 'true');
-    showCourseMessage(grid, 'course-loading', 'Loading courses…');
+    root.setAttribute('aria-busy', 'true');
+    showIndexMessage(root, 'index-note', 'Loading…');
 
     try {
       const response = await fetch('courses.json');
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const courses = await response.json();
-      grid.replaceChildren(...courses.map(createCourseCard));
-      grid.removeAttribute('aria-busy');
+      const groups = groupByInstitution(courses);
+      root.replaceChildren(
+        ...[...groups].map(([institution, list]) => createGroup(institution, list))
+      );
     } catch (err) {
       console.error('Failed to load courses:', err);
-      showCourseMessage(grid, 'course-error', 'Couldn\u2019t load courses.');
-      grid.removeAttribute('aria-busy');
+      showIndexMessage(root, 'index-note is-error', 'Couldn’t load courses.');
+    } finally {
+      root.removeAttribute('aria-busy');
     }
   }
 
-  function initScrollReveal() {
-    if (reducedMotion) {
-      document.querySelectorAll('.reveal-section, .reveal-item').forEach((el) => {
-        el.classList.add('visible');
-      });
-      return;
-    }
-
-    const sectionObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            entry.target.querySelectorAll('.reveal-item').forEach((item) => {
-              item.classList.add('visible');
-            });
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
-    );
-
-    document.querySelectorAll('.reveal-section').forEach((section) => {
-      if (section.id === 'home') {
-        section.classList.add('visible');
-        section.querySelectorAll('.reveal-item').forEach((item) => item.classList.add('visible'));
-      } else {
-        sectionObserver.observe(section);
-      }
-    });
-  }
+  /* ── Wiring ────────────────────────────────────────────────────────── */
 
   let scrollTicking = false;
   window.addEventListener('scroll', () => {
-    if (!scrollTicking) {
-      scrollTicking = true;
-      requestAnimationFrame(() => {
-        updateScrollSpy();
-        if (window.CubeFloor) {
-          window.CubeFloor.onScroll();
-        }
-        scrollTicking = false;
-      });
-    }
+    if (scrollTicking) return;
+    scrollTicking = true;
+    requestAnimationFrame(() => {
+      updateScrollSpy();
+      if (window.CubeFloor) window.CubeFloor.onScroll();
+      scrollTicking = false;
+    });
   }, { passive: true });
 
   navLinks.forEach((link) => {
@@ -171,18 +189,17 @@
   });
 
   window.addEventListener('hashchange', () => {
-    setActiveNav(location.hash.replace('#', '') || 'home');
+    setActiveNav(location.hash.replace('#', '') || null);
   });
 
   async function init() {
+    initDrift();
     await renderCourses();
-    initScrollReveal();
     updateScrollSpy();
 
-    if (window.CubeFloor) {
-      window.CubeFloor.bindSurfacePulse();
-      window.CubeFloor.refreshFootprints();
-    }
+    // The index only exists after the fetch resolves, so the floor has to be
+    // told where the new type sits before it can knock ink out from under it.
+    if (window.CubeFloor) window.CubeFloor.refreshFootprints();
   }
 
   init();

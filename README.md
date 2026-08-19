@@ -1,10 +1,65 @@
 # jackcareynapa.github.io
 
-Personal portfolio site for [jackcareynapa.github.io](https://jackcareynapa.github.io).
+Personal site for [jackcareynapa.github.io](https://jackcareynapa.github.io) — laid
+out as a cheaply printed two-colour program.
+
+## The design system
+
+Five colours, no gradients. Tokens live at the top of `styles.css`.
+
+| Token | Value | Role |
+|-------|-------|------|
+| `--stock` | `#DEDAD0` | the paper |
+| `--ink` | `#181A17` | black pass — body copy, rules |
+| `--blue` | `#2440C4` | spot ink 1 — links, the press floor, focus rings |
+| `--pink` | `#FF4FA3` | spot ink 2 — **graphic only** |
+| `--fade` | `#5A594F` | secondary copy, meta rows |
+
+**`--pink` must never carry a word.** It is 2.8:1 against the stock. Its only jobs
+are the offset impression behind type (where the legible ink pass sits on top of
+it), dots on the press floor, and acting as a *background* for ink-coloured type,
+which measures 5.8:1 the other way round.
+
+Type is set in Bricolage Grotesque (display), Newsreader (body), and DM Mono
+(codes, meta rows, the running order).
+
+### Misregistration
+
+Headlines print more than once. `.reg` renders a pink plate as a `::before`, and
+`.billing .reg` adds a blue plate as an `::after`; the real text prints on top.
+The offset lives in `--rx` / `--ry` **in `em`**, so a 2px slip on a project title
+is a 6px slip on the cover. The plates are pseudo-elements fed by `data-text`, so
+they stay out of the accessibility tree and out of copy-paste.
+
+`ui.js` drives `--rx` / `--ry` from the pointer in the hero; everything else
+registers on `:hover` in CSS. Both are frozen under `prefers-reduced-motion`.
+
+### The press floor
+
+`cube-floor.js` paints an isometric field of ink dots on a canvas behind the page.
+`elevation` does not mean height — it means **ink coverage**, expressed as dot
+size, so pushing the pointer across the sheet makes the screen gain. Coverage is
+capped below the point where neighbouring dots touch; a halftone that floods to
+solid stops being a halftone.
+
+Each pass is a single path and a single `fill()`.
+
+## Knockouts: the `.occludes` class
+
+Any element tagged `.occludes` is measured every scroll and knocks the ink back
+under itself, which is what keeps body copy readable over the field. Put it on
+**blocks of type**, never on layout containers — a rectangle the size of a whole
+project row punches a visible hole in the sheet.
+
+Because the wave is suppressed inside those rectangles, `nearestPointOnRect`
+pushes the wave origin *out* to the nearest edge when the pointer is inside one.
+Reading a paragraph squeezes ink out from under the type instead of killing the
+effect.
 
 ## Local preview
 
-Coursework is loaded via `fetch`, so open the site through a local server (not `file://`):
+Coursework is loaded via `fetch`, so open the site through a local server
+(not `file://`):
 
 ```bash
 python3 -m http.server 8000
@@ -14,25 +69,25 @@ Then visit `http://localhost:8000`.
 
 ## Adding courses
 
-Edit [`courses.json`](courses.json). Each entry needs:
+Edit [`courses.json`](courses.json). Rows are grouped by `institution` and render
+automatically — no HTML changes needed.
 
 | Field | Description |
 |-------|-------------|
 | `id` | Course code (e.g. `COMPSCI 201`) |
-| `name` | Course title |
-| `institution` | School name |
+| `name` | Course title — becomes the syllabus link when `url` is present |
+| `institution` | School name; also the group heading |
 | `description` | Short summary |
-| `status` | `"done"` or `"wip"` |
+| `status` | `"done"` or `"wip"`. Only `"wip"` renders a marker — a badge on every finished course is noise |
 | `url` | Syllabus link (must start with `https://`) |
-
-Cards render automatically on page load — no HTML changes needed.
 
 ## File layout
 
 | File | Purpose |
 |------|---------|
 | `index.html` | Page structure |
-| `styles.css` | Design tokens and layout |
-| `ui.js` | Nav, scroll reveal, course renderer |
-| `cube-floor.js` | Canvas background animation |
+| `styles.css` | Tokens, type scale, misregistration, layout |
+| `ui.js` | Running order, registration drift, the training index |
+| `cube-floor.js` | The press floor |
 | `courses.json` | Coursework data |
+| `favicon.svg` | Misregistered `JC` |
