@@ -30,10 +30,27 @@
   const WAVE_RADIUS_PX = 170;
   const FOOTPRINT_PAD = 2;
   const FEATHER = 60;       // how far a block's hold-back reaches
-  const PAD = 4;            // breathing room around the type itself
-  const UNDER_TEXT = 0.08;  // ink still laid down beneath type
-  const KNOCK_SCALE = 0.4;  // the hold-back buffer is low-res; it is only blur
-  const KNOCK_BLUR = 17;
+  const PAD = 6;            // breathing room around the type itself
+  const KNOCK_SCALE = 0.65;  // the hold-back buffer is low-res; it is only blur
+  const KNOCK_BLUR = 3;
+
+  /* How hard the ink is held back is decided by what prints on top of it,
+     not by a single number for the whole page.
+
+     Measured against the darkest dot the field can produce with the wave at
+     full strength: the black pass clears 8.8:1 and needs nothing held back
+     at all, while --fade secondary copy only manages 3.6:1 and stops meeting
+     AA. Holding everything back to suit the weakest type wiped the screen out
+     from under every block on the page — the field stopped running under the
+     type and started reading as a panel behind it.
+
+     STOCK_L and FIELD_DARKEST_L are the two ends of the blend, sampled from
+     the composited sheet. The model is in luminance and the blend is really
+     per-channel, so TARGET_CONTRAST carries margin over the 4.5:1 it has to
+     clear. */
+  const FIELD_DARKEST_L = 0.36;
+  const STOCK_L = 0.70;
+  const TARGET_CONTRAST = 6.2;
   const MAX_LIFT = reducedMotion ? 0 : 10;   // peak coverage, in arbitrary units
   const LERP = reducedMotion ? 1 : 0.16;
   const GRID_MARGIN = lowQuality ? 1.1 : 1.2;
@@ -108,6 +125,36 @@
     return a + (b - a) * ux + (c - a) * uy + (a - b - c + d) * ux * uy;
   }
 
+  /* sRGB relative luminance, per WCAG. */
+  function channelL(v) {
+    v /= 255;
+    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+  }
+
+  const holdBackCache = new Map();
+
+  function holdBackFor(color) {
+    let strength = holdBackCache.get(color);
+    if (strength !== undefined) return strength;
+
+    const parts = color.match(/[\d.]+/g);
+    if (!parts || parts.length < 3) {
+      strength = 1;
+    } else {
+      const L = 0.2126 * channelL(+parts[0])
+              + 0.7152 * channelL(+parts[1])
+              + 0.0722 * channelL(+parts[2]);
+      // The background luminance this type needs to sit on to clear the bar.
+      const needed = TARGET_CONTRAST * (L + 0.05) - 0.05;
+      strength = needed <= FIELD_DARKEST_L
+        ? 0
+        : Math.min(1, (needed - FIELD_DARKEST_L) / (STOCK_L - FIELD_DARKEST_L));
+    }
+
+    holdBackCache.set(color, strength);
+    return strength;
+  }
+
   function tileCenter(col, row) {
     return {
       x: offsetX + (col - row) * (TILE_W / 2),
@@ -147,21 +194,37 @@
      rectangle around it. */
   function refreshFootprints() {
     const sy = window.scrollY;
-    const els = document.querySelectorAll('.occludes');
     const rects = [];
     const range = document.createRange();
-    els.forEach((el) => {
-      range.selectNodeContents(el);
-      for (const r of range.getClientRects()) {
-        if (r.width <= 0 || r.height <= 0) continue;
-        rects.push(
-          r.left - FOOTPRINT_PAD,
-          r.top + sy - FOOTPRINT_PAD,
-          r.right + FOOTPRINT_PAD,
-          r.bottom + sy + FOOTPRINT_PAD
-        );
+
+    /* Walked per text node rather than per block, because a single .occludes
+       can hold both weights at once — a facts row is a --fade key beside an
+       ink value, and they need different hold-backs on the same line. */
+    document.querySelectorAll('.occludes').forEach((block) => {
+      const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+      let node;
+      while ((node = walker.nextNode())) {
+        if (!node.textContent.trim()) continue;
+        const parent = node.parentElement;
+        if (!parent) continue;
+
+        const strength = holdBackFor(getComputedStyle(parent).color);
+        if (strength <= 0) continue;   // the field runs under this type untouched
+
+        range.selectNodeContents(node);
+        for (const r of range.getClientRects()) {
+          if (r.width <= 0 || r.height <= 0) continue;
+          rects.push(
+            r.left - FOOTPRINT_PAD,
+            r.top + sy - FOOTPRINT_PAD,
+            r.right + FOOTPRINT_PAD,
+            r.bottom + sy + FOOTPRINT_PAD,
+            strength
+          );
+        }
       }
     });
+
     footprintRects = new Float64Array(rects);
     visibleRects = new Float64Array(rects.length);
   }
@@ -169,12 +232,13 @@
   /* Everything off screen is irrelevant to this frame. */
   function collectVisibleRects(topDoc, bottomDoc) {
     visibleCount = 0;
-    for (let i = 0; i < footprintRects.length; i += 4) {
+    for (let i = 0; i < footprintRects.length; i += 5) {
       if (footprintRects[i + 3] < topDoc || footprintRects[i + 1] > bottomDoc) continue;
       visibleRects[visibleCount++] = footprintRects[i];
       visibleRects[visibleCount++] = footprintRects[i + 1];
       visibleRects[visibleCount++] = footprintRects[i + 2];
       visibleRects[visibleCount++] = footprintRects[i + 3];
+      visibleRects[visibleCount++] = footprintRects[i + 4];
     }
   }
 
@@ -196,7 +260,8 @@
     knockCtx.setTransform(KNOCK_SCALE, 0, 0, KNOCK_SCALE, 0, 0);
     knockCtx.clearRect(0, 0, w, h);
     knockCtx.fillStyle = STOCK;
-    for (let i = 0; i < visibleCount; i += 4) {
+    for (let i = 0; i < visibleCount; i += 5) {
+      knockCtx.globalAlpha = visibleRects[i + 4];
       knockCtx.fillRect(
         visibleRects[i] - PAD,
         visibleRects[i + 1] - sy - PAD,
@@ -204,10 +269,13 @@
         visibleRects[i + 3] - visibleRects[i + 1] + PAD * 2
       );
     }
+    knockCtx.globalAlpha = 1;
 
+    /* Composited in one pass at full alpha: the strength now lives in each
+       rect, so the scratch buffer still unions rather than compounding the
+       way separate draws onto the sheet would. */
     ctx.save();
     if (canBlur) ctx.filter = `blur(${KNOCK_BLUR}px)`;
-    ctx.globalAlpha = 1 - UNDER_TEXT;
     ctx.drawImage(knockCanvas, 0, 0, w, h);
     ctx.restore();
   }

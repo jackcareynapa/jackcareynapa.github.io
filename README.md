@@ -83,9 +83,27 @@ Each pass is a single path and a single `fill()`.
 ## Ink under type: the `.occludes` class
 
 The ink runs *underneath* body copy rather than being knocked out of it. Elements
-tagged `.occludes` hold the ink back to `UNDER_TEXT` of its normal coverage,
-feathered out over `FEATHER` pixels so there is no rectangle to see. The wave
-still animates under them.
+tagged `.occludes` are measured for hold-back; the wave still animates under them.
+
+**How hard the ink is held back is decided by what prints on top of it**, not by
+one number for the whole page. Measured against the darkest dot the field can
+produce with the wave at full strength, the black pass clears 8.8:1 and needs
+nothing held back at all — so it gets nothing, and the screen runs visibly under
+the body copy. `--fade` secondary copy only manages 3.6:1, so it still gets a
+real hold-back, but as a thin band on its own lines rather than a slab over the
+whole block.
+
+`holdBackFor()` derives the strength from the type's own luminance and the two
+ends of the blend, `FIELD_DARKEST_L` and `STOCK_L`, both sampled from the
+composited sheet. The model works in luminance while the blend is really
+per-channel, so `TARGET_CONTRAST` carries margin over the 4.5:1 it has to clear.
+Swept across seven scroll positions with the wave forced under the copy, the
+worst measured ratio on the page is 4.55:1.
+
+Footprints are walked **per text node**, not per block, because a single
+`.occludes` can carry both weights at once — a facts row is a `--fade` key beside
+an ink value on the same line. Rects at zero strength are dropped at measure
+time, which is why the finer walk is also the faster one.
 
 Footprints are measured in **document** coordinates and cached. A scroll costs one
 subtraction per rectangle and a repaint — no `getBoundingClientRect`, no layout
