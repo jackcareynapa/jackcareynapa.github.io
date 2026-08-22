@@ -258,10 +258,21 @@
     target.lineTo(cx - hw, cy);
   }
 
-  function computeExtent(w, h) {
-    const reachX = (w / 2 + TILE_W) / (TILE_W / 2);
-    const reachY = (h / 2 + TILE_H * 3) / (TILE_H / 2);
-    return Math.ceil(Math.max(reachX, reachY) * GRID_MARGIN);
+  /* The grid is isometric, so col and row are not the axes that matter —
+     the diagonals are. u = col - row alone decides x; v = col + row alone
+     decides y. Sweeping col and row as a square meant sizing that square to
+     the *larger* of the two reaches and applying it to both, which built
+     roughly three tiles for every one that could ever be drawn. Walking u
+     and v instead enumerates the diamond that actually lands on the sheet.
+
+     The asymmetry in the y reach is deliberate and pre-existing: the field
+     origin sits a tile below centre, so it has to carry further up than
+     down. Taking the larger side symmetrically covers both. */
+  function computeReach(w, h) {
+    return {
+      u: Math.ceil((w / 2 + TILE_W) / (TILE_W / 2) * GRID_MARGIN),
+      v: Math.ceil((h / 2 + TILE_H * 3) / (TILE_H / 2) * GRID_MARGIN),
+    };
   }
 
   function buildGrid() {
@@ -276,15 +287,18 @@
     canvas.style.height = h + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    const extent = computeExtent(w, h);
+    const reach = computeReach(w, h);
     offsetX = w / 2;
     offsetY = h / 2 + TILE_H;
 
     tiles = [];
     lastWaveTiles = [];
     activeTiles.clear();
-    for (let r = -extent; r <= extent; r++) {
-      for (let c = -extent; c <= extent; c++) {
+    for (let v = -reach.v; v <= reach.v; v++) {
+      // u has to share v's parity or col and row come out on half-tiles.
+      for (let u = -reach.u + ((reach.u + v) & 1); u <= reach.u; u += 2) {
+        const c = (u + v) / 2;
+        const r = (v - u) / 2;
         tiles.push({
           col: c,
           row: r,

@@ -10,11 +10,24 @@
     .map((link) => ({ id: link.dataset.nav, el: document.getElementById(link.dataset.nav) }))
     .filter((item) => item.el);
 
+  /* Has to agree with scroll-padding-top, which is what actually decides where
+     an anchor click lands. They disagreed by 8px, which was enough that every
+     click on the running order left it one entry behind: clicking "education"
+     landed at the top of Education with "work" still lit. Reading the computed
+     value keeps the two from drifting apart again; the extra pixel absorbs
+     subpixel rounding so the landing position counts as having arrived. */
   function getHeaderOffset() {
+    const pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop);
+    if (Number.isFinite(pad)) return pad + 1;
     return parseInt(
       getComputedStyle(document.documentElement).getPropertyValue('--mast-h') || '54',
       10
-    ) + 8;
+    ) + 16;
+  }
+
+  function atDocumentEnd() {
+    const doc = document.documentElement;
+    return window.scrollY + window.innerHeight >= doc.scrollHeight - 2;
   }
 
   function setActiveNav(id) {
@@ -30,6 +43,16 @@
   }
 
   function updateScrollSpy() {
+    // The closing section sits too near the foot of the page for its top edge
+    // ever to travel up to the header line — there is nothing underneath it
+    // left to scroll. Reaching the bottom of the document *is* arriving at it,
+    // and without this the running order reads a section behind for the whole
+    // last screenful.
+    if (sections.length && atDocumentEnd()) {
+      setActiveNav(sections[sections.length - 1].id);
+      return;
+    }
+
     const scrollY = window.scrollY + getHeaderOffset();
     // The opening has no entry in the running order, so nothing is marked
     // until the reader has actually reached the first act.

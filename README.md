@@ -43,10 +43,17 @@ is a 6px slip on the cover. The plates are pseudo-elements fed by `data-text`, s
 they stay out of the accessibility tree and out of copy-paste.
 
 `ui.js` drives `--rx` / `--ry` from the pointer in the hero; everything else
-registers on `:hover` in CSS. Both are frozen under `prefers-reduced-motion`.
+registers on `:hover` in CSS. Both are frozen under `prefers-reduced-motion`, and
+the `:root` defaults are set to the value the pointer settles on near the middle
+of the sheet — they are what reduced-motion readers and the pre-script paint
+actually get, so they have to be the *tight* register rather than a loose one.
 
-Body copy takes the same impression on hover via `text-shadow`, which wraps with
-the text and needs no extra markup.
+**Labels take the impression on hover, body copy does not.** Meta rows, eyebrows
+and the credit line get it via `text-shadow`, which wraps with the text and needs
+no extra markup. Running prose is deliberately excluded: a 2px slip on 17px
+Newsreader is about as wide as the serif itself, and the pointer necessarily sits
+inside a paragraph the whole time that paragraph is being read, so the effect
+made the copy worse exactly when someone was reading it.
 
 ### The halftone name
 
@@ -94,6 +101,14 @@ union instead of compounding.
 
 `buildField()` rasterises the resting screen to an offscreen canvas once per
 resize; `render()` blits it and path-draws only the disturbed tiles.
+
+The grid itself is enumerated along the diagonals `u = col - row` and
+`v = col + row`, not as a square sweep of col and row. Because the field is
+isometric, `u` alone decides x and `v` alone decides y, and the two reaches
+differ sharply — sizing one square to the larger of them built roughly three
+tiles for every one that could ever be drawn, and closer to eight on a phone,
+where the tall vertical reach was being applied to the short horizontal axis.
+`u` and `v` have to share parity or col and row land on half-tiles.
 
 Building the full path every frame was the entire cost of the animation —
 ~3,600 visible diamonds is ~18,000 canvas calls, measured at 41ms per frame.

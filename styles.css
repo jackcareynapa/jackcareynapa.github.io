@@ -31,9 +31,15 @@
   /* Registration offset — how badly the press is aligned. Expressed in em
      so a 2px slip on a caption is a 6px slip on the cover, the way a real
      misprint scales. Driven by the pointer in the hero, by :hover elsewhere,
-     frozen under reduced motion. */
-  --rx: 0.035em;
-  --ry: 0.028em;
+     frozen under reduced motion.
+
+     These defaults are the value the pointer settles on with the cursor near
+     the middle of the sheet, because they have to stand in for it: ui.js
+     never writes --rx under reduced motion, and nothing writes it before the
+     script runs. A looser default only ever showed up as a hard drop shadow
+     on 176px type, for the readers who asked for less movement. */
+  --rx: 0.012em;
+  --ry: 0.012em;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -649,35 +655,32 @@ a.index-name:hover { border-bottom-color: var(--ink); }
 }
 
 /* ── Live type ──────────────────────────────────────────────────────────
-   Hovering any block of copy slips its plate, the same misprint the
-   headlines get. text-shadow rather than a pseudo-element, so it wraps with
-   the text and costs nothing in markup. */
+   Hovering a label slips its plate, the same misprint the headlines get.
+   text-shadow rather than a pseudo-element, so it wraps with the text and
+   costs nothing in markup.
+
+   Labels only, and deliberately so. The impression is sized for type that
+   is scanned — short, uppercase, widely tracked, where the offset falls in
+   the space between letters. On running prose it does the opposite: a 2px
+   slip on 17px Newsreader is about as wide as the serif itself, and the
+   pointer necessarily sits inside a paragraph the whole time that paragraph
+   is being read. The copy stays in register. */
 
 .credit,
-.intro,
 .eyebrow,
 .bill-meta,
-.bill-desc,
 .facts-key,
-.facts-value,
 .index-school,
 .index-name,
-.index-desc,
-.hail-note,
 .elsewhere-key {
   transition: text-shadow 0.22s ease, color 0.22s ease;
 }
 
 .credit:hover,
-.intro:hover,
 .eyebrow:hover,
 .bill-meta:hover,
-.bill-desc:hover,
 .facts-key:hover,
-.facts-value:hover,
 .index-school:hover,
-.index-desc:hover,
-.hail-note:hover,
 .elsewhere-key:hover {
   text-shadow: 2px 1.5px 0 var(--pink), -1px -1px 0 rgba(36, 64, 196, 0.55);
 }
@@ -715,6 +718,10 @@ a.index-name:hover {
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+
+  /* Pinned rather than inherited: this is the state ui.js declines to drive,
+     so the plate has to be set here on purpose. */
+  :root { --rx: 0.012em; --ry: 0.012em; }
 
   .reg::before,
   .reg::after { transition: none; }
