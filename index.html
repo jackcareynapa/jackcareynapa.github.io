@@ -5,6 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Jack Carey — computer science and theater studies at Duke. Graph search, improv sets, and things built to see what happens.">
   <title>Jack Carey</title>
+
+  <!-- The palette is hand-measured for contrast on a light stock; declaring the
+       scheme stops browsers and extensions auto-inverting it into something
+       whose ratios nobody checked. -->
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#DEDAD0">
+
+  <!-- A personal site is distributed by pasting the link. Without these it
+       unfurls blank in LinkedIn, Slack and mail. -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jack Carey">
+  <meta property="og:title" content="Jack Carey">
+  <meta property="og:description" content="Computer science and theater studies at Duke. Graph search, improv sets, and things built to see what happens.">
+  <meta property="og:url" content="https://jackcareynapa.github.io/">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Jack Carey">
+  <meta name="twitter:description" content="Computer science and theater studies at Duke. Graph search, improv sets, and things built to see what happens.">
+  <link rel="canonical" href="https://jackcareynapa.github.io/">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="alternate icon" href="cubes.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,8 +50,8 @@
 
   <main>
 
-    <section id="top" class="opening">
-      <h1 class="billing occludes">
+    <section id="top" class="opening" tabindex="-1" aria-labelledby="billing-name">
+      <h1 class="billing occludes" id="billing-name">
         <span class="reg" data-text="Jack"><span class="reg-ink">Jack</span></span>
         <span class="reg" data-text="Carey"><span class="reg-ink">Carey</span></span>
       </h1>
@@ -47,9 +66,9 @@
       </p>
     </section>
 
-    <section id="work">
+    <section id="work" aria-labelledby="work-heading">
       <div class="ramp" aria-hidden="true"></div>
-      <h2 class="eyebrow occludes">Work</h2>
+      <h2 class="eyebrow occludes" id="work-heading">Work</h2>
 
       <div class="bill">
 
@@ -63,8 +82,8 @@
             over the full English Wikipedia link graph with memory-mapped CSR arrays.
           </p>
           <p class="bill-links occludes">
-            <a class="ink-link" href="https://raw.githubusercontent.com/jackcareynapa/wikinaut/main/wikinaut.user.js" target="_blank" rel="noopener">Install the userscript</a>
-            <a class="ink-link" href="https://github.com/jackcareynapa/wikinaut" target="_blank" rel="noopener">Source</a>
+            <a class="ink-link" href="https://raw.githubusercontent.com/jackcareynapa/wikinaut/main/wikinaut.user.js" target="_blank" rel="noopener">Install the userscript<span class="visually-hidden"> (opens in a new tab)</span></a>
+            <a class="ink-link" href="https://github.com/jackcareynapa/wikinaut" target="_blank" rel="noopener">Source<span class="visually-hidden"> (opens in a new tab)</span></a>
           </p>
         </article>
 
@@ -77,8 +96,8 @@
             what it should look like.
           </p>
           <p class="bill-links occludes">
-            <a class="ink-link" href="https://napavalleyvineyard.vercel.app/" target="_blank" rel="noopener">Visit</a>
-            <a class="ink-link" href="https://github.com/jackcareynapa/napavalleyvineyard" target="_blank" rel="noopener">Source</a>
+            <a class="ink-link" href="https://napavalleyvineyard.vercel.app/" target="_blank" rel="noopener">Visit<span class="visually-hidden"> (opens in a new tab)</span></a>
+            <a class="ink-link" href="https://github.com/jackcareynapa/napavalleyvineyard" target="_blank" rel="noopener">Source<span class="visually-hidden"> (opens in a new tab)</span></a>
           </p>
         </article>
 
@@ -90,17 +109,17 @@
             Upload a picture, add words, get a link. The whole thing runs on cloud functions.
           </p>
           <p class="bill-links occludes">
-            <a class="ink-link" href="https://serverless-meme-generator.vercel.app/" target="_blank" rel="noopener">Visit</a>
-            <a class="ink-link" href="https://github.com/jackcareynapa/serverless-meme-generator" target="_blank" rel="noopener">Source</a>
+            <a class="ink-link" href="https://serverless-meme-generator.vercel.app/" target="_blank" rel="noopener">Visit<span class="visually-hidden"> (opens in a new tab)</span></a>
+            <a class="ink-link" href="https://github.com/jackcareynapa/serverless-meme-generator" target="_blank" rel="noopener">Source<span class="visually-hidden"> (opens in a new tab)</span></a>
           </p>
         </article>
 
       </div>
     </section>
 
-    <section id="education">
+    <section id="education" aria-labelledby="education-heading">
       <div class="ramp" aria-hidden="true"></div>
-      <h2 class="eyebrow occludes">Education</h2>
+      <h2 class="eyebrow occludes" id="education-heading">Education</h2>
 
       <ul class="facts occludes">
         <li><span class="facts-key">Degree</span><span class="facts-value">BS Computer Science, Duke University, 2027</span></li>
@@ -112,9 +131,9 @@
       <div class="index"></div>
     </section>
 
-    <section id="elsewhere">
+    <section id="elsewhere" aria-labelledby="elsewhere-heading">
       <div class="ramp" aria-hidden="true"></div>
-      <h2 class="eyebrow occludes">Elsewhere</h2>
+      <h2 class="eyebrow occludes" id="elsewhere-heading">Elsewhere</h2>
       <div>
         <a class="hail occludes" href="mailto:jack.carey.napa@gmail.com">jack.carey.napa@gmail.com</a>
         <p class="hail-note occludes">Email is the one I actually read.</p>
@@ -122,15 +141,15 @@
         <ul class="elsewhere-list occludes">
           <li>
             <span class="elsewhere-key">GitHub</span>
-            <a class="ink-link" href="https://github.com/jackcareynapa" target="_blank" rel="noopener">github.com/jackcareynapa</a>
+            <a class="ink-link" href="https://github.com/jackcareynapa" target="_blank" rel="noopener">github.com/jackcareynapa<span class="visually-hidden"> (opens in a new tab)</span></a>
           </li>
           <li>
             <span class="elsewhere-key">LinkedIn</span>
-            <a class="ink-link" href="https://linkedin.com/in/jack-carey-50386b379" target="_blank" rel="noopener">jack-carey</a>
+            <a class="ink-link" href="https://linkedin.com/in/jack-carey-50386b379" target="_blank" rel="noopener">jack-carey<span class="visually-hidden"> (opens in a new tab)</span></a>
           </li>
           <li>
             <span class="elsewhere-key">Resume</span>
-            <a class="ink-link" href="Jack-Carey-Resume.pdf">Jack-Carey-Resume.pdf</a>
+            <a class="ink-link" href="Jack-Carey-Resume.pdf" target="_blank" rel="noopener">Jack-Carey-Resume.pdf<span class="visually-hidden"> (opens in a new tab)</span></a>
           </li>
         </ul>
       </div>

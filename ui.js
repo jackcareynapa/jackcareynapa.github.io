@@ -19,10 +19,10 @@
   function getHeaderOffset() {
     const pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop);
     if (Number.isFinite(pad)) return pad + 1;
-    return parseInt(
-      getComputedStyle(document.documentElement).getPropertyValue('--mast-h') || '54',
-      10
-    ) + 16;
+    // Fallback: measure the bar rather than parsing --mast-h, which is in rem
+    // and so does not resolve to pixels by parseInt.
+    const mast = document.querySelector('.masthead');
+    return (mast ? mast.getBoundingClientRect().height : 54) + 16;
   }
 
   function atDocumentEnd() {
@@ -35,7 +35,7 @@
       const isActive = link.dataset.nav === id;
       link.classList.toggle('active', isActive);
       if (isActive) {
-        link.setAttribute('aria-current', 'true');
+        link.setAttribute('aria-current', 'location');
       } else {
         link.removeAttribute('aria-current');
       }
@@ -126,6 +126,11 @@
       link.href = course.url;
       link.target = '_blank';
       link.rel = 'noopener';
+      // Same pairing as the markup: the `↗` is the visible half, this is the
+      // half a screen reader gets.
+      link.appendChild(
+        createTextEl('span', 'visually-hidden', ' (opens in a new tab)')
+      );
       head.appendChild(link);
     } else {
       head.appendChild(createTextEl('span', 'index-name', course.name));
@@ -168,7 +173,11 @@
   }
 
   function showIndexMessage(root, className, text) {
-    root.replaceChildren(createTextEl('p', className, text));
+    const note = createTextEl('p', className, text);
+    // Loading and failure are status changes, not content. Without a live
+    // region a reader who has already passed this point never hears them.
+    note.setAttribute('role', 'status');
+    root.replaceChildren(note);
   }
 
   async function renderCourses() {
@@ -183,6 +192,12 @@
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const courses = await response.json();
       const groups = groupByInstitution(courses);
+      if (!groups.size) {
+        // Otherwise the section just stops, with no way to tell an empty
+        // index from a broken one.
+        showIndexMessage(root, 'index-note', 'No coursework listed yet.');
+        return;
+      }
       root.replaceChildren(
         ...[...groups].map(([institution, list]) => createGroup(institution, list))
       );

@@ -208,6 +208,12 @@
         const parent = node.parentElement;
         if (!parent) continue;
 
+        /* Screen-reader-only text still lays out — it is clipped, not removed —
+           so a Range over it returns a full-width rect. Held back like real
+           type it would knock a stock-coloured band out of the field with
+           nothing printed on top of it. Nothing prints, so nothing is held. */
+        if (parent.closest('.visually-hidden')) continue;
+
         const strength = holdBackFor(getComputedStyle(parent).color);
         if (strength <= 0) continue;   // the field runs under this type untouched
 

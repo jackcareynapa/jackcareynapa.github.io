@@ -24,7 +24,9 @@
   --font-body:    'Newsreader', Georgia, serif;
   --font-data:    'DM Mono', ui-monospace, monospace;
 
-  --mast-h: 54px;
+  /* rem, not px: the bar has to grow with the type it contains, or a
+     reader with a larger default font size gets a clipped masthead. */
+  --mast-h: 3.375rem;   /* 54px at a 16px root */
   --measure: 60rem;
   --gutter: clamp(1.25rem, 5vw, 4rem);
 
@@ -46,7 +48,10 @@
 
 html {
   scroll-behavior: smooth;
-  font-size: 16px;
+  /* 100%, not a fixed px: a px root font size silently discards the reader's
+     own browser font-size setting, and because the whole scale is in rem that
+     pins every size on the page. */
+  font-size: 100%;
   scroll-padding-top: calc(var(--mast-h) + 1rem);
 }
 
@@ -87,8 +92,9 @@ body::after {
 /* ── Misregistration ─────────────────────────────────────────────────────
    Type prints twice — pink, then the ink pass on top — and the cover prints
    three times. The spot impressions are pseudo-elements, so they stay out of
-   the accessibility tree and out of copy-paste. z-index:0 on the parent
-   contains them. */
+   copy-paste. Being a pseudo-element is *not* enough to stay out of the
+   accessibility tree, though — generated content is announced — so the plates
+   carry explicit empty alt text below. z-index:0 on the parent contains them. */
 
 .reg {
   position: relative;
@@ -99,7 +105,12 @@ body::after {
 
 .reg::before,
 .billing .reg::after {
+  /* The plates are ink, not words. The bare declaration is the fallback for
+     engines without alt-text support; the `/ ""` form paints the same glyphs
+     but hands the a11y tree an empty string. Without it the cover announces
+     as "Jack Jack Jack Carey Carey Carey" — three plates, three readings. */
   content: attr(data-text);
+  content: attr(data-text) / "";
   position: absolute;
   /* inset, not left/top — the plate has to take the same box as the ink pass
      so a title that wraps to two lines wraps identically on every plate. */
@@ -492,9 +503,27 @@ section {
   border-bottom-color: var(--ink);
 }
 
+/* The arrow is the visual half of "opens in a new tab"; the other half is a
+   visually-hidden note in the markup. Empty alt text keeps the glyph itself
+   from being announced as a symbol after every link. */
 .ink-link[target='_blank']::after {
   content: ' ↗';
+  content: ' ↗' / "";
   letter-spacing: 0;
+}
+
+/* Reachable by screen reader and by copy, invisible on the sheet. Not
+   display:none, which would remove it from both. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 /* ── Training ─────────────────────────────────────────────────────────── */
@@ -695,6 +724,13 @@ a.index-name:hover {
   outline-offset: 3px;
 }
 
+/* The opening is focusable only so the skip link can land on it. It is a
+   scroll destination, not a control, so it takes no ring of its own. */
+.opening:focus,
+.opening:focus-visible {
+  outline: none;
+}
+
 ::selection {
   background: var(--pink);
   color: var(--ink);
@@ -736,3 +772,70 @@ a.index-name:hover {
 /* ── Cheap press: Safari and coarse pointers get a flatter print ── */
 .reduced-fx .billing .reg::after { display: none; }
 .reduced-fx .reg::before { transform: translate(0.03em, 0.024em); }
+
+/* ── Print ────────────────────────────────────────────────────────────────
+   None of the press survives a printer: the floor and the paper tooth are
+   fixed-position full-bleed layers that would print once, over the top of
+   page one, and the masthead would stamp itself across the copy. Printing
+   the sheet means printing the words on it. */
+@media print {
+  #cube-floor,
+  body::after,
+  .ramp,
+  .skip { display: none !important; }
+
+  html { font-size: 12pt; }
+
+  body {
+    background: #fff;
+    color: #000;
+    overflow-x: visible;
+  }
+
+  .masthead,
+  .colophon {
+    position: static;
+    background: none;
+  }
+
+  main { padding-top: 0; }
+
+  section {
+    padding: 0 0 1.5rem;
+    max-width: none;
+  }
+
+  /* Plates are a printing joke that a real printer does not get to be in on. */
+  .reg::before,
+  .billing .reg::after { display: none; }
+
+  /* The halftone fill relies on background-clip; without it the name would
+     print as nothing at all. */
+  .billing .reg-ink {
+    background: none;
+    -webkit-text-fill-color: #000;
+    color: #000;
+  }
+
+  .ink-link,
+  .index-code,
+  a { color: #000; text-decoration: underline; }
+
+  /* On paper a link has to carry its own destination. These have to out-rank
+     the `↗` rule, which is a class *and* an attribute selector. */
+  .bill-links .ink-link[target='_blank']::after,
+  .elsewhere-list .ink-link[target='_blank']::after,
+  .index-list .index-name[href]::after {
+    content: ' (' attr(href) ')';
+    font-family: var(--font-data);
+    font-size: 0.75em;
+    word-break: break-all;
+  }
+
+  .visually-hidden { display: none; }
+
+  .bill-item,
+  .index-group { break-inside: avoid; }
+
+  h1, h2, h3 { break-after: avoid; }
+}

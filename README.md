@@ -40,7 +40,23 @@ Headlines print more than once. `.reg` renders a pink plate as a `::before`, and
 `.billing .reg` adds a blue plate as an `::after`; the real text prints on top.
 The offset lives in `--rx` / `--ry` **in `em`**, so a 2px slip on a project title
 is a 6px slip on the cover. The plates are pseudo-elements fed by `data-text`, so
-they stay out of the accessibility tree and out of copy-paste.
+they stay out of copy-paste.
+
+Being a pseudo-element is **not** enough to stay out of the accessibility tree —
+generated content is announced. Left plain, the cover read as *"Jack Jack Jack
+Carey Carey Carey"* and every project title stuttered. The plates therefore carry
+explicit empty alt text:
+
+```css
+content: attr(data-text);        /* fallback for engines without alt text */
+content: attr(data-text) / "";   /* same glyphs, nothing to announce */
+```
+
+The bare declaration has to come first: an engine that does not understand the
+`/ ""` form drops that line and keeps the plain one, so the plate still prints.
+The same pairing gives the `↗` on external links an empty alt text, because the
+arrow is an affordance and the words for it live in a `.visually-hidden` span
+next to it.
 
 `ui.js` drives `--rx` / `--ry` from the pointer in the hero; everything else
 registers on `:hover` in CSS. Both are frozen under `prefers-reduced-motion`, and
@@ -132,6 +148,25 @@ Building the full path every frame was the entire cost of the animation —
 ~3,600 visible diamonds is ~18,000 canvas calls, measured at 41ms per frame.
 Blitting the still and drawing only what moved is 0.3ms. If you add anything to
 the resting screen, put it in `buildField()`, not `render()`.
+
+## Screen-reader-only text
+
+`.visually-hidden` is clipped, not removed — `display: none` would take it out of
+the accessibility tree as well, which is the opposite of the point. Because it is
+clipped rather than removed it still **lays out**, and a `Range` over it returns a
+full-width rectangle. `refreshFootprints()` skips anything inside it: the
+hold-back exists to protect ink that prints, and nothing prints here. Without
+that skip, twenty-one invisible strings knock stock-coloured bands, up to 160px
+wide, out of the field.
+
+## Print
+
+`@media print` takes the press off the page: the floor, the paper tooth and the
+ramps are fixed-position full-bleed layers that would otherwise print once, over
+the top of page one, with the masthead stamped across the copy. The plates go
+too — misregistration is a joke about printing that a real printer does not get
+to be in on — and the halftone name falls back to solid black, because its fill
+depends on `background-clip: text`. Links print their own `href`.
 
 ## Local preview
 
