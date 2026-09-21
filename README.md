@@ -1,177 +1,10 @@
 # jackcareynapa.github.io
 
-Personal site for [jackcareynapa.github.io](https://jackcareynapa.github.io) — set
-as a two-colour halftone print.
-
-## The design system
-
-Five colours, no gradients. Tokens live at the top of `styles.css`.
-
-| Token | Value | Role |
-|-------|-------|------|
-| `--stock` | `#DEDAD0` | the paper |
-| `--ink` | `#181A17` | black pass — body copy, rules |
-| `--blue` | `#2440C4` | spot ink 1 — links, the press floor, focus rings |
-| `--pink` | `#FF4FA3` | spot ink 2 — **graphic only** |
-| `--fade` | `#5A594F` | secondary copy, meta rows |
-
-**`--pink` must never carry a word.** It is 2.8:1 against the stock. Its only jobs
-are the offset impression behind type (where the legible ink pass sits on top of
-it), dots on the press floor, and acting as a *background* for ink-coloured type,
-which measures 5.8:1 the other way round.
-
-Type is set in Bricolage Grotesque (display), Newsreader (body), and DM Mono
-(codes, meta rows, navigation).
-
-### Tonal ramps
-
-Section rules are halftone ramps, not hairlines. `.ramp` layers two diamond
-patterns: large diamonds hold the left end and die out by 40%, small ones fade in
-where the large ones stop, sit in the gaps between them, and carry the ramp out to
-nothing. Each layer is a background image with its own mask gradient, which is why
-they need separate pseudo-elements rather than one multi-layer background.
-
-`.ramp-thin` is the same device at a smaller scale, used between list items. Both
-are `aria-hidden` — they are rules, not content.
-
-### Misregistration
-
-Headlines print more than once. `.reg` renders a pink plate as a `::before`, and
-`.billing .reg` adds a blue plate as an `::after`; the real text prints on top.
-The offset lives in `--rx` / `--ry` **in `em`**, so a 2px slip on a project title
-is a 6px slip on the cover. The plates are pseudo-elements fed by `data-text`, so
-they stay out of copy-paste.
-
-Being a pseudo-element is **not** enough to stay out of the accessibility tree —
-generated content is announced. Left plain, the cover read as *"Jack Jack Jack
-Carey Carey Carey"* and every project title stuttered. The plates therefore carry
-explicit empty alt text:
-
-```css
-content: attr(data-text);        /* fallback for engines without alt text */
-content: attr(data-text) / "";   /* same glyphs, nothing to announce */
-```
-
-The bare declaration has to come first: an engine that does not understand the
-`/ ""` form drops that line and keeps the plain one, so the plate still prints.
-The same pairing gives the `↗` on external links an empty alt text, because the
-arrow is an affordance and the words for it live in a `.visually-hidden` span
-next to it.
-
-`ui.js` drives `--rx` / `--ry` from the pointer in the hero; everything else
-registers on `:hover` in CSS. Both are frozen under `prefers-reduced-motion`, and
-the `:root` defaults are set to the value the pointer settles on near the middle
-of the sheet — they are what reduced-motion readers and the pre-script paint
-actually get, so they have to be the *tight* register rather than a loose one.
-
-**Labels take the impression on hover, body copy does not.** Meta rows, eyebrows
-and the credit line get it via `text-shadow`, which wraps with the text and needs
-no extra markup. Running prose is deliberately excluded: a 2px slip on 17px
-Newsreader is about as wide as the serif itself, and the pointer necessarily sits
-inside a paragraph the whole time that paragraph is being read, so the effect
-made the copy worse exactly when someone was reading it.
-
-### The halftone name
-
-`.billing .reg-ink` fills the letterforms with the same diamond screen as the
-floor — solid at the top of each line, breaking into dots towards the baseline.
-The screen is sized in `em` so it stays proportional to the type; a fixed pixel
-screen is far too coarse once the name shrinks on a phone.
-
-The ink pass **must** be an inline child (`.reg-ink`), not the element's own
-background. An element's background paints *below* its negative-z-index
-pseudo-elements, so putting the screen there renders both spot plates on top of
-the ink and the name comes out blue. A descendant's background paints after them.
-
-The whole block is wrapped in `@supports (background-clip: text)`; without it the
-name falls back to solid ink rather than disappearing.
-
-### The press floor
-
-`cube-floor.js` paints an isometric field of ink dots on a canvas behind the page.
-`elevation` does not mean height — it means **ink coverage**, expressed as dot
-size, so pushing the pointer across the sheet makes the screen gain. Coverage is
-capped below the point where neighbouring dots touch; a halftone that floods to
-solid stops being a halftone.
-
-Each pass is a single path and a single `fill()`.
-
-## Ink under type: the `.occludes` class
-
-The ink runs *underneath* body copy rather than being knocked out of it. Elements
-tagged `.occludes` are measured for hold-back; the wave still animates under them.
-
-**How hard the ink is held back is decided by what prints on top of it**, not by
-one number for the whole page. Measured against the darkest dot the field can
-produce with the wave at full strength, the black pass clears 8.8:1 and needs
-nothing held back at all — so it gets nothing, and the screen runs visibly under
-the body copy. `--fade` secondary copy only manages 3.6:1, so it still gets a
-real hold-back, but as a thin band on its own lines rather than a slab over the
-whole block.
-
-`holdBackFor()` derives the strength from the type's own luminance and the two
-ends of the blend, `FIELD_DARKEST_L` and `STOCK_L`, both sampled from the
-composited sheet. The model works in luminance while the blend is really
-per-channel, so `TARGET_CONTRAST` carries margin over the 4.5:1 it has to clear.
-Swept across seven scroll positions with the wave forced under the copy, the
-worst measured ratio on the page is 4.55:1.
-
-Footprints are walked **per text node**, not per block, because a single
-`.occludes` can carry both weights at once — a facts row is a `--fade` key beside
-an ink value on the same line. Rects at zero strength are dropped at measure
-time, which is why the finer walk is also the faster one.
-
-Footprints are measured in **document** coordinates and cached. A scroll costs one
-subtraction per rectangle and a repaint — no `getBoundingClientRect`, no layout
-flush. Re-measure only when layout actually changes: resize, web fonts landing,
-and after the course index renders.
-
-The hold-back is composed on its own scratch buffer before being drawn. Painted
-directly onto the sheet, two nearby text blocks would each apply their own alpha
-and the overlap would wash out to bare stock; opaque rects on a scratch buffer
-union instead of compounding.
-
-## Why the resting screen is cached
-
-`buildField()` rasterises the resting screen to an offscreen canvas once per
-resize; `render()` blits it and path-draws only the disturbed tiles.
-
-The grid itself is enumerated along the diagonals `u = col - row` and
-`v = col + row`, not as a square sweep of col and row. Because the field is
-isometric, `u` alone decides x and `v` alone decides y, and the two reaches
-differ sharply — sizing one square to the larger of them built roughly three
-tiles for every one that could ever be drawn, and closer to eight on a phone,
-where the tall vertical reach was being applied to the short horizontal axis.
-`u` and `v` have to share parity or col and row land on half-tiles.
-
-Building the full path every frame was the entire cost of the animation —
-~3,600 visible diamonds is ~18,000 canvas calls, measured at 41ms per frame.
-Blitting the still and drawing only what moved is 0.3ms. If you add anything to
-the resting screen, put it in `buildField()`, not `render()`.
-
-## Screen-reader-only text
-
-`.visually-hidden` is clipped, not removed — `display: none` would take it out of
-the accessibility tree as well, which is the opposite of the point. Because it is
-clipped rather than removed it still **lays out**, and a `Range` over it returns a
-full-width rectangle. `refreshFootprints()` skips anything inside it: the
-hold-back exists to protect ink that prints, and nothing prints here. Without
-that skip, twenty-one invisible strings knock stock-coloured bands, up to 160px
-wide, out of the field.
-
-## Print
-
-`@media print` takes the press off the page: the floor, the paper tooth and the
-ramps are fixed-position full-bleed layers that would otherwise print once, over
-the top of page one, with the masthead stamped across the copy. The plates go
-too — misregistration is a joke about printing that a real printer does not get
-to be in on — and the halftone name falls back to solid black, because its fill
-depends on `background-clip: text`. Links print their own `href`.
+Personal portfolio site for [jackcareynapa.github.io](https://jackcareynapa.github.io).
 
 ## Local preview
 
-Coursework is loaded via `fetch`, so open the site through a local server
-(not `file://`):
+Coursework is loaded via `fetch`, so open the site through a local server (not `file://`):
 
 ```bash
 python3 -m http.server 8000
@@ -181,25 +14,24 @@ Then visit `http://localhost:8000`.
 
 ## Adding courses
 
-Edit [`courses.json`](courses.json). Rows are grouped by `institution` and render
-automatically — no HTML changes needed.
+Edit [`courses.json`](courses.json). Each entry needs:
 
 | Field | Description |
 |-------|-------------|
 | `id` | Course code (e.g. `COMPSCI 201`) |
-| `name` | Course title — becomes the syllabus link when `url` is present |
-| `institution` | School name; also the group heading |
+| `name` | Course title |
+| `institution` | School name |
 | `description` | Short summary |
-| `status` | `"done"` or `"wip"`. Only `"wip"` renders a marker — a badge on every finished course is noise |
+| `status` | `"done"` or `"wip"` |
 | `url` | Syllabus link (must start with `https://`) |
+
+Rows render into the coursework index automatically on page load — no HTML changes needed.
 
 ## File layout
 
 | File | Purpose |
 |------|---------|
 | `index.html` | Page structure |
-| `styles.css` | Tokens, type scale, misregistration, layout |
-| `ui.js` | Navigation, registration drift, the course index |
-| `cube-floor.js` | The press floor |
+| `styles.css` | Design tokens and layout |
+| `ui.js` | Nav, scroll reveal, course renderer |
 | `courses.json` | Coursework data |
-| `favicon.svg` | Misregistered `JC` |

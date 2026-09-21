@@ -3,168 +3,130 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Jack Carey — computer science and theater studies at Duke. Graph search, improv sets, and things built to see what happens.">
-  <title>Jack Carey</title>
-
-  <!-- The palette is hand-measured for contrast on a light stock; declaring the
-       scheme stops browsers and extensions auto-inverting it into something
-       whose ratios nobody checked. -->
-  <meta name="color-scheme" content="light">
-  <meta name="theme-color" content="#DEDAD0">
-
-  <!-- A personal site is distributed by pasting the link. Without these it
-       unfurls blank in LinkedIn, Slack and mail. -->
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Jack Carey">
-  <meta property="og:title" content="Jack Carey">
-  <meta property="og:description" content="Computer science and theater studies at Duke. Graph search, improv sets, and things built to see what happens.">
-  <meta property="og:url" content="https://jackcareynapa.github.io/">
-  <meta property="og:locale" content="en_US">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Jack Carey">
-  <meta name="twitter:description" content="Computer science and theater studies at Duke. Graph search, improv sets, and things built to see what happens.">
-  <link rel="canonical" href="https://jackcareynapa.github.io/">
+  <meta name="description" content="Jack Carey — CS student at Duke University. Portfolio showcasing coursework, projects, and experience in AI, game design, and systems.">
+  <title>Jack Carey — Portfolio</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="alternate icon" href="cubes.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=DM+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <a class="skip" href="#top">Skip to content</a>
+  <a href="#main" class="skip-link">Skip to content</a>
 
-  <canvas id="cube-floor" aria-hidden="true"></canvas>
-
-  <header class="masthead">
+  <header class="site-header">
     <nav aria-label="Primary">
-      <a href="#top" class="mast-name">jack carey</a>
-      <ul class="running-order">
-        <li><a href="#work" data-nav="work">work</a></li>
-        <li><a href="#education" data-nav="education">education</a></li>
-        <li><a href="#elsewhere" data-nav="elsewhere">elsewhere</a></li>
+      <a href="#home" class="nav-logo">Jack Carey</a>
+      <ul class="nav-links">
+        <li><a href="#home" data-nav="home">Cover</a></li>
+        <li><a href="#projects" data-nav="projects">Work</a></li>
+        <li><a href="#coursework" data-nav="coursework">Index</a></li>
+        <li><a href="#resume" data-nav="resume">Resume</a></li>
+        <li><a href="#contact" data-nav="contact">Contact</a></li>
       </ul>
     </nav>
   </header>
 
-  <main>
+  <main id="main">
 
-    <section id="top" class="opening" tabindex="-1" aria-labelledby="billing-name">
-      <h1 class="billing occludes" id="billing-name">
-        <span class="reg" data-text="Jack"><span class="reg-ink">Jack</span></span>
-        <span class="reg" data-text="Carey"><span class="reg-ink">Carey</span></span>
-      </h1>
-
-      <p class="credit occludes">Computer Science · Duke University · Class of 2027</p>
-
-      <p class="intro occludes">
-        I grew up in Napa, California, and spent last year on exchange at the
-        University of Sydney. Outside class I'm in Duke Improv and Hoof 'n' Horn,
-        play more Rainbow Six Siege than I should, and go cliff jumping whenever
-        I can find water worth jumping into.
+    <section id="home" class="cover reveal-section">
+      <div class="cover-panel">
+        <p class="issue-meta">Issue #01 <span aria-hidden="true">·</span> Durham, NC</p>
+        <h1 class="cover-name">Jack<br>Carey</h1>
+        <p class="cover-role">Computer Science <span aria-hidden="true">·</span> Duke University</p>
+        <p class="credits"><span class="credits-key">Featuring</span> AI / ML <span aria-hidden="true">·</span> Game Design <span aria-hidden="true">·</span> Systems <span aria-hidden="true">·</span> Networks <span aria-hidden="true">·</span> Improv</p>
+      </div>
+      <p class="caption cover-caption">
+        CS student passionate about video game design, AI, and building technology that matters. At Duke I'm involved in improv and theater. I believe creativity and computation belong together.
       </p>
+      <a href="#projects" class="btn btn-solid cover-cta">See the work <span aria-hidden="true">↓</span></a>
     </section>
 
-    <section id="work" aria-labelledby="work-heading">
-      <div class="ramp" aria-hidden="true"></div>
-      <h2 class="eyebrow occludes" id="work-heading">Work</h2>
+    <section id="projects" class="reveal-section">
+      <p class="section-label"><span class="section-no">01</span> Selected work</p>
+      <h2 class="section-heading">Projects</h2>
 
-      <div class="bill">
+      <article class="panel panel-splash reveal-item">
+        <div class="splash-body">
+          <h3 class="panel-title">Wikinaut</h3>
+          <p class="panel-desc">A space-themed navigation game for Wikipedia: chart the shortest link-path between two articles, then fly there hop by hop, clicking through the real links on each live page. A Tampermonkey userscript drives the flight and DOM link-matching; a Python/Flask backend does bidirectional BFS over the full English Wikipedia link graph (memory-mapped CSR arrays, deployed on Fly.io).</p>
+        </div>
+        <div class="splash-links">
+          <a href="https://raw.githubusercontent.com/jackcareynapa/wikinaut/main/wikinaut.user.js" target="_blank" rel="noopener" class="btn btn-solid">Install <span aria-hidden="true">↗</span></a>
+          <a href="https://github.com/jackcareynapa/wikinaut" target="_blank" rel="noopener" class="btn btn-outline">GitHub <span aria-hidden="true">↗</span></a>
+        </div>
+        <p class="splash-stack"><span class="credits-key">Built with</span> Python <span aria-hidden="true">·</span> Flask <span aria-hidden="true">·</span> Userscript <span aria-hidden="true">·</span> Graph Search</p>
+      </article>
 
-        <article class="bill-item">
-          <h3 class="bill-title occludes"><span class="reg" data-text="Wikinaut">Wikinaut</span></h3>
-          <p class="bill-meta occludes">Userscript + Flask · Tampermonkey / Fly.io</p>
-          <p class="bill-desc occludes">
-            Chart the shortest link-path between two Wikipedia articles, then fly it hop
-            by hop, clicking the real links on real pages. A Tampermonkey userscript drives
-            the flight and matches links in the DOM; a Flask backend runs bidirectional BFS
-            over the full English Wikipedia link graph with memory-mapped CSR arrays.
-          </p>
-          <p class="bill-links occludes">
-            <a class="ink-link" href="https://raw.githubusercontent.com/jackcareynapa/wikinaut/main/wikinaut.user.js" target="_blank" rel="noopener">Install the userscript<span class="visually-hidden"> (opens in a new tab)</span></a>
-            <a class="ink-link" href="https://github.com/jackcareynapa/wikinaut" target="_blank" rel="noopener">Source<span class="visually-hidden"> (opens in a new tab)</span></a>
-          </p>
+      <div class="panel-pair">
+        <article class="panel panel-wide reveal-item">
+          <p class="panel-no panel-no-big" aria-hidden="true">01</p>
+          <h3 class="panel-title">Napa Valley Vineyard</h3>
+          <p class="panel-desc">A vineyard showcase site built with modern web tooling — estate storytelling, responsive layout, and a polished front-end experience deployed on Vercel.</p>
+          <div class="panel-links">
+            <a href="https://napavalleyvineyard.vercel.app/" target="_blank" rel="noopener" class="btn btn-solid">Live <span aria-hidden="true">↗</span></a>
+            <a href="https://github.com/jackcareynapa/napavalleyvineyard" target="_blank" rel="noopener" class="btn btn-outline">GitHub <span aria-hidden="true">↗</span></a>
+          </div>
         </article>
 
-        <div class="ramp ramp-thin" aria-hidden="true"></div>
-        <article class="bill-item">
-          <h3 class="bill-title occludes"><span class="reg" data-text="Napa Valley Vineyard">Napa Valley Vineyard</span></h3>
-          <p class="bill-meta occludes">Front-end · Vercel</p>
-          <p class="bill-desc occludes">
-            A site for a Napa winery. I grew up there, so I had strong opinions about
-            what it should look like.
-          </p>
-          <p class="bill-links occludes">
-            <a class="ink-link" href="https://napavalleyvineyard.vercel.app/" target="_blank" rel="noopener">Visit<span class="visually-hidden"> (opens in a new tab)</span></a>
-            <a class="ink-link" href="https://github.com/jackcareynapa/napavalleyvineyard" target="_blank" rel="noopener">Source<span class="visually-hidden"> (opens in a new tab)</span></a>
-          </p>
+        <article class="panel panel-narrow reveal-item">
+          <p class="panel-no" aria-hidden="true">02</p>
+          <h3 class="panel-title">Serverless Meme Generator</h3>
+          <p class="panel-desc">A serverless meme generator using cloud functions and a lightweight front end — upload, caption, and share memes with zero backend maintenance.</p>
+          <div class="panel-links">
+            <a href="https://serverless-meme-generator.vercel.app/" target="_blank" rel="noopener" class="btn btn-solid">Live <span aria-hidden="true">↗</span></a>
+            <a href="https://github.com/jackcareynapa/serverless-meme-generator" target="_blank" rel="noopener" class="btn btn-outline">GitHub <span aria-hidden="true">↗</span></a>
+          </div>
         </article>
-
-        <div class="ramp ramp-thin" aria-hidden="true"></div>
-        <article class="bill-item">
-          <h3 class="bill-title occludes"><span class="reg" data-text="Serverless Meme Generator">Serverless Meme Generator</span></h3>
-          <p class="bill-meta occludes">Cloud functions · Vercel</p>
-          <p class="bill-desc occludes">
-            Upload a picture, add words, get a link. The whole thing runs on cloud functions.
-          </p>
-          <p class="bill-links occludes">
-            <a class="ink-link" href="https://serverless-meme-generator.vercel.app/" target="_blank" rel="noopener">Visit<span class="visually-hidden"> (opens in a new tab)</span></a>
-            <a class="ink-link" href="https://github.com/jackcareynapa/serverless-meme-generator" target="_blank" rel="noopener">Source<span class="visually-hidden"> (opens in a new tab)</span></a>
-          </p>
-        </article>
-
       </div>
     </section>
 
-    <section id="education" aria-labelledby="education-heading">
-      <div class="ramp" aria-hidden="true"></div>
-      <h2 class="eyebrow occludes" id="education-heading">Education</h2>
-
-      <ul class="facts occludes">
-        <li><span class="facts-key">Degree</span><span class="facts-value">BS Computer Science, Duke University, 2027</span></li>
-        <li><span class="facts-key">Concentration</span><span class="facts-value">Artificial intelligence and machine learning</span></li>
-        <li><span class="facts-key">Minor</span><span class="facts-value">Theater studies</span></li>
-        <li><span class="facts-key">Exchange</span><span class="facts-value">University of Sydney, Fall 2025</span></li>
-      </ul>
-
-      <div class="index"></div>
+    <section id="coursework" class="reveal-section">
+      <p class="section-label"><span class="section-no">02</span> The index</p>
+      <h2 class="section-heading">Coursework</h2>
+      <div class="index-layout">
+        <blockquote class="pull-quote">
+          <p>Creativity and computation belong together.</p>
+        </blockquote>
+        <div class="course-index"></div>
+      </div>
     </section>
 
-    <section id="elsewhere" aria-labelledby="elsewhere-heading">
-      <div class="ramp" aria-hidden="true"></div>
-      <h2 class="eyebrow occludes" id="elsewhere-heading">Elsewhere</h2>
-      <div>
-        <a class="hail occludes" href="mailto:jack.carey.napa@gmail.com">jack.carey.napa@gmail.com</a>
-        <p class="hail-note occludes">Email is the one I actually read.</p>
-
-        <ul class="elsewhere-list occludes">
-          <li>
-            <span class="elsewhere-key">GitHub</span>
-            <a class="ink-link" href="https://github.com/jackcareynapa" target="_blank" rel="noopener">github.com/jackcareynapa<span class="visually-hidden"> (opens in a new tab)</span></a>
-          </li>
-          <li>
-            <span class="elsewhere-key">LinkedIn</span>
-            <a class="ink-link" href="https://linkedin.com/in/jack-carey-50386b379" target="_blank" rel="noopener">jack-carey<span class="visually-hidden"> (opens in a new tab)</span></a>
-          </li>
-          <li>
-            <span class="elsewhere-key">Resume</span>
-            <a class="ink-link" href="Jack-Carey-Resume.pdf" target="_blank" rel="noopener">Jack-Carey-Resume.pdf<span class="visually-hidden"> (opens in a new tab)</span></a>
-          </li>
-        </ul>
+    <section id="resume" class="reveal-section">
+      <p class="section-label"><span class="section-no">03</span> Back matter</p>
+      <div class="panel panel-strip reveal-item">
+        <div>
+          <h2 class="strip-title">Resume</h2>
+          <p class="strip-text">Full work history, skills, and experience — available as a PDF.</p>
+        </div>
+        <a href="Jack-Carey-Resume.pdf" class="btn btn-solid">Download PDF <span aria-hidden="true">↓</span></a>
       </div>
+    </section>
+
+    <section id="contact" class="reveal-section">
+      <p class="section-label"><span class="section-no">04</span> To be continued</p>
+      <h2 class="contact-headline">Let's<br>connect.</h2>
+      <dl class="contact-list">
+        <div class="contact-row reveal-item">
+          <dt>Email</dt>
+          <dd><a href="mailto:jack.carey.napa@gmail.com">jack.carey.napa@gmail.com</a></dd>
+        </div>
+        <div class="contact-row reveal-item">
+          <dt>GitHub</dt>
+          <dd><a href="https://github.com/jackcareynapa" target="_blank" rel="noopener">github.com/jackcareynapa</a></dd>
+        </div>
+        <div class="contact-row reveal-item">
+          <dt>LinkedIn</dt>
+          <dd><a href="https://linkedin.com/in/jack-carey-50386b379" target="_blank" rel="noopener">linkedin.com/in/jack-carey-50386b379</a></dd>
+        </div>
+      </dl>
     </section>
 
   </main>
 
-  <footer class="colophon">
-    <div>
-      <span>Set in Bricolage Grotesque, Newsreader &amp; DM Mono. Printed in two inks.</span>
-      <span>Napa, CA → Durham, NC → Sydney</span>
-    </div>
-  </footer>
+  <footer>&copy; 2026 Jack Carey</footer>
 
-  <script src="cube-floor.js" defer></script>
   <script src="ui.js" defer></script>
 </body>
 </html>

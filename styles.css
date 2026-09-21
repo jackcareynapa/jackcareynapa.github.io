@@ -1,841 +1,703 @@
-/* ═══════════════════════════════════════════════════════════════════════
-   jackcareynapa.github.io — printed in two inks
-   Stock, one black pass, two spot inks. No gradients anywhere.
-   ═══════════════════════════════════════════════════════════════════════ */
-
+/* ── Design tokens ────────────────────────────────────────────────
+   Two inks on stock. No blur, no gradients except the single halftone
+   screen, no radius, one hard shadow.
+   ───────────────────────────────────────────────────────────────── */
 :root {
-  /* ── The inks ── */
-  --stock:      #DEDAD0;  /* the paper */
-  --stock-lit:  #E7E4DB;  /* paper catching light — masthead, footer */
-  --ink:        #181A17;  /* black pass: body copy, rules */
-  --blue:       #2440C4;  /* spot 1: links, the floor, focus rings */
-  --pink:       #FF4FA3;  /* spot 2: GRAPHIC ONLY — see note below */
-  --fade:       #5A594F;  /* secondary copy, meta rows — 5.1:1 on stock */
-  --rule:       rgba(24, 26, 23, 0.22);
-  --rule-soft:  rgba(24, 26, 23, 0.11);
+  /* Two inks on stock, carried over from the printed-program palette.
+     Measured against --paper: --ink 12.6:1, --spot 5.8:1, --ink-soft 5.1:1.
+     --graphic is 2.8:1 and must NEVER carry a word: its only job here is
+     the halftone screen on the splash panel. */
+  --paper: #DEDAD0;        /* the stock */
+  --paper-lit: #E7E4DB;    /* stock catching light — cover panel, ghost numerals */
+  --ink: #181A17;          /* black pass: body copy, rules, panel borders */
+  --ink-soft: #5A594F;     /* secondary copy, meta rows */
+  --spot: #2440C4;         /* spot ink: links, labels, focus rings — text-safe */
+  --graphic: #FF4FA3;      /* spot ink 2: GRAPHIC ONLY, never type */
+  --graphic-screen: rgba(255, 79, 163, 0.22);  /* the halftone dot itself */
 
-  /* Measured against --stock: ink 12.6:1, blue 5.8:1, fade 5.1:1.
-     --pink is 2.8:1 and must never carry a word. Its only jobs are the
-     offset impression behind type (where the legible ink pass sits on top
-     of it), dots on the press floor, and a background for ink-coloured
-     type, which measures 5.8:1 the other way round. */
+  --rule: 2px solid var(--ink);
+  --rule-hair: 1px solid var(--ink);
+  --hair-soft: 1px solid rgba(24, 26, 23, 0.22);
+  --panel-shadow: 4px 4px 0 var(--ink);
 
-  --font-display: 'Bricolage Grotesque', 'Helvetica Neue', sans-serif;
-  --font-body:    'Newsreader', Georgia, serif;
-  --font-data:    'DM Mono', ui-monospace, monospace;
+  --gutter: clamp(10px, 1.4vw, 18px);
+  --pad: clamp(1.25rem, 2.4vw, 2rem);
+  --header-h: 52px;
+  --max-w: 1120px;
 
-  /* rem, not px: the bar has to grow with the type it contains, or a
-     reader with a larger default font size gets a clipped masthead. */
-  --mast-h: 3.375rem;   /* 54px at a 16px root */
-  --measure: 60rem;
-  --gutter: clamp(1.25rem, 5vw, 4rem);
+  --font-display: 'Archivo Black', 'Arial Black', 'Helvetica Neue', sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
-  /* Registration offset — how badly the press is aligned. Expressed in em
-     so a 2px slip on a caption is a 6px slip on the cover, the way a real
-     misprint scales. Driven by the pointer in the hero, by :hover elsewhere,
-     frozen under reduced motion.
-
-     These defaults are the value the pointer settles on with the cursor near
-     the middle of the sheet, because they have to stand in for it: ui.js
-     never writes --rx under reduced motion, and nothing writes it before the
-     script runs. A looser default only ever showed up as a hard drop shadow
-     on 176px type, for the readers who asked for less movement. */
-  --rx: 0.012em;
-  --ry: 0.012em;
+  --dur: 160ms;
+  --dur-slow: 320ms;
+  --ease: cubic-bezier(0.2, 0, 0.2, 1);
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 html {
   scroll-behavior: smooth;
-  /* 100%, not a fixed px: a px root font size silently discards the reader's
-     own browser font-size setting, and because the whole scale is in rem that
-     pins every size on the page. */
-  font-size: 100%;
-  scroll-padding-top: calc(var(--mast-h) + 1rem);
+  font-size: 16px;
+  background: var(--paper);
 }
 
 body {
-  background-color: var(--stock);
+  background-color: var(--paper);
   color: var(--ink);
-  font-family: var(--font-body);
-  font-optical-sizing: auto;
-  font-size: 1.0625rem;
+  font-family: var(--font-sans);
   line-height: 1.6;
-  overflow-x: hidden;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Paper tooth. Sits above the press floor, below the type. */
-body::after {
+/* Paper stock: fixed grain over the whole page. */
+body::before {
   content: '';
   position: fixed;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.35;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.5'/%3E%3C/svg%3E");
-  background-size: 160px 160px;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px 180px;
 }
 
-#cube-floor {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  width: 100%;
-  height: 100dvh;
+/* ── Focus & skip link ── */
+:focus-visible {
+  outline: 3px solid var(--spot);
+  outline-offset: 2px;
 }
 
-/* ── Misregistration ─────────────────────────────────────────────────────
-   Type prints twice — pink, then the ink pass on top — and the cover prints
-   three times. The spot impressions are pseudo-elements, so they stay out of
-   copy-paste. Being a pseudo-element is *not* enough to stay out of the
-   accessibility tree, though — generated content is announced — so the plates
-   carry explicit empty alt text below. z-index:0 on the parent contains them. */
-
-.reg {
-  position: relative;
-  z-index: 0;
-  display: inline-block;
-  color: var(--ink);
-}
-
-.reg::before,
-.billing .reg::after {
-  /* The plates are ink, not words. The bare declaration is the fallback for
-     engines without alt-text support; the `/ ""` form paints the same glyphs
-     but hands the a11y tree an empty string. Without it the cover announces
-     as "Jack Jack Jack Carey Carey Carey" — three plates, three readings. */
-  content: attr(data-text);
-  content: attr(data-text) / "";
-  position: absolute;
-  /* inset, not left/top — the plate has to take the same box as the ink pass
-     so a title that wraps to two lines wraps identically on every plate. */
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  user-select: none;
-  transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
-}
-
-.reg::before {
-  color: var(--pink);
-  transform: translate(var(--rx), var(--ry));
-}
-
-/* Only the cover is worth running a third plate for. */
-.billing .reg::after {
-  color: var(--blue);
-  transform: translate(calc(var(--rx) * -0.5), calc(var(--ry) * -0.6));
-}
-
-/* ── Glitch ───────────────────────────────────────────────────────────────
-   Hovering a headline doesn't just slip the plates further out of register —
-   it jams. steps(1, jump-end) holds each position instead of easing through
-   it, so the pink and blue passes jump-cut independently of each other and
-   of the base type, which never moves. */
-@keyframes glitch-pink {
-  0%   { transform: translate(var(--rx), var(--ry)); }
-  15%  { transform: translate(calc(var(--rx) * 3.2), calc(var(--ry) * -2)); }
-  30%  { transform: translate(calc(var(--rx) * -1.4), calc(var(--ry) * 2.6)); }
-  45%  { transform: translate(calc(var(--rx) * 2.1), calc(var(--ry) * 0.3)); }
-  60%  { transform: translate(var(--rx), var(--ry)); }
-  75%  { transform: translate(calc(var(--rx) * -2.6), calc(var(--ry) * -1.1)); }
-  90%  { transform: translate(calc(var(--rx) * 1.6), calc(var(--ry) * 1.8)); }
-  100% { transform: translate(var(--rx), var(--ry)); }
-}
-
-@keyframes glitch-blue {
-  0%   { transform: translate(calc(var(--rx) * -0.5), calc(var(--ry) * -0.6)); }
-  18%  { transform: translate(calc(var(--rx) * -2.4), calc(var(--ry) * 1.7)); }
-  36%  { transform: translate(calc(var(--rx) * 1.1), calc(var(--ry) * -2.3)); }
-  54%  { transform: translate(calc(var(--rx) * -0.5), calc(var(--ry) * -0.6)); }
-  72%  { transform: translate(calc(var(--rx) * 2.8), calc(var(--ry) * 0.5)); }
-  90%  { transform: translate(calc(var(--rx) * -1.6), calc(var(--ry) * -1.9)); }
-  100% { transform: translate(calc(var(--rx) * -0.5), calc(var(--ry) * -0.6)); }
-}
-
-.billing:hover .reg::before,
-.bill-item:hover .bill-title .reg::before {
-  animation: glitch-pink 0.38s steps(1, jump-end) infinite;
-}
-
-.billing:hover .reg::after {
-  animation: glitch-blue 0.5s steps(1, jump-end) infinite;
-}
-
-/* ── Skip link ── */
-.skip {
+.skip-link {
   position: absolute;
   left: -9999px;
   top: 0;
   z-index: 200;
   background: var(--ink);
-  color: var(--stock);
-  font-family: var(--font-data);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
   text-transform: uppercase;
+  letter-spacing: 0.08em;
   text-decoration: none;
   padding: 0.7rem 1.1rem;
 }
 
-.skip:focus {
-  left: 0.5rem;
-  top: 0.5rem;
+.skip-link:focus {
+  left: 0;
 }
 
-/* ── Masthead ── */
-.masthead {
+/* ── Header ── */
+.site-header {
   position: fixed;
-  inset: 0 0 auto 0;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
-  background: var(--stock-lit);
-  border-bottom: 1px solid var(--ink);
+  background: var(--paper);
+  border-bottom: var(--rule);
 }
 
-.masthead nav {
-  max-width: var(--measure);
+nav {
+  max-width: var(--max-w);
   margin: 0 auto;
-  padding: 0 var(--gutter);
-  height: var(--mast-h);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  padding: 0 clamp(1rem, 3vw, 2rem);
+  min-height: var(--header-h);
 }
 
-.mast-name {
+.nav-logo {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-stretch: 82%;
-  font-size: 1.05rem;
-  letter-spacing: -0.01em;
+  font-size: 0.92rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
   color: var(--ink);
   text-decoration: none;
+  white-space: nowrap;
 }
 
-.running-order {
+.nav-links {
   display: flex;
-  gap: clamp(0.85rem, 3vw, 1.9rem);
+  flex-wrap: wrap;
+  gap: 0.25rem 1.35rem;
   list-style: none;
-  font-family: var(--font-data);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
+}
+
+.nav-links a {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
   text-transform: uppercase;
-}
-
-.running-order a {
-  color: var(--fade);
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
   text-decoration: none;
-  padding-bottom: 2px;
-  border-bottom: 1px solid transparent;
-  transition: color 0.18s, border-color 0.18s;
+  padding: 0.3rem 0;
+  border-bottom: 2px solid transparent;
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
 
-.running-order a:hover { color: var(--ink); border-bottom-color: var(--ink); }
-.running-order a.active { color: var(--blue); border-bottom-color: var(--blue); }
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--ink);
+  border-bottom-color: var(--spot);
+}
 
-/* ── Layout ── */
+/* ── Page frame ── */
 main {
   position: relative;
   z-index: 2;
-  padding-top: var(--mast-h);
+  padding-top: var(--header-h);
 }
 
 section {
   position: relative;
-  max-width: var(--measure);
+  max-width: var(--max-w);
   margin: 0 auto;
-  padding: clamp(2.5rem, 6vw, 4.5rem) var(--gutter);
+  padding: clamp(3.25rem, 7vw, 5.5rem) clamp(1rem, 3vw, 2rem);
+  scroll-margin-top: calc(var(--header-h) + 8px);
 }
 
-/* Eyebrows double as the section headings — a printed running order
-   labels an act, it doesn't restate it underneath. */
-.eyebrow {
-  font-family: var(--font-data);
+section + section {
+  border-top: var(--rule-hair);
+}
+
+.section-label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
   font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--ink);
-  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
+  margin-bottom: 0.65rem;
 }
 
-/* ── Opening ── */
-.opening { padding-top: clamp(3rem, 8vw, 5.5rem); }
+.section-no {
+  color: var(--spot);
+  font-weight: 500;
+}
 
-.billing {
+.section-heading {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-stretch: 78%;
-  font-size: clamp(3.5rem, 21vw, 11rem);
-  line-height: 0.8;
+  font-size: clamp(2.1rem, 5.2vw, 3.4rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+/* ── Cover ── */
+.cover {
+  padding-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+.cover-panel {
+  border: var(--rule);
+  background: var(--paper-lit);
+  padding: clamp(1.75rem, 4vw, 3.25rem) var(--pad) clamp(4.5rem, 7vw, 5.5rem);
+}
+
+.issue-meta {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink-soft);
+  text-align: right;
+  padding-bottom: 0.9rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  border-bottom: var(--hair-soft);
+}
+
+.cover-name {
+  font-family: var(--font-display);
+  font-size: clamp(3.4rem, 15vw, 8.5rem);
+  line-height: 0.82;
   letter-spacing: -0.035em;
   text-transform: uppercase;
 }
 
-.billing .reg { display: block; }
-
-/* ── Halftone name ───────────────────────────────────────────────────────
-   The letterforms are filled with the same diamond screen as the floor:
-   solid at the top of each line, breaking into dots towards the baseline.
-   Real text underneath, so it stays selectable and readable to a screen
-   reader; only the paint is a screen. */
-
-/* The ink pass has to be an inline child, not the element's own background:
-   an element background paints *below* its negative-z-index pseudo-elements,
-   which would put both spot plates on top of the ink. A descendant's
-   background paints after them. */
-
-@supports ((-webkit-background-clip: text) or (background-clip: text)) {
-  .billing .reg-ink,
-  .billing .reg::before,
-  .billing .reg::after {
-    background-repeat: repeat;
-    /* em, so the screen stays proportional to the type — a fixed pixel
-       screen is far too coarse once the name shrinks on a phone. */
-    background-position: 0 0, 0.034em 0.034em, 0 0;
-    background-size: 0.125em 0.125em, 0.068em 0.068em, 100% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .billing .reg-ink {
-    background-image:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Cpath d='M11 0 L22 11 L11 22 L0 11 Z' fill='%23181A17'/%3E%3C/svg%3E"),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M6 1.4 L10.6 6 L6 10.6 L1.4 6 Z' fill='%23181A17'/%3E%3C/svg%3E"),
-      linear-gradient(180deg, var(--ink) 0%, var(--ink) 30%,
-        color-mix(in srgb, var(--ink) 55%, transparent) 96%);
-  }
-
-  /* Held back: with a screened ink pass, the plates show through every gap
-     rather than only at the offset edge, which muddies the letterforms. */
-  .billing .reg::before { opacity: 0.72; }
-  .billing .reg::after { opacity: 0.55; }
-
-  .billing .reg::before {
-    background-image:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Cpath d='M11 0 L22 11 L11 22 L0 11 Z' fill='%23FF4FA3'/%3E%3C/svg%3E"),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M6 1.4 L10.6 6 L6 10.6 L1.4 6 Z' fill='%23FF4FA3'/%3E%3C/svg%3E"),
-      linear-gradient(180deg, var(--pink) 0%, var(--pink) 30%, transparent 96%);
-  }
-
-  .billing .reg::after {
-    background-image:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Cpath d='M11 0 L22 11 L11 22 L0 11 Z' fill='%232440C4'/%3E%3C/svg%3E"),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M6 1.4 L10.6 6 L6 10.6 L1.4 6 Z' fill='%232440C4'/%3E%3C/svg%3E"),
-      linear-gradient(180deg, var(--blue) 0%, var(--blue) 30%, transparent 96%);
-  }
-}
-
-.credit {
-  font-family: var(--font-data);
-  font-size: clamp(0.66rem, 1.6vw, 0.78rem);
-  letter-spacing: 0.16em;
+.cover-role {
+  font-family: var(--font-mono);
+  font-size: clamp(0.68rem, 1.6vw, 0.8rem);
   text-transform: uppercase;
-  color: var(--fade);
-  margin-top: clamp(1.25rem, 2.5vw, 1.75rem);
-}
-
-.intro {
-  font-size: clamp(1.05rem, 2vw, 1.2rem);
-  line-height: 1.55;
-  max-width: 48ch;
-  margin-top: clamp(1.75rem, 4vw, 2.5rem);
-  text-wrap: pretty;
-}
-
-/* ── Tonal ramp ──────────────────────────────────────────────────────────
-   Section rules are a halftone ramp, not a hairline: large diamonds die out
-   first, small ones carry further right. Two layers so the falloff reads as
-   dot gain rather than a fade. */
-
-.ramp {
-  position: relative;
-  height: 20px;
-  margin-bottom: 0.5rem;
-  pointer-events: none;
-}
-
-.ramp::before,
-.ramp::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-repeat: repeat-x;
-  background-position: 0 50%;
-}
-
-/* Large diamonds hold the left end and are gone by 40%. */
-.ramp::before {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpath d='M10 1 L19 10 L10 19 L1 10 Z' fill='%232440C4'/%3E%3C/svg%3E");
-  background-size: 20px 20px;
-  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 11%, transparent 40%);
-  mask-image: linear-gradient(90deg, #000 0%, #000 11%, transparent 40%);
-}
-
-/* Small ones fade in where the large ones die, sit in the gaps between them,
-   and carry the ramp out to nothing. */
-.ramp::after {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='20'%3E%3Cpath d='M5 7 L8 10 L5 13 L2 10 Z' fill='%232440C4'/%3E%3C/svg%3E");
-  background-size: 10px 20px;
-  background-position: 5px 50%;
-  -webkit-mask-image: linear-gradient(90deg, transparent 6%, #000 26%, #000 42%, transparent 94%);
-  mask-image: linear-gradient(90deg, transparent 6%, #000 26%, #000 42%, transparent 94%);
-}
-
-/* A shorter, lighter ramp between items in a list */
-.ramp-thin {
-  height: 12px;
-  /* the divider needs air above it, not just below */
-  margin: clamp(1.75rem, 4vw, 2.5rem) 0 0;
-}
-
-.ramp-thin::before {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M6 1 L11 6 L6 11 L1 6 Z' fill='%232440C4'/%3E%3C/svg%3E");
-  background-size: 12px 12px;
-  -webkit-mask-image: linear-gradient(90deg, #000 0%, transparent 26%);
-  mask-image: linear-gradient(90deg, #000 0%, transparent 26%);
-}
-
-.ramp-thin::after {
-  background-size: 7px 12px;
-  background-position: 3.5px 50%;
-  -webkit-mask-image: linear-gradient(90deg, transparent 4%, #000 18%, #000 30%, transparent 78%);
-  mask-image: linear-gradient(90deg, transparent 4%, #000 18%, #000 30%, transparent 78%);
-}
-
-/* ── Facts ── */
-.facts {
-  list-style: none;
-  margin-bottom: clamp(2.25rem, 5vw, 3.25rem);
-  max-width: 44rem;
-}
-
-.facts li {
-  display: flex;
-  align-items: baseline;
-  gap: 1rem;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid var(--rule-soft);
-}
-
-.facts-key {
-  flex: 0 0 8rem;
-  font-family: var(--font-data);
-  font-size: 0.68rem;
   letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--fade);
+  color: var(--ink-soft);
+  margin-top: 1.35rem;
 }
 
-.facts-value {
-  flex: 1 1 auto;
-  font-size: 0.98rem;
-  color: var(--ink);
-}
-
-/* ── The bill ── */
-.bill { display: flex; flex-direction: column; }
-
-.bill-item {
-  padding: clamp(2rem, 4.5vw, 3rem) 0 0;
-}
-
-.bill-item:first-child { padding-top: 0; }
-.bill-item:last-child { padding-bottom: 0; }
-
-.bill-title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-stretch: 84%;
-  font-size: clamp(2.1rem, 6.5vw, 3.6rem);
-  line-height: 0.95;
-  letter-spacing: -0.025em;
-}
-
-/* The press slips a little when you lean on it. */
-.bill-item:hover .bill-title .reg { --rx: 0.055em; --ry: 0.045em; }
-
-.bill-meta {
-  font-family: var(--font-data);
+.credits {
+  font-family: var(--font-mono);
   font-size: 0.7rem;
-  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--fade);
-  margin-top: 0.9rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+  margin-top: 1.5rem;
+  padding-top: 1.1rem;
+  border-top: var(--hair-soft);
 }
 
-.bill-desc {
-  margin-top: 1.1rem;
-  max-width: 52ch;
-  color: var(--ink);
-  text-wrap: pretty;
+.credits-key {
+  color: var(--spot);
+  font-weight: 500;
 }
 
-.bill-links {
+/* Caption box, pulled up to overlap the cover panel's lower edge. */
+.caption {
+  font-family: var(--font-mono);
+  font-size: clamp(0.76rem, 1.5vw, 0.84rem);
+  line-height: 1.75;
+  background: var(--paper);
+  border: var(--rule);
+  box-shadow: var(--panel-shadow);
+  padding: clamp(1rem, 2vw, 1.35rem);
+}
+
+.cover-caption {
+  position: relative;
+  z-index: 3;
+  max-width: 46ch;
+  margin: -3.25rem 0 0 clamp(0rem, 2vw, 2.5rem);
+}
+
+.cover-cta {
+  margin-top: clamp(1.75rem, 3vw, 2.25rem);
+}
+
+/* ── Panels ── */
+.panel {
+  position: relative;
+  background: var(--paper);
+  border: var(--rule);
+  padding: var(--pad);
+  transition: box-shadow var(--dur) var(--ease);
+}
+
+.panel:hover {
+  box-shadow: var(--panel-shadow);
+}
+
+.panel-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.45rem, 3vw, 2.15rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin-bottom: 0.9rem;
+}
+
+.panel-desc {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  max-width: 62ch;
+}
+
+.panel-no {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--spot);
+  margin-bottom: 0.6rem;
+}
+
+/* Splash: the largest panel on the page, with the one halftone screen. */
+.panel-splash {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  padding: clamp(1.75rem, 3.5vw, 2.75rem);
+  box-shadow: var(--panel-shadow);
+  background-color: var(--paper);
+  background-image: repeating-radial-gradient(
+    circle at 0 0,
+    var(--graphic-screen) 0 1.2px,
+    transparent 1.2px 6px
+  );
+  background-size: 6px 6px;
+}
+
+.panel-splash .panel-title {
+  font-size: clamp(2.1rem, 5.4vw, 3.6rem);
+}
+
+.panel-splash .panel-desc {
+  font-size: 1rem;
+}
+
+.splash-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: stretch;
+}
+
+.splash-stack {
+  grid-column: 1 / -1;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+  padding-top: 1.1rem;
+  border-top: var(--hair-soft);
+}
+
+/* Paired panels: deliberately unequal, arranged differently inside. */
+.panel-pair {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: var(--gutter);
+  margin-top: var(--gutter);
+}
+
+.panel-wide {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 100%;
+}
+
+.panel-no-big {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 5rem);
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  color: var(--paper-lit);
+  margin-bottom: 0.35rem;
+}
+
+.panel-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
+  gap: 0.5rem;
   margin-top: 1.4rem;
 }
 
-/* ── Links ── */
-.ink-link {
-  font-family: var(--font-data);
-  font-size: 0.76rem;
-  letter-spacing: 0.06em;
-  color: var(--blue);
-  text-decoration: none;
-  border-bottom: 1px solid var(--blue);
-  padding-bottom: 1px;
-  transition: color 0.18s, border-color 0.18s;
-}
-
-.ink-link:hover {
-  color: var(--ink);
-  border-bottom-color: var(--ink);
-}
-
-/* The arrow is the visual half of "opens in a new tab"; the other half is a
-   visually-hidden note in the markup. Empty alt text keeps the glyph itself
-   from being announced as a symbol after every link. */
-.ink-link[target='_blank']::after {
-  content: ' ↗';
-  content: ' ↗' / "";
-  letter-spacing: 0;
-}
-
-/* Reachable by screen reader and by copy, invisible on the sheet. Not
-   display:none, which would remove it from both. */
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  border: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
-/* ── Training ─────────────────────────────────────────────────────────── */
-.index-group + .index-group { margin-top: clamp(2.25rem, 5vw, 3.25rem); }
-
-.index-school {
-  font-family: var(--font-data);
-  font-size: 0.7rem;
+/* ── Buttons ── */
+.btn {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.73rem;
   font-weight: 500;
-  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--ink);
-  padding-bottom: 0.55rem;
-  border-bottom: 1px solid var(--rule);
-  margin-bottom: 0.25rem;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-align: center;
+  padding: 0.6rem 1.15rem;
+  border: var(--rule);
+  white-space: nowrap;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease),
+              border-color var(--dur) var(--ease);
 }
 
-.index-list {
-  list-style: none;
+.btn-solid {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.btn-solid:hover {
+  background: var(--spot);
+  border-color: var(--spot);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--ink);
+}
+
+.btn-outline:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* ── Coursework index ── */
+.index-layout {
   display: grid;
-  /* min() so a narrow viewport collapses to one column instead of
-     forcing the grid wider than the page. */
-  grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr));
-  column-gap: clamp(1.5rem, 4vw, 3rem);
+  grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: start;
 }
 
-.index-row {
-  padding: 0.85rem 0;
-  border-bottom: 1px solid var(--rule-soft);
+.pull-quote {
+  border-left: 3px solid var(--spot);
+  padding-left: 1.1rem;
+  position: sticky;
+  top: calc(var(--header-h) + 2.5rem);
 }
 
-.index-head {
-  display: flex;
+.pull-quote p {
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.course-index {
+  border-top: var(--rule);
+}
+
+.course-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.25rem 1.5rem;
   align-items: baseline;
-  gap: 0.7rem;
+  padding: 0.95rem 0;
+  border-bottom: var(--hair-soft);
 }
 
-.index-code {
-  flex: none;
-  font-family: var(--font-data);
+.course-code {
+  grid-column: 1 / -1;
+  font-family: var(--font-mono);
   font-size: 0.68rem;
-  letter-spacing: 0.06em;
-  color: var(--blue);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--spot);
 }
 
-.index-name {
-  font-size: 0.98rem;
-  line-height: 1.3;
+.course-name {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.course-meta {
+  grid-column: 1 / -1;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+}
+
+.course-desc {
+  grid-column: 1 / -1;
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  max-width: 62ch;
+  margin-top: 0.2rem;
+}
+
+.course-link {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink);
+  white-space: nowrap;
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
 
-a.index-name {
+.course-link:hover {
+  color: var(--spot);
+  border-color: var(--spot);
+}
+
+.course-link-disabled {
+  color: var(--ink-soft);
+  border-bottom-style: dotted;
+  opacity: 0.7;
+}
+
+.course-loading,
+.course-error {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding: 0.95rem 0;
+}
+
+.course-error {
+  color: var(--spot);
+}
+
+/* ── Resume strip ── */
+.panel-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem 2rem;
+}
+
+.strip-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.4rem;
+}
+
+.strip-text {
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  max-width: 48ch;
+}
+
+/* ── Contact ── */
+.contact-headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 9vw, 5.5rem);
+  line-height: 0.88;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  margin-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
+}
+
+.contact-list {
+  border-top: var(--rule);
+}
+
+.contact-row {
+  display: grid;
+  grid-template-columns: minmax(0, 7rem) minmax(0, 1fr);
+  gap: 0.25rem 1.5rem;
+  align-items: baseline;
+  padding: 1rem 0;
+  border-bottom: var(--hair-soft);
+}
+
+.contact-row dt {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
+}
+
+.contact-row dd a {
+  font-family: var(--font-mono);
+  font-size: clamp(0.78rem, 1.8vw, 0.92rem);
+  color: var(--ink);
   text-decoration: none;
   border-bottom: 1px solid transparent;
-  transition: border-color 0.18s;
+  overflow-wrap: anywhere;
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
 
-a.index-name:hover { border-bottom-color: var(--ink); }
-
-.index-desc {
-  font-size: 0.83rem;
-  line-height: 1.5;
-  color: var(--fade);
-  margin-top: 0.2rem;
-  padding-left: 0;
+.contact-row dd a:hover {
+  color: var(--spot);
+  border-bottom-color: var(--spot);
 }
 
-/* Twelve identical "completed" badges said nothing. Only an unfinished
-   run is worth marking. */
-.index-wip {
-  font-family: var(--font-data);
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink);
-  background: var(--pink);
-  padding: 0.1rem 0.4rem;
-  margin-left: 0.4rem;
-}
-
-.index-note {
-  font-family: var(--font-data);
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  color: var(--fade);
-}
-
-.index-note.is-error { color: var(--blue); }
-
-/* ── Elsewhere ── */
-.hail {
-  display: inline-block;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-stretch: 84%;
-  font-size: clamp(1.5rem, 5.2vw, 3.1rem);
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-  text-decoration: none;
-  border-bottom: 2px solid var(--blue);
-  word-break: break-word;
-}
-
-.hail:hover { color: var(--blue); }
-
-.hail-note {
-  font-family: var(--font-body);
-  font-style: italic;
-  color: var(--fade);
-  margin-top: 1rem;
-}
-
-.elsewhere-list {
-  list-style: none;
-  margin-top: clamp(2.25rem, 5vw, 3rem);
-  max-width: 34rem;
-}
-
-.elsewhere-list li {
-  display: flex;
-  align-items: baseline;
-  gap: 1rem;
-  padding: 0.85rem 0;
-  border-top: 1px solid var(--rule-soft);
-}
-
-.elsewhere-list dt,
-.elsewhere-key {
-  flex: 0 0 6.5rem;
-  font-family: var(--font-data);
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--fade);
-}
-
-/* ── Colophon ── */
-.colophon {
+/* ── Footer ── */
+footer {
   position: relative;
   z-index: 2;
-  background: var(--stock-lit);
-  border-top: 1px solid var(--ink);
-  padding: 1.5rem var(--gutter);
-}
-
-.colophon div {
-  max-width: var(--measure);
-  margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem 1.5rem;
-  justify-content: space-between;
-  font-family: var(--font-data);
+  background: var(--paper);
+  border-top: var(--rule);
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
   font-size: 0.68rem;
-  letter-spacing: 0.06em;
-  color: var(--fade);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  text-align: center;
+  padding: 1.35rem;
 }
 
-/* ── Live type ──────────────────────────────────────────────────────────
-   Hovering a label slips its plate, the same misprint the headlines get.
-   text-shadow rather than a pseudo-element, so it wraps with the text and
-   costs nothing in markup.
-
-   Labels only, and deliberately so. The impression is sized for type that
-   is scanned — short, uppercase, widely tracked, where the offset falls in
-   the space between letters. On running prose it does the opposite: a 2px
-   slip on 17px Newsreader is about as wide as the serif itself, and the
-   pointer necessarily sits inside a paragraph the whole time that paragraph
-   is being read. The copy stays in register. */
-
-.credit,
-.eyebrow,
-.bill-meta,
-.facts-key,
-.index-school,
-.index-name,
-.elsewhere-key {
-  transition: text-shadow 0.22s ease, color 0.22s ease;
+/* ── Reveal ──
+   Visible by default; only JS opts content into the hidden state, so a
+   no-JS visitor still reads the whole page. One-time, opacity-led.     */
+.js .reveal-section,
+.js .reveal-item {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease);
 }
 
-.credit:hover,
-.eyebrow:hover,
-.bill-meta:hover,
-.facts-key:hover,
-.index-school:hover,
-.elsewhere-key:hover {
-  text-shadow: 2px 1.5px 0 var(--pink), -1px -1px 0 rgba(36, 64, 196, 0.55);
-}
-
-a.index-name:hover {
-  text-shadow: 2px 1.5px 0 var(--pink);
-}
-
-/* ── Focus ── */
-:focus-visible {
-  outline: 2px solid var(--blue);
-  outline-offset: 3px;
-}
-
-/* The opening is focusable only so the skip link can land on it. It is a
-   scroll destination, not a control, so it takes no ring of its own. */
-.opening:focus,
-.opening:focus-visible {
-  outline: none;
-}
-
-::selection {
-  background: var(--pink);
-  color: var(--ink);
+.js .reveal-section.visible,
+.js .reveal-item.visible {
+  opacity: 1;
+  transform: none;
 }
 
 /* ── Responsive ── */
-@media (max-width: 620px) {
-  .facts li { display: block; }
-  .facts-key { display: block; margin-bottom: 0.15rem; }
-  .elsewhere-list li { display: block; }
-  .elsewhere-key { display: block; margin-bottom: 0.2rem; }
-  .bill-links { gap: 1rem 1.25rem; }
+@media (max-width: 900px) {
+  .index-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .pull-quote {
+    position: static;
+  }
 }
 
-@media (max-width: 420px) {
-  .masthead nav { gap: 0.5rem; }
-  .running-order { gap: 0.7rem; font-size: 0.66rem; }
-  .mast-name { font-size: 0.92rem; }
+@media (max-width: 760px) {
+  .panel-splash {
+    grid-template-columns: 1fr;
+  }
+
+  .splash-links {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .panel-pair {
+    grid-template-columns: 1fr;
+  }
+
+  .cover-caption {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    gap: 0.35rem;
+  }
+
+  .nav-links {
+    gap: 0.2rem 1rem;
+  }
+
+  .cover-caption {
+    margin-top: -2.5rem;
+  }
+
+  .contact-row {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-
-  /* Pinned rather than inherited: this is the state ui.js declines to drive,
-     so the plate has to be set here on purpose. */
-  :root { --rx: 0.012em; --ry: 0.012em; }
-
-  .reg::before,
-  .reg::after { transition: none; }
-
-  .billing:hover .reg::before,
-  .bill-item:hover .bill-title .reg::before,
-  .billing:hover .reg::after { animation: none; }
-
-  .bill-item:hover .bill-title .reg { --rx: 3px; --ry: 2px; }
-}
-
-/* ── Cheap press: Safari and coarse pointers get a flatter print ── */
-.reduced-fx .billing .reg::after { display: none; }
-.reduced-fx .reg::before { transform: translate(0.03em, 0.024em); }
-
-/* ── Print ────────────────────────────────────────────────────────────────
-   None of the press survives a printer: the floor and the paper tooth are
-   fixed-position full-bleed layers that would print once, over the top of
-   page one, and the masthead would stamp itself across the copy. Printing
-   the sheet means printing the words on it. */
-@media print {
-  #cube-floor,
-  body::after,
-  .ramp,
-  .skip { display: none !important; }
-
-  html { font-size: 12pt; }
-
-  body {
-    background: #fff;
-    color: #000;
-    overflow-x: visible;
+  html {
+    scroll-behavior: auto;
   }
 
-  .masthead,
-  .colophon {
-    position: static;
-    background: none;
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 
-  main { padding-top: 0; }
-
-  section {
-    padding: 0 0 1.5rem;
-    max-width: none;
+  .js .reveal-section,
+  .js .reveal-item {
+    opacity: 1;
+    transform: none;
   }
-
-  /* Plates are a printing joke that a real printer does not get to be in on. */
-  .reg::before,
-  .billing .reg::after { display: none; }
-
-  /* The halftone fill relies on background-clip; without it the name would
-     print as nothing at all. */
-  .billing .reg-ink {
-    background: none;
-    -webkit-text-fill-color: #000;
-    color: #000;
-  }
-
-  .ink-link,
-  .index-code,
-  a { color: #000; text-decoration: underline; }
-
-  /* On paper a link has to carry its own destination. These have to out-rank
-     the `↗` rule, which is a class *and* an attribute selector. */
-  .bill-links .ink-link[target='_blank']::after,
-  .elsewhere-list .ink-link[target='_blank']::after,
-  .index-list .index-name[href]::after {
-    content: ' (' attr(href) ')';
-    font-family: var(--font-data);
-    font-size: 0.75em;
-    word-break: break-all;
-  }
-
-  .visually-hidden { display: none; }
-
-  .bill-item,
-  .index-group { break-inside: avoid; }
-
-  h1, h2, h3 { break-after: avoid; }
 }

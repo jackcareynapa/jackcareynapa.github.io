@@ -1,33 +1,22 @@
 (function () {
   'use strict';
 
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Arm the reveal styles. Without JS the content stays visible in CSS.
+  document.documentElement.classList.add('js');
 
-  /* ── Running order ─────────────────────────────────────────────────── */
-
-  const navLinks = document.querySelectorAll('.running-order a[data-nav]');
+  const navLinks = document.querySelectorAll('.nav-links a[data-nav]');
   const sections = [...navLinks]
-    .map((link) => ({ id: link.dataset.nav, el: document.getElementById(link.dataset.nav) }))
+    .map((link) => ({
+      id: link.dataset.nav,
+      el: document.getElementById(link.dataset.nav),
+    }))
     .filter((item) => item.el);
 
-  /* Has to agree with scroll-padding-top, which is what actually decides where
-     an anchor click lands. They disagreed by 8px, which was enough that every
-     click on the running order left it one entry behind: clicking "education"
-     landed at the top of Education with "work" still lit. Reading the computed
-     value keeps the two from drifting apart again; the extra pixel absorbs
-     subpixel rounding so the landing position counts as having arrived. */
-  function getHeaderOffset() {
-    const pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop);
-    if (Number.isFinite(pad)) return pad + 1;
-    // Fallback: measure the bar rather than parsing --mast-h, which is in rem
-    // and so does not resolve to pixels by parseInt.
-    const mast = document.querySelector('.masthead');
-    return (mast ? mast.getBoundingClientRect().height : 54) + 16;
-  }
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function atDocumentEnd() {
-    const doc = document.documentElement;
-    return window.scrollY + window.innerHeight >= doc.scrollHeight - 2;
+  function getHeaderOffset() {
+    const header = document.querySelector('.site-header');
+    return (header ? header.offsetHeight : 52) + 8;
   }
 
   function setActiveNav(id) {
@@ -35,7 +24,7 @@
       const isActive = link.dataset.nav === id;
       link.classList.toggle('active', isActive);
       if (isActive) {
-        link.setAttribute('aria-current', 'location');
+        link.setAttribute('aria-current', 'page');
       } else {
         link.removeAttribute('aria-current');
       }
@@ -43,20 +32,8 @@
   }
 
   function updateScrollSpy() {
-    // The closing section sits too near the foot of the page for its top edge
-    // ever to travel up to the header line — there is nothing underneath it
-    // left to scroll. Reaching the bottom of the document *is* arriving at it,
-    // and without this the running order reads a section behind for the whole
-    // last screenful.
-    if (sections.length && atDocumentEnd()) {
-      setActiveNav(sections[sections.length - 1].id);
-      return;
-    }
-
     const scrollY = window.scrollY + getHeaderOffset();
-    // The opening has no entry in the running order, so nothing is marked
-    // until the reader has actually reached the first act.
-    let current = null;
+    let current = sections[0]?.id || 'home';
 
     for (const section of sections) {
       if (scrollY >= section.el.offsetTop) {
@@ -66,39 +43,6 @@
 
     setActiveNav(current);
   }
-
-  /* ── Registration drift ────────────────────────────────────────────────
-     The hero's plates slide with the pointer. Everything else registers
-     on :hover in CSS. */
-
-  const opening = document.getElementById('top');
-  let driftTicking = false;
-
-  function applyDrift(e) {
-    const w = window.innerWidth || 1;
-    const h = window.innerHeight || 1;
-    const x = (e.clientX / w - 0.5) * 2;   // -1 … 1
-    const y = (e.clientY / h - 0.5) * 2;
-    // em, not px, so the slip stays proportional to whatever it's printed at.
-    opening.style.setProperty('--rx', (0.012 + x * 0.038).toFixed(4) + 'em');
-    opening.style.setProperty('--ry', (0.012 + y * 0.028).toFixed(4) + 'em');
-  }
-
-  function initDrift() {
-    if (reducedMotion || !opening) return;
-    if (window.matchMedia('(pointer: coarse)').matches) return;
-
-    window.addEventListener('pointermove', (e) => {
-      if (driftTicking) return;
-      driftTicking = true;
-      requestAnimationFrame(() => {
-        applyDrift(e);
-        driftTicking = false;
-      });
-    }, { passive: true });
-  }
-
-  /* ── Education index ────────────────────────────────────────────────── */
 
   function createTextEl(tag, className, text) {
     const el = document.createElement(tag);
@@ -112,114 +56,107 @@
   }
 
   function createCourseRow(course) {
-    const row = document.createElement('li');
-    row.className = 'index-row occludes';
+    const isDone = course.status === 'done';
+    const statusLabel = isDone ? 'Completed' : 'In progress';
 
-    const head = document.createElement('div');
-    head.className = 'index-head';
-    head.appendChild(createTextEl('span', 'index-code', course.id));
+    const row = document.createElement('article');
+    row.className = 'course-row reveal-item';
 
-    // The syllabus link is the whole point of a course title, so the title
-    // is the link when there is one — no separate "Outline ↗" affordance.
+    row.appendChild(createTextEl('p', 'course-code', course.id));
+    row.appendChild(createTextEl('h3', 'course-name', course.name));
+
     if (isSafeUrl(course.url)) {
-      const link = createTextEl('a', 'index-name', course.name);
+      const link = document.createElement('a');
+      link.className = 'course-link';
       link.href = course.url;
       link.target = '_blank';
       link.rel = 'noopener';
-      // Same pairing as the markup: the `↗` is the visible half, this is the
-      // half a screen reader gets.
-      link.appendChild(
-        createTextEl('span', 'visually-hidden', ' (opens in a new tab)')
-      );
-      head.appendChild(link);
+      link.textContent = 'Outline ↗';
+      link.setAttribute('aria-label', `Course outline for ${course.name} (opens in a new tab)`);
+      row.appendChild(link);
     } else {
-      head.appendChild(createTextEl('span', 'index-name', course.name));
+      const note = createTextEl('span', 'course-link course-link-disabled', 'No outline');
+      note.setAttribute('aria-disabled', 'true');
+      row.appendChild(note);
     }
 
-    if (course.status === 'wip') {
-      head.appendChild(createTextEl('span', 'index-wip', 'In progress'));
-    }
-
-    row.appendChild(head);
-
-    if (course.description) {
-      row.appendChild(createTextEl('p', 'index-desc', course.description));
-    }
+    row.appendChild(
+      createTextEl('p', 'course-meta', `${course.institution} · ${statusLabel}`)
+    );
+    row.appendChild(createTextEl('p', 'course-desc', course.description));
 
     return row;
   }
 
-  function createGroup(institution, courses) {
-    const group = document.createElement('div');
-    group.className = 'index-group';
-    group.appendChild(createTextEl('h3', 'index-school occludes', institution));
-
-    const list = document.createElement('ul');
-    list.className = 'index-list';
-    list.append(...courses.map(createCourseRow));
-    group.appendChild(list);
-
-    return group;
-  }
-
-  function groupByInstitution(courses) {
-    const groups = new Map();
-    for (const course of courses) {
-      const key = course.institution || 'Elsewhere';
-      if (!groups.has(key)) groups.set(key, []);
-      groups.get(key).push(course);
-    }
-    return groups;
-  }
-
-  function showIndexMessage(root, className, text) {
-    const note = createTextEl('p', className, text);
-    // Loading and failure are status changes, not content. Without a live
-    // region a reader who has already passed this point never hears them.
-    note.setAttribute('role', 'status');
-    root.replaceChildren(note);
+  function showCourseMessage(index, className, text) {
+    index.replaceChildren(createTextEl('p', className, text));
   }
 
   async function renderCourses() {
-    const root = document.querySelector('.index');
-    if (!root) return;
+    const index = document.querySelector('.course-index');
+    if (!index) return;
 
-    root.setAttribute('aria-busy', 'true');
-    showIndexMessage(root, 'index-note', 'Loading…');
+    index.setAttribute('aria-busy', 'true');
+    showCourseMessage(index, 'course-loading', 'Loading courses…');
 
     try {
       const response = await fetch('courses.json');
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const courses = await response.json();
-      const groups = groupByInstitution(courses);
-      if (!groups.size) {
-        // Otherwise the section just stops, with no way to tell an empty
-        // index from a broken one.
-        showIndexMessage(root, 'index-note', 'No coursework listed yet.');
-        return;
-      }
-      root.replaceChildren(
-        ...[...groups].map(([institution, list]) => createGroup(institution, list))
-      );
+      index.replaceChildren(...courses.map(createCourseRow));
+      index.removeAttribute('aria-busy');
     } catch (err) {
       console.error('Failed to load courses:', err);
-      showIndexMessage(root, 'index-note is-error', 'Couldn’t load courses.');
-    } finally {
-      root.removeAttribute('aria-busy');
+      showCourseMessage(index, 'course-error', 'Couldn’t load courses.');
+      index.removeAttribute('aria-busy');
     }
   }
 
-  /* ── Wiring ────────────────────────────────────────────────────────── */
+  function revealAll() {
+    document.querySelectorAll('.reveal-section, .reveal-item').forEach((el) => {
+      el.classList.add('visible');
+    });
+  }
+
+  function initScrollReveal() {
+    if (reducedMotion || !('IntersectionObserver' in window)) {
+      revealAll();
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('visible');
+          entry.target.querySelectorAll('.reveal-item').forEach((item) => {
+            item.classList.add('visible');
+          });
+          obs.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    document.querySelectorAll('.reveal-section').forEach((section) => {
+      if (section.id === 'home') {
+        section.classList.add('visible');
+        section.querySelectorAll('.reveal-item').forEach((item) => item.classList.add('visible'));
+      } else {
+        observer.observe(section);
+      }
+    });
+  }
 
   let scrollTicking = false;
   window.addEventListener('scroll', () => {
-    if (scrollTicking) return;
-    scrollTicking = true;
-    requestAnimationFrame(() => {
-      updateScrollSpy();
-      if (window.CubeFloor) window.CubeFloor.onScroll();
-      scrollTicking = false;
-    });
+    if (!scrollTicking) {
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        updateScrollSpy();
+        scrollTicking = false;
+      });
+    }
   }, { passive: true });
 
   navLinks.forEach((link) => {
@@ -227,17 +164,13 @@
   });
 
   window.addEventListener('hashchange', () => {
-    setActiveNav(location.hash.replace('#', '') || null);
+    setActiveNav(location.hash.replace('#', '') || 'home');
   });
 
   async function init() {
-    initDrift();
     await renderCourses();
+    initScrollReveal();
     updateScrollSpy();
-
-    // The index only exists after the fetch resolves, so the floor has to be
-    // told where the new type sits before it can knock ink out from under it.
-    if (window.CubeFloor) window.CubeFloor.refreshFootprints();
   }
 
   init();
