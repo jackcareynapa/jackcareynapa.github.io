@@ -1,19 +1,39 @@
 /* ── Design tokens ────────────────────────────────────────────────
-   Two inks on stock. No blur, no gradients except the single halftone
-   screen, no radius, one hard shadow.
+   Two inks on stock. No blur, no gradients except the halftone
+   screens, no radius, one hard shadow.
    ───────────────────────────────────────────────────────────────── */
 :root {
   /* Two inks on stock, carried over from the printed-program palette.
      Measured against --paper: --ink 12.6:1, --spot 5.8:1, --ink-soft 5.1:1.
-     --graphic is 2.8:1 and must NEVER carry a word: its only job here is
-     the halftone screen on the splash panel. */
+     --graphic is 2.18:1 and must NEVER carry a word: its only job is to
+     print the halftone screens. */
   --paper: #DEDAD0;        /* the stock */
   --paper-lit: #E7E4DB;    /* stock catching light — cover panel, ghost numerals */
   --ink: #181A17;          /* black pass: body copy, rules, panel borders */
   --ink-soft: #5A594F;     /* secondary copy, meta rows */
   --spot: #2440C4;         /* spot ink: links, labels, focus rings — text-safe */
   --graphic: #FF4FA3;      /* spot ink 2: GRAPHIC ONLY, never type */
-  --graphic-screen: rgba(255, 79, 163, 0.22);  /* the halftone dot itself */
+
+  /* ── Halftone screens ───────────────────────────────────────────
+     Pitch is the distance between dot centres; radius is ~24% of it.
+     Past ~30% the dots touch and the screen fills in to a flat wash,
+     which is the mistake the old single screen made. Dots are two
+     offset layers, half a pitch apart, so the lattice is staggered
+     like a real screen instead of a square grid of circles.
+     ─────────────────────────────────────────────────────────────── */
+  --screen-fine: 6px;      --screen-fine-r: 1.4px;   /* reads as tone */
+  --screen-coarse: 12px;   --screen-coarse-r: 3px;   /* reads as Ben-Day dots */
+  --screen-line: 6px;      --screen-line-w: 1.2px;   /* diagonal line screen */
+  --screen-angle: 45deg;
+
+  --screen-soft: 0.30;     /* the only density display type may sit near */
+  --screen-mid: 0.55;
+  --screen-loud: 0.75;     /* the graded ramp only, and only where it fades out */
+
+  /* Registration offset. In em, so a slip on a caption scales up to a
+     bigger slip on the cover — the way a real misprint scales. */
+  --reg: 0.018em;
+  --reg-blue: -0.011em;
 
   --rule: 2px solid var(--ink);
   --rule-hair: 1px solid var(--ink);
@@ -30,6 +50,7 @@
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
   --dur: 160ms;
+  --dur-stamp: 120ms;
   --dur-slow: 320ms;
   --ease: cubic-bezier(0.2, 0, 0.2, 1);
 }
@@ -55,17 +76,92 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Paper stock: fixed grain over the whole page. */
+/* Paper stock: fixed grain over the whole page, multiplied into the
+   sheet so it reads as tooth rather than as a grey film on top. */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.05;
+  opacity: 0.18;
+  mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 180px 180px;
+}
+
+/* ── Halftone screens ─────────────────────────────────────────────
+   A screen is its own empty element, never a wrapper around copy —
+   that is what keeps the hard rule (no screen behind running text)
+   structural instead of a thing to remember. Every host sets
+   `position: relative; z-index: 0` so the screen at z-index -1 lands
+   above the host's background and below its content, and multiplies
+   into that background rather than the whole page.
+   ───────────────────────────────────────────────────────────────── */
+.screen {
+  --sc: var(--graphic);
+  --p: var(--screen-fine);
+  --r: var(--screen-fine-r);
+  --d: var(--screen-soft);
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  opacity: var(--d);
+  mix-blend-mode: multiply;
+}
+
+.screen-dots {
+  background-image:
+    radial-gradient(circle at 50% 50%, var(--sc) var(--r), transparent calc(var(--r) + 0.1px)),
+    radial-gradient(circle at 50% 50%, var(--sc) var(--r), transparent calc(var(--r) + 0.1px));
+  background-size: var(--p) var(--p), var(--p) var(--p);
+  background-position: 0 0, calc(var(--p) / 2) calc(var(--p) / 2);
+}
+
+.screen-lines {
+  background-image: repeating-linear-gradient(
+    var(--screen-angle),
+    var(--sc) 0 var(--screen-line-w),
+    transparent var(--screen-line-w) var(--screen-line)
+  );
+}
+
+/* ── Misregistration ──────────────────────────────────────────────
+   Display type prints three times: the pink plate, the blue plate,
+   then the black pass on top. The plates are pseudo-elements so they
+   stay out of copy-paste — but generated content IS announced, so the
+   `/ ""` form hands the accessibility tree an empty string. Without
+   it the cover reads as "Jack Jack Jack Carey Carey Carey". The bare
+   declaration above it is the fallback for engines without alt-text
+   support: same glyphs, no empty string.
+   ───────────────────────────────────────────────────────────────── */
+.reg {
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+  color: var(--ink);
+}
+
+.reg::before,
+.reg::after {
+  content: attr(data-text);
+  content: attr(data-text) / "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.reg::before {
+  color: var(--graphic);
+  transform: translate(var(--reg), var(--reg));
+}
+
+.reg::after {
+  color: var(--spot);
+  transform: translate(var(--reg-blue), calc(var(--reg-blue) * 0.7));
 }
 
 /* ── Focus & skip link ── */
@@ -167,8 +263,9 @@ section {
   scroll-margin-top: calc(var(--header-h) + 8px);
 }
 
+/* A panel edge, not a web divider. */
 section + section {
-  border-top: var(--rule-hair);
+  border-top: var(--rule);
 }
 
 .section-label {
@@ -203,9 +300,36 @@ section + section {
 }
 
 .cover-panel {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
   border: var(--rule);
   background: var(--paper-lit);
   padding: clamp(1.75rem, 4vw, 3.25rem) var(--pad) clamp(4.5rem, 7vw, 5.5rem);
+}
+
+/* The one graded screen: a full-density field on the right that masks
+   itself out before it reaches the type. A real tonal ramp, made with
+   a mask rather than variable-radius dot geometry. */
+.cover-screen {
+  --d: var(--screen-loud);
+  inset: 0;
+  /* Two masks, intersected. The horizontal one holds the field off the
+     type on the left; the vertical one clears the issue line at the top,
+     which is 0.7rem mono in --ink-soft and has no business sitting on a
+     loud screen. Measured: the issue rule ends at 16% of panel height
+     and the name starts at 23.5%, so the field fades in between them.
+     The horizontal stop is 40%, not 52%: at 52% the fade still carried
+     ~6% ink past the end of the credits line and the tail of the Y in
+     CAREY. Ink that faint is invisible, but the rule is the rule. */
+  -webkit-mask-image:
+    linear-gradient(to left, #000 0 20%, transparent 40%),
+    linear-gradient(to bottom, transparent 0 18%, #000 25%);
+  mask-image:
+    linear-gradient(to left, #000 0 20%, transparent 40%),
+    linear-gradient(to bottom, transparent 0 18%, #000 25%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
 }
 
 .issue-meta {
@@ -278,14 +402,10 @@ section + section {
 /* ── Panels ── */
 .panel {
   position: relative;
+  z-index: 0;
   background: var(--paper);
   border: var(--rule);
   padding: var(--pad);
-  transition: box-shadow var(--dur) var(--ease);
-}
-
-.panel:hover {
-  box-shadow: var(--panel-shadow);
 }
 
 .panel-title {
@@ -313,20 +433,36 @@ section + section {
   margin-bottom: 0.6rem;
 }
 
-/* Splash: the largest panel on the page, with the one halftone screen. */
+/* The ink stamp: the panel presses a millimetre toward its own shadow.
+   Only the work panels get it — it is interaction feedback, not decor,
+   and linear steps rather than an eased lift so it lands like a press. */
+#projects .panel {
+  transition: box-shadow var(--dur-stamp) linear, transform var(--dur-stamp) linear;
+}
+
+#projects .panel:hover,
+#projects .panel:focus-within {
+  box-shadow: var(--panel-shadow);
+  transform: translate(-1px, -1px);
+}
+
+/* Splash: the largest panel on the page. The screen is clipped to the
+   right column, behind the buttons — never behind the description. */
 .panel-splash {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: clamp(1.5rem, 3vw, 2.5rem);
   padding: clamp(1.75rem, 3.5vw, 2.75rem);
+  overflow: hidden;
   box-shadow: var(--panel-shadow);
-  background-color: var(--paper);
-  background-image: repeating-radial-gradient(
-    circle at 0 0,
-    var(--graphic-screen) 0 1.2px,
-    transparent 1.2px 6px
-  );
-  background-size: 6px 6px;
+}
+
+.splash-screen {
+  --p: var(--screen-coarse);
+  --r: var(--screen-coarse-r);
+  --d: var(--screen-mid);
+  inset: 0 0 0 auto;
+  width: 32%;
 }
 
 .panel-splash .panel-title {
@@ -344,15 +480,24 @@ section + section {
   align-items: stretch;
 }
 
+/* The credits strip bleeds to the panel's trim and prints on solid
+   stock, so it knocks the screen out from under itself. That is what
+   keeps the rule above it visible and the words off the dots at every
+   width — no magic numbers, no assumption about how many lines it
+   wraps to. */
 .splash-stack {
+  position: relative;
+  z-index: 1;
   grid-column: 1 / -1;
+  background: var(--paper);
   font-family: var(--font-mono);
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--ink-soft);
-  padding-top: 1.1rem;
   border-top: var(--hair-soft);
+  margin: 0 calc(-1 * clamp(1.75rem, 3.5vw, 2.75rem)) calc(-1 * clamp(1.75rem, 3.5vw, 2.75rem));
+  padding: 1.1rem clamp(1.75rem, 3.5vw, 2.75rem) clamp(1.75rem, 3.5vw, 2.75rem);
 }
 
 /* Paired panels: deliberately unequal, arranged differently inside. */
@@ -370,13 +515,26 @@ section + section {
   min-height: 100%;
 }
 
+/* The ghost numeral becomes paper knocked out of a dot field. */
+.numeral-wrap {
+  position: relative;
+  z-index: 0;
+  align-self: flex-start;
+  margin-bottom: 0.35rem;
+}
+
+.numeral-screen {
+  inset: 0.12em -0.25em 0.1em -0.1em;
+}
+
 .panel-no-big {
+  position: relative;
   font-family: var(--font-display);
   font-size: clamp(3rem, 7vw, 5rem);
   line-height: 0.8;
   letter-spacing: -0.04em;
   color: var(--paper-lit);
-  margin-bottom: 0.35rem;
+  margin-bottom: 0;
 }
 
 .panel-links {
@@ -413,8 +571,10 @@ section + section {
   border-color: var(--spot);
 }
 
+/* Opaque, not transparent: an outline button has to be able to sit on a
+   screened field without the dots running under its label. */
 .btn-outline {
-  background: transparent;
+  background: var(--paper);
   color: var(--ink);
 }
 
@@ -431,11 +591,14 @@ section + section {
   align-items: start;
 }
 
+.index-margin {
+  position: sticky;
+  top: calc(var(--header-h) + 2.5rem);
+}
+
 .pull-quote {
   border-left: 3px solid var(--spot);
   padding-left: 1.1rem;
-  position: sticky;
-  top: calc(var(--header-h) + 2.5rem);
 }
 
 .pull-quote p {
@@ -444,6 +607,21 @@ section + section {
   line-height: 1.15;
   letter-spacing: -0.01em;
   text-transform: uppercase;
+}
+
+/* Line screen filling the index's margin column. In flow, not absolute:
+   it is the only screen that occupies space rather than backing it. */
+.index-screen {
+  --sc: var(--spot);
+  --d: 0.24;
+  position: relative;
+  z-index: 0;
+  height: 8rem;
+  /* Indented to the pull quote's text, not the column edge, so the rule
+     and the tone below it read as one margin element rather than a
+     swatch parked next to the quote. */
+  margin: 1.75rem 0 0 calc(1.1rem + 3px);
+  border-top: var(--hair-soft);
 }
 
 .course-index {
@@ -460,7 +638,7 @@ section + section {
 }
 
 .course-code {
-  grid-column: 1 / -1;
+  grid-column: 1;
   font-family: var(--font-mono);
   font-size: 0.68rem;
   font-weight: 500;
@@ -468,7 +646,18 @@ section + section {
   color: var(--spot);
 }
 
+/* Running number: where you are in a twelve-entry index. */
+.course-no {
+  grid-column: 2;
+  justify-self: end;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+}
+
 .course-name {
+  grid-column: 1;
   font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: 600;
@@ -493,26 +682,32 @@ section + section {
   margin-top: 0.2rem;
 }
 
+/* Underline rather than a border, so the padding that lifts this to a
+   usable target size doesn't drag the rule away from the word. */
 .course-link {
+  grid-column: 2;
+  justify-self: end;
   font-family: var(--font-mono);
   font-size: 0.66rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--ink);
-  text-decoration: none;
-  border-bottom: 1px solid var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
   white-space: nowrap;
-  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  padding: 0.45rem 0.35rem;
+  margin: -0.45rem -0.35rem;
+  transition: color var(--dur) var(--ease);
 }
 
 .course-link:hover {
   color: var(--spot);
-  border-color: var(--spot);
 }
 
 .course-link-disabled {
   color: var(--ink-soft);
-  border-bottom-style: dotted;
+  text-decoration-style: dotted;
   opacity: 0.7;
 }
 
@@ -537,6 +732,17 @@ section + section {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 1.25rem 2rem;
+  overflow: hidden;
+  padding-left: calc(var(--pad) + clamp(28px, 4vw, 56px));
+}
+
+/* Back-cover-ad band. The strip's extra left padding is what guarantees
+   no word ever lands on it, at any width. */
+.strip-screen {
+  --sc: var(--ink);
+  --d: 0.24;
+  inset: 0 auto 0 0;
+  width: clamp(28px, 4vw, 56px);
 }
 
 .strip-title {
@@ -561,7 +767,44 @@ section + section {
   line-height: 0.88;
   letter-spacing: -0.035em;
   text-transform: uppercase;
-  margin-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
+}
+
+/* The page's one speech bubble. Tail is two triangles: the ink one sets
+   the outline, the stock one covers its interior and is pulled up over
+   the bubble's own bottom border so the mouth has no seam. */
+.bubble {
+  position: relative;
+  display: inline-block;
+  background: var(--paper-lit);
+  border: var(--rule);
+  padding: clamp(0.9rem, 2vw, 1.4rem) clamp(1.1rem, 2.5vw, 1.8rem);
+  margin-bottom: clamp(2.75rem, 4.5vw, 3.5rem);
+  max-width: 100%;
+}
+
+.bubble::before,
+.bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: transparent;
+  border-bottom-width: 0;
+}
+
+.bubble::before {
+  left: clamp(1.5rem, 4vw, 3rem);
+  border-width: 18px 15px 0;
+  border-top-color: var(--ink);
+}
+
+.bubble::after {
+  left: calc(clamp(1.5rem, 4vw, 3rem) + 3px);
+  border-width: 14px 12px 0;
+  border-top-color: var(--paper-lit);
+  margin-top: -2px;
 }
 
 .contact-list {
@@ -631,20 +874,43 @@ footer {
   transform: none;
 }
 
+/* The cover screen rides the same reveal, but it has to land on its own
+   density rather than on 1, and it must never translate — a screen that
+   slides would drag its dots out from under the type. */
+.js .cover-screen {
+  opacity: 0;
+  transform: none;
+}
+
+.js .cover-screen.visible {
+  opacity: var(--d);
+  transform: none;
+}
+
 /* ── Responsive ── */
 @media (max-width: 900px) {
   .index-layout {
     grid-template-columns: 1fr;
   }
 
-  .pull-quote {
+  .index-margin {
     position: static;
+  }
+
+  .index-screen {
+    height: 3rem;
   }
 }
 
 @media (max-width: 760px) {
   .panel-splash {
     grid-template-columns: 1fr;
+  }
+
+  /* One column means the right-hand field would land under the body
+     copy. There is no honest place for it here, so it does not print. */
+  .splash-screen {
+    display: none;
   }
 
   .splash-links {
@@ -658,6 +924,15 @@ footer {
 
   .cover-caption {
     margin-left: 0;
+  }
+
+  /* The ramp moves to the foot of the cover panel, inside its bottom
+     padding, where the type has already ended. */
+  .cover-screen {
+    inset: auto 0 0 0;
+    height: 4rem;
+    -webkit-mask-image: linear-gradient(to top, #000 0 20%, transparent 92%);
+    mask-image: linear-gradient(to top, #000 0 20%, transparent 92%);
   }
 }
 
@@ -681,6 +956,18 @@ footer {
   .contact-row {
     grid-template-columns: 1fr;
   }
+
+  /* A pitch that reads as tone on a desk reads as interference in the
+     hand. Every screen steps down to fine dots at the softest density. */
+  .screen {
+    --p: var(--screen-fine);
+    --r: var(--screen-fine-r);
+    --d: var(--screen-soft);
+  }
+
+  .js .cover-screen.visible {
+    opacity: var(--screen-soft);
+  }
 }
 
 /* ── Reduced motion ── */
@@ -699,5 +986,27 @@ footer {
   .js .reveal-item {
     opacity: 1;
     transform: none;
+  }
+
+  /* Must come after the rule above, or the cover screen is stuck at
+     opacity 1 — which for a halftone field means a flat wash, not a
+     screen. It prints at its density, immediately. */
+  .js .cover-screen,
+  .js .cover-screen.visible {
+    opacity: var(--d);
+  }
+}
+
+/* ── Forced contrast ──
+   Every screen is atmosphere. A reader who has asked for more contrast
+   is asking for less of exactly this, so the ink comes off the sheet. */
+@media (prefers-contrast: more) {
+  .screen {
+    display: none;
+  }
+
+  .reg::before,
+  .reg::after {
+    display: none;
   }
 }

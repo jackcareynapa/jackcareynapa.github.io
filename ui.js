@@ -55,7 +55,7 @@
     return typeof url === 'string' && url.startsWith('https://');
   }
 
-  function createCourseRow(course) {
+  function createCourseRow(course, position) {
     const isDone = course.status === 'done';
     const statusLabel = isDone ? 'Completed' : 'In progress';
 
@@ -63,6 +63,13 @@
     row.className = 'course-row reveal-item';
 
     row.appendChild(createTextEl('p', 'course-code', course.id));
+
+    // Where you are in the index. Decorative for a screen reader — the
+    // list already conveys order — so it is hidden from the a11y tree.
+    const no = createTextEl('p', 'course-no', String(position + 1).padStart(2, '0'));
+    no.setAttribute('aria-hidden', 'true');
+    row.appendChild(no);
+
     row.appendChild(createTextEl('h3', 'course-name', course.name));
 
     if (isSafeUrl(course.url)) {
