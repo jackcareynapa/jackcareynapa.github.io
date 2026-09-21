@@ -53,8 +53,35 @@ Measured against the *rendered* sheet (nominal `--paper` darkened by the grain l
 | `--ink-soft` | `#5A594F` | 4.80:1 | Secondary copy, meta rows |
 | `--graphic` | `#FF4FA3` | **2.18:1** | Screens only — **never** carries a word |
 
+Three rules keep the page from drifting, and each one is a single value you can check:
+
+- **One screen ink.** Every halftone prints in `--graphic`. `--spot` carries words,
+  `--graphic` carries dots, and neither does both. An earlier pass had the index margin
+  printing in blue and the resume band in black, which put the text ink and the black pass
+  to work as graphics.
+- **One stock.** Every bordered surface — cover panel, project panels, caption, credits
+  strip, bubble, buttons, header, footer — prints on `--paper`. `--paper-lit` is *not* a
+  second stock; it is the knockout highlight on the ghost numeral, and nothing else.
+- **One type scale.** Four sizes, and every fixed size is one of them.
+
 `--ink-soft` clears AA with about 0.3 of headroom. It is the tightest token on the
 page, so darkening the stock or the grain any further will break it.
+
+### Type scale
+
+| Token | Size | Carries |
+|-------|------|---------|
+| `--fs-label` | 0.72rem | All mono furniture: labels, meta, credits, nav, buttons, footer |
+| `--fs-small` | 0.86rem | Course descriptions |
+| `--fs-body` | 0.95rem | Body copy |
+| `--fs-lead` | 1rem | The splash description, course names |
+
+0.72rem is a floor, not a preference. The mono furniture used to run from 0.66 to
+0.78rem across seven values — differences of a third of a pixel, which read as
+sloppiness rather than as hierarchy. It is also where IBM Plex Mono stops holding up:
+measured at 0.66rem, `--ink-soft` rendered at **2.4:1** through antialiasing even though
+the specified colour is 4.8:1. Verified against a grain-off control, so it is the stroke
+weight doing that, not the texture.
 
 ### Halftone screens
 
@@ -76,6 +103,18 @@ pink wash.
 Every host element needs `position: relative; z-index: 0` — the screen sits at
 `z-index: -1`, which lands it above the host's background and below its content, and
 confines the `multiply` blend to that host.
+
+### Paper grain
+
+`body::before` is fixed at `z-index: 150`, which puts it above the panels and the header
+and below the skip link. It has to be above them: tooth belongs to the sheet, and anything
+carrying a background of its own would otherwise punch a flat hole in the page. Measured
+before it was raised, panel interiors had a pixel std-dev of 0.0 against the sheet's 1.49,
+and read about 15 levels lighter.
+
+Because it now sits over the type as well, it lifts entirely under
+`prefers-contrast: more` — at that point it is not texture, it is something between the
+reader and the words. It is `pointer-events: none`, so it intercepts nothing.
 
 **The hard rule: a screen never sits behind running text.** It backs display type, ghost
 numerals, empty fields and panel edges. Where a control or a strip has to cross a screen,
