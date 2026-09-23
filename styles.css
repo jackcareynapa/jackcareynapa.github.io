@@ -71,6 +71,13 @@ svg {
   outline-offset: 3px;
 }
 
+/* Above 900px the nav sits on the hero's sky, where brick is too weak
+   a ring; ink holds 6:1 there and on paper. */
+.nav-logo:focus-visible,
+.nav-links a:focus-visible {
+  outline-color: var(--ink);
+}
+
 .skip-link {
   position: absolute;
   left: -9999px;
@@ -147,8 +154,12 @@ svg {
   transition: transform var(--dur) var(--ease);
 }
 
-/* An outlined key, tracked caps. */
+/* An outlined key, tracked caps. The key's face and its brick plate
+   are two layers: on hover the plate slips out of register behind the
+   inked face; on press the key sinks back onto it. */
 .btn {
+  position: relative;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
   gap: 1.1rem;
@@ -160,13 +171,34 @@ svg {
   color: var(--ink);
   text-decoration: none;
   white-space: nowrap;
+  /* The 1px border lives on the face, so the padding carries it. */
+  padding: calc(0.85rem + 1px) calc(1.4rem + 1px);
+  transition: color var(--dur) var(--ease), transform 150ms var(--ease);
+}
+
+.btn::before,
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.btn::before {
+  z-index: -1;
+  background: var(--paper);
   border: 1px solid var(--ink);
-  padding: 0.85rem 1.4rem;
-  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  transition: background-color var(--dur) var(--ease);
+}
+
+.btn::after {
+  z-index: -2;
+  background: var(--brick);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
 
 .btn:active {
-  transform: translateY(1px);
+  transform: translate(3px, 3px);
 }
 
 /* A red, underlined, tracked link. */
@@ -183,15 +215,40 @@ svg {
   text-decoration: none;
   border-bottom: 1px solid currentColor;
   padding: 0.35rem 0 0.2rem;
-  transition: color var(--dur) var(--ease);
+  transition: color var(--dur) var(--ease), transform 150ms var(--ease);
+}
+
+a.link:active {
+  transform: translateY(1px);
 }
 
 /* Hover only where there is a pointer to hover with; on touch a tap
    leaves :hover stuck. */
 @media (hover: hover) {
   .btn:hover {
-    background: var(--ink);
     color: var(--paper);
+  }
+
+  .btn:hover::before {
+    background: var(--ink);
+  }
+
+  .btn:hover::after {
+    opacity: 1;
+    transform: translate(4px, 4px);
+  }
+
+  /* Pressed, the key covers the plate it was lifted off. */
+  .btn:hover:active::after {
+    transform: translate(1px, 1px);
+  }
+
+  .card:hover {
+    border-color: var(--line);
+  }
+
+  .card:hover .card-art svg {
+    transform: scale(1.02);
   }
 
   .btn:hover .arrow,
@@ -384,11 +441,11 @@ svg {
 
 /* One-time: the scene develops in on load, then never moves again. */
 .hero-art .scene {
-  animation: develop 1100ms var(--ease) both;
+  animation: develop 500ms var(--ease) both;
 }
 
 @keyframes develop {
-  from { opacity: 0; transform: scale(1.025); }
+  from { opacity: 0; transform: scale(1.015); }
   to   { opacity: 1; transform: none; }
 }
 
@@ -456,6 +513,13 @@ svg {
   padding: 7px;
   background: var(--paper);
   border: 1px solid var(--line-card);
+  transition: border-color var(--dur) var(--ease);
+}
+
+/* A focused link darkens its whole card, so the keyboard shows which
+   project it is in. */
+.card:focus-within {
+  border-color: var(--line);
 }
 
 .card-feature {
@@ -527,6 +591,7 @@ svg {
   inset: 0;
   width: 100%;
   height: 100%;
+  transition: transform 250ms var(--ease);
 }
 
 /* The halftone tile hangs off the left margin. */
@@ -764,7 +829,7 @@ svg {
   margin: -0.35rem 0;
   font-size: clamp(0.85rem, 1.6vw, 1rem);
   color: var(--ink);
-  text-decoration: underline 1px transparent;
+  text-decoration: underline 1px var(--line-soft);
   text-underline-offset: 4px;
   overflow-wrap: anywhere;
   transition: color var(--dur) var(--ease), text-decoration-color var(--dur) var(--ease);
@@ -793,6 +858,24 @@ svg {
 .footer-name {
   font-weight: 500;
   letter-spacing: 0.34em;
+}
+
+/* ── Reveal ──
+   Panels below the fold rise in once as they arrive. ui.js adds
+   .reveal only to panels still off-screen, so nothing on screen at load
+   is ever hidden, and without the script everything is simply there. */
+@media screen and (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  /* Only the arrival is animated; being hidden is instant. */
+  .reveal.is-in {
+    opacity: 1;
+    transform: none;
+    transition: opacity 450ms var(--ease), transform 450ms var(--ease), border-color var(--dur) var(--ease);
+  }
 }
 
 /* ── Responsive ── */
@@ -962,6 +1045,13 @@ svg {
 
   .hero-art .scene {
     animation: none;
+  }
+
+  /* Colour changes stay; nothing shifts or scales. */
+  .btn:active,
+  a.link:active,
+  .card:hover .card-art svg {
+    transform: none;
   }
 }
 

@@ -41,7 +41,8 @@ Running numbers are generated from array position, so reordering the file reorde
 
 An editorial sheet with a quiet surreal streak: cream stock, navy ink, one brick-red
 accent, and dusty-blue illustrations of concrete architecture, sea and sky. Hairline
-rules, no radius, no drop shadows.
+rules, no radius, no drop shadows. The one offset is the brick plate behind a
+button, and it only appears as hover and press feedback.
 
 ### Colour
 
@@ -73,7 +74,7 @@ typed full stop; `.nowrap` keeps it on the same line as the last word.
 Inline SVG, `aria-hidden`, and original to this site: an aqueduct whose walkway is the
 tape pulled out of a floating cassette (hero); a corridor of doorways with a red line
 running through them to the horizon (Wikinaut, one link after another); a window onto
-vineyard rows (Napa Valley Vineyard); a staircase that climbs into a cloud with no
+vineyard rows, drawn as dotted lines of vines (Napa Valley Vineyard); a staircase that climbs into a cloud with no
 building at the top (Serverless Meme Generator). A halftone eye tile and a cassette
 side-label (`.deck`) sit in the margins of the work grid at wide widths.
 
@@ -94,11 +95,17 @@ information.
 
 ### Motion
 
-| Motion | Trigger |
-|--------|---------|
-| The hero scene develops in (opacity + slight scale) | Once, on load (CSS) |
-| Arrows nudge right; buttons fill navy; links turn navy | Hover, pointer devices only |
-| Buttons press down 1px | `:active` |
+| Motion | Trigger | Timing |
+|--------|---------|--------|
+| The hero scene develops in (opacity + slight scale) | Once, on load (CSS) | 500ms |
+| Project cards and the resume card rise in (opacity + 14px) | Once each, as they scroll into view (`ui.js` adds `.reveal`, then `.is-in`) | 450ms |
+| Button face fills navy; its brick plate slips 4px out of register | Hover, pointer devices only | 180ms |
+| Button sinks 3px onto its plate; links press down 1px | `:active` | 150ms |
+| Card frame darkens and its art settles in 2% | Card hover (pointer) or a focused link inside it | 250ms |
+| Arrows nudge right; links turn navy | Hover, pointer devices only | 180ms |
 
-Nothing loops and nothing moves on scroll. Under `prefers-reduced-motion: reduce` the
-scene is simply there.
+Only `transform` and `opacity` move. Nothing loops and nothing is tied to scroll
+position. The reveal hides only panels still below the fold at load, so nothing on
+screen blinks out, and with no script every panel is simply there. Under
+`prefers-reduced-motion: reduce` there is no develop, no reveal and no press travel;
+colour changes stay.

@@ -89,5 +89,31 @@
     }
   }
 
+  // Project cards and the resume card rise in once as they scroll into
+  // view. Only panels still below the fold are hidden, so nothing on
+  // screen at load flashes out and back.
+  function revealPanels() {
+    if (!('IntersectionObserver' in window)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const panels = [...document.querySelectorAll('.card, .resume-card')]
+      .filter((panel) => panel.getBoundingClientRect().top > window.innerHeight);
+    if (!panels.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add('is-in');
+        observer.unobserve(entry.target);
+      }
+    }, { threshold: 0.15 });
+
+    for (const panel of panels) {
+      panel.classList.add('reveal');
+      observer.observe(panel);
+    }
+  }
+
   renderCourses();
+  revealPanels();
 })();
