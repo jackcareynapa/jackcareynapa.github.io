@@ -32,113 +32,73 @@ Running numbers are generated from array position, so reordering the file reorde
 
 | File | Purpose |
 |------|---------|
-| `index.html` | Page structure and the two inline SVG plates |
-| `styles.css` | Design tokens, layout, illustration inks |
-| `ui.js` | Scroll spy, course renderer, the one-shot halftone resolve |
+| `index.html` | Page structure and the inline SVG illustrations |
+| `styles.css` | Design tokens, layout, responsive rules |
+| `ui.js` | Course renderer |
 | `courses.json` | Coursework data |
 
-## The print system
+## Design system
 
-The page is set as an illustrated field manual: black ink and putty hardware on warm
-stock, with one phosphor ink and one signal ink. The comic foundation — halftone
-screens, misregistered display type, hard shadows, the speech bubble — carries over.
+An editorial sheet with a quiet surreal streak: cream stock, navy ink, one brick-red
+accent, and dusty-blue illustrations of concrete architecture, sea and sky. Hairline
+rules, no radius, no drop shadows.
 
-### Inks
+### Colour
 
 | Token | Hex | Contrast on paper | Use |
 |-------|-----|------------------|-----|
-| `--paper` | `#E5DECD` | — | The stock |
-| `--ink` | `#1B1A17` | 12.98:1 | Body copy, rules, borders |
-| `--ink-soft` | `#57534A` | 5.71:1 | Secondary copy — **paper only** (3.76:1 on putty) |
-| `--putty` | `#BDB5A2` | — | Hardware bodies; takes `--ink` text at 8.53:1 |
-| `--signal` | `#A8321B` | 4.99:1 | Links, labels, focus rings, lamps |
-| `--phosphor` | `#E09A2B` | **1.77:1** | Screen light and every dot — **never** carries a word |
+| `--paper` | `#F1ECE2` | — | The stock |
+| `--ink` | `#1B2130` | 13.65:1 | Type, rules, borders |
+| `--ink-soft` | `#4A5262` | 6.67:1 | Meta rows, labels |
+| `--brick` | `#A9412A` | 5.13:1 | Links, code tags, focus ring, the full stops |
+| `--sky` | `#9DB4C9` | — | Behind the art while it loads; illustration only |
 
-`--signal` carries words, `--phosphor` carries light and dots, and neither does both.
+Brick is the only colour that marks a link. Rules come in three weights: `--line`
+(section and header rules), `--line-card` (card frames) and `--line-soft` (list rows).
 
-### Paper grain
+### Type
 
-The grain is part of the stock, not an overlay: `--stock` is a faint
-`feTurbulence` tile (alpha baked in) layered over `--paper`. Every opaque surface —
-body, header, panels, caption, bubble, footer — sets `background: var(--stock)`, so
-nothing punches a flat hole in the sheet and nothing sits between the reader and the
-type. Under `prefers-contrast: more` the stock goes flat.
+| Family | Role |
+|--------|------|
+| Anton | Display: the hero statement, card titles, "Let's connect" |
+| Oswald | Wide-tracked labels: nav, section heads, buttons, links, course names |
+| IBM Plex Mono | Body copy and marginalia |
 
-### Type scale
+The hero statement is sized in container units (`cqi`) against its own column, so its
+longest word always fits. Headlines end in a round brick dot (`.dot`) instead of a
+typed full stop; `.nowrap` keeps it on the same line as the last word.
 
-| Token | Size | Carries |
-|-------|------|---------|
-| `--fs-label` | 0.72rem | All mono furniture: labels, meta, credits, nav, buttons, footer |
-| `--fs-small` | 0.86rem | Course descriptions |
-| `--fs-body` | 0.95rem | Body copy |
-| `--fs-lead` | 1rem | The splash description, course names |
+### Illustrations
 
-0.72rem is a floor: below it IBM Plex Mono's strokes thin out enough that `--ink-soft`
-renders well under its specified contrast.
+Inline SVG, `aria-hidden`, and original to this site: an aqueduct whose walkway is the
+tape pulled out of a floating cassette (hero); a corridor of doorways with a red line
+running through them to the horizon (Wikinaut, one link after another); a window onto
+vineyard rows (Napa Valley Vineyard); a staircase that climbs into a cloud with no
+building at the top (Serverless Meme Generator). A halftone eye tile and a cassette
+side-label (`.deck`) sit in the margins of the work grid at wide widths.
 
-### Halftone screens
+Every `.art` container gets a stronger grain tile laid over it (`--grain-art`,
+`mix-blend-mode: multiply`) so the flat fills read as print. The page itself carries a
+faint grain baked into `--stock`. Both come off under `prefers-contrast: more`.
 
-Three screens, three jobs:
+Card art uses `preserveAspectRatio="xMidYMid slice"`, so each scene keeps its subject
+in the middle of the frame: at wide widths the art sits beside the copy and gets
+cropped at the sides; below 1180px it sits above the copy at 4:3.
 
-| Screen | Where |
-|--------|-------|
-| Fine dots | Paper tone — the caption's head band, the index margin |
-| Coarse dots | Behind a focal visual only — the sun outside the CRT, the Wikinaut planet |
-| Line screen (ink) | Shadows cast by hardware — under the CRT, behind the cartridges, the resume band |
+### Marginalia
 
-A CSS screen is a **standalone empty element**, never a wrapper around copy:
-
-```html
-<div class="screen screen-dots index-screen" aria-hidden="true"></div>
-```
-
-`.screen` sets position, blend and density; `.screen-dots` or `.screen-lines` sets the
-pattern; `.screen-ink` switches it to the black pass. Geometry comes from `--p`
-(pitch), `--r` (dot radius), `--d` (density) and `--sc` (ink). Dots are two offset
-`radial-gradient` layers so the lattice is staggered like a real screen. Every host
-needs `position: relative; z-index: 0`.
-
-**The hard rule: a screen never sits behind running text.** Below 560px every CSS
-screen steps down to fine dots at the softest density.
-
-### Plates
-
-The illustrations are inline SVG, `aria-hidden`, coloured by classes (`.i-ink`,
-`.i-putty`, `.i-phosphor`, …) so the palette has one source. Only two places get an
-idea of their own:
-
-- **Cover** — the CRT is a window, not a display: the sun and horizon on its screen
-  carry on outside the housing, solid light behind the glass, printed dots on paper.
-- **Wikinaut** — one link underline leaves the article and becomes the flight path.
-
-The secondary projects are **cartridges**: putty shell, notched corner, grip spine,
-paper label, line-screen shadow. No illustration. Dot-filled SVG parts carry
-`.art-screen` and are removed under `prefers-contrast: more`.
-
-### Misregistration
-
-`.reg` prints display type three times — phosphor plate, signal plate, black pass —
-offset by `--reg`, which is in `em` so the slip scales with the type.
-
-```html
-<span class="reg" data-text="Jack">Jack</span>
-```
-
-The `data-text` value **must** match the element's text. The plates use
-`content: attr(data-text) / ""` so the accessibility tree gets an empty string; drop
-the `/ ""` and the cover announces as "Jack Jack Jack Carey Carey Carey". A line break
-needs its own `.reg` span per line.
+`.note` sets small stacked words with a short rule, like notes on a proof: in the
+hero's left margin, over the art, under the halftone tile. They are decoration and are
+hidden from assistive tech, except for the Duke / Durham note, which is real
+information.
 
 ### Motion
 
-Everything is one-time and local, and only `transform` / `opacity` move:
-
 | Motion | Trigger |
 |--------|---------|
-| CRT power-on — the picture opens out of a scan line | Once, on load (CSS) |
-| Wikinaut planet resolves from a rough screen to its finished one | Once, first time in view (`ui.js`) |
-| Key press — buttons close over their 2px shadow | `:active` |
-| Colour changes on links, nav and buttons | Hover |
+| The hero scene develops in (opacity + slight scale) | Once, on load (CSS) |
+| Arrows nudge right; buttons fill navy; links turn navy | Hover, pointer devices only |
+| Buttons press down 1px | `:active` |
 
-Nothing loops, nothing moves on scroll, and content is never hidden waiting for a
-reveal. Under `prefers-reduced-motion: reduce` everything prints in its final state.
+Nothing loops and nothing moves on scroll. Under `prefers-reduced-motion: reduce` the
+scene is simply there.

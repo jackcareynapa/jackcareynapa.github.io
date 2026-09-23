@@ -1,8 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" fill="#E5DECD"/>
-  <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="700" font-size="38" letter-spacing="-2">
-    <text x="30" y="46" text-anchor="middle" fill="#E09A2B">JC</text>
-    <text x="27" y="43" text-anchor="middle" fill="#A8321B">JC</text>
-    <text x="28" y="44" text-anchor="middle" fill="#1B1A17">JC</text>
-  </g>
+  <rect width="64" height="64" fill="#F1ECE2"/>
+  <rect x="4" y="12" width="56" height="40" rx="4" fill="#1B2130"/>
+  <rect x="10" y="17" width="44" height="22" rx="2" fill="#F1ECE2"/>
+  <rect x="16" y="23" width="32" height="11" rx="5.5" fill="#1B2130"/>
+  <rect x="27" y="25" width="10" height="7" fill="#A9412A"/>
+  <circle cx="22" cy="28.5" r="3.2" fill="#F1ECE2"/>
+  <circle cx="42" cy="28.5" r="3.2" fill="#F1ECE2"/>
+  <path d="M16 52L19 44H45L48 52Z" fill="#F1ECE2"/>
 </svg>

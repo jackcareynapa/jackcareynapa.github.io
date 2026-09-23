@@ -1,72 +1,41 @@
 /* ── Design tokens ────────────────────────────────────────────────
-   A field manual printed on warm stock: black ink, putty for the
-   hardware, one phosphor ink for light and dots, one signal ink for
-   words that need to be found. No blur, no radius on the page
-   furniture, one hard shadow.
+   An editorial sheet: cream stock, navy ink, one brick-red accent,
+   dusty-blue illustrations. Hairline rules, no radius, no shadows.
+   Condensed display type, wide-tracked labels, typewriter copy.
    ───────────────────────────────────────────────────────────────── */
 :root {
-  /* Measured against --paper: --ink 12.98:1, --ink-soft 5.71:1,
-     --signal 4.99:1. --phosphor is 1.77:1 and must NEVER carry a word:
-     it is the light on the screens and the ink in the dots. --putty
-     takes --ink text (8.53:1) but not --ink-soft (3.76:1). */
-  --paper: #E5DECD;        /* the stock */
-  --ink: #1B1A17;          /* black pass: body copy, rules, borders */
-  --ink-soft: #57534A;     /* secondary copy, meta rows — paper only */
-  --putty: #BDB5A2;        /* hardware bodies */
-  --putty-dk: #9A9282;     /* hardware side faces — graphic only */
-  --phosphor: #E09A2B;     /* GRAPHIC ONLY: screen light and every dot */
-  --signal: #A8321B;       /* links, labels, focus rings, lamps — text-safe */
+  /* Measured against --paper: --ink 13.65:1, --ink-soft 6.67:1,
+     --brick 5.13:1. Brick is the only colour that marks a link. */
+  --paper: #F1ECE2;
+  --ink: #1B2130;
+  --ink-soft: #4A5262;
+  --brick: #A9412A;
+  --sky: #9DB4C9;
 
-  /* The stock carries its own tooth. It is a background layer, not an
-     overlay, so it sits under the type instead of between the reader
-     and the words, and every opaque surface prints on the same sheet
-     by using this token rather than a flat --paper. The grain's alpha
-     is baked into the tile. */
-  --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+  --line: rgba(27, 33, 48, 0.72);
+  --line-card: rgba(27, 33, 48, 0.42);
+  --line-soft: rgba(27, 33, 48, 0.2);
+
+  /* Paper tooth, baked into the stock as a background layer. The
+     stronger tile is laid over the illustrations as print grain. */
+  --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  --grain-art: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.22'/%3E%3C/svg%3E");
   --stock: var(--grain) 0 0 / 200px 200px repeat, var(--paper);
 
-  /* ── Halftone screens ───────────────────────────────────────────
-     Three jobs, three screens. Fine dots are paper tone — caption
-     bands and quiet margins. Coarse dots sit behind a focal visual and
-     nowhere else. Line screens are the shadows cast by hardware.
-     Radius stays ~24% of pitch: past ~30% the dots touch and the
-     screen fills in to a flat wash.
-     ─────────────────────────────────────────────────────────────── */
-  --screen-fine: 6px;      --screen-fine-r: 1.4px;
-  --screen-line: 6px;      --screen-line-w: 1.2px;
-  --screen-angle: 45deg;
+  --gutter: clamp(16px, 2.6vw, 40px);
+  --header-h: 64px;
+  --max-w: 1520px;
 
-  --screen-soft: 0.30;
-
-  /* Registration offset. In em, so the slip scales with the type. */
-  --reg: 0.018em;
-  --reg-signal: -0.011em;
-
-  --rule: 2px solid var(--ink);
-  --rule-hair: 1px solid var(--ink);
-  --hair-soft: 1px solid rgba(27, 26, 23, 0.22);
-  --panel-shadow: 4px 4px 0 var(--ink);
-
-  --gutter: clamp(10px, 1.4vw, 18px);
-  --pad: clamp(1.25rem, 2.4vw, 2rem);
-  --plate-pad: clamp(1.5rem, 3.2vw, 2.5rem);
-  --header-h: 52px;
-  --max-w: 1120px;
-
-  --font-display: 'Archivo Black', 'Arial Black', 'Helvetica Neue', sans-serif;
-  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
+  --font-label: 'Oswald', 'Arial Narrow', sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
-  /* Four sizes, and every fixed size on the page is one of them.
-     0.72rem is the floor at which IBM Plex Mono's strokes still hold
-     up against --ink-soft. */
-  --fs-label: 0.72rem;   /* all mono furniture */
-  --fs-small: 0.86rem;   /* course descriptions */
-  --fs-body: 0.95rem;    /* body copy */
-  --fs-lead: 1rem;       /* the splash description, course names */
+  --fs-note: 0.66rem;    /* marginalia */
+  --fs-label: 0.78rem;   /* tracked labels, links */
+  --fs-small: 0.82rem;   /* card and course copy */
+  --fs-body: 0.95rem;
 
-  --dur: 160ms;
-  --dur-press: 80ms;
+  --dur: 180ms;
   --ease: cubic-bezier(0.2, 0, 0.2, 1);
 }
 
@@ -76,13 +45,8 @@
   padding: 0;
 }
 
-/* One offset for everything that scrolls into view — nav anchors and
-   focused controls alike — so nothing lands under the fixed header. It
-   sits 2px inside the scroll spy's line (header height + border + 8px
-   in ui.js), so an anchor jump always lights its own nav link. */
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--header-h) + 8px);
   font-size: 16px;
   background: var(--paper);
 }
@@ -90,89 +54,21 @@ html {
 body {
   background: var(--stock);
   color: var(--ink);
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
+  font-size: var(--fs-body);
   line-height: 1.6;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── Halftone screens ─────────────────────────────────────────────
-   A screen is its own empty element, never a wrapper around copy —
-   that keeps the hard rule (no screen behind running text) structural.
-   Every host sets `position: relative; z-index: 0` so the screen at
-   z-index -1 lands above the host's background and below its content.
-   ───────────────────────────────────────────────────────────────── */
-.screen {
-  --sc: var(--phosphor);
-  --p: var(--screen-fine);
-  --r: var(--screen-fine-r);
-  --d: var(--screen-soft);
-  position: absolute;
-  z-index: -1;
-  pointer-events: none;
-  opacity: var(--d);
-  mix-blend-mode: multiply;
-}
-
-/* Hardware shadows print in the black pass, not the spot ink. */
-.screen-ink {
-  --sc: var(--ink);
-}
-
-.screen-dots {
-  background-image:
-    radial-gradient(circle at 50% 50%, var(--sc) var(--r), transparent calc(var(--r) + 0.1px)),
-    radial-gradient(circle at 50% 50%, var(--sc) var(--r), transparent calc(var(--r) + 0.1px));
-  background-size: var(--p) var(--p), var(--p) var(--p);
-  background-position: 0 0, calc(var(--p) / 2) calc(var(--p) / 2);
-}
-
-.screen-lines {
-  background-image: repeating-linear-gradient(
-    var(--screen-angle),
-    var(--sc) 0 var(--screen-line-w),
-    transparent var(--screen-line-w) var(--screen-line)
-  );
-}
-
-/* ── Misregistration ──────────────────────────────────────────────
-   Display type prints three times: the phosphor plate, the signal
-   plate, then the black pass on top. The plates are pseudo-elements so
-   they stay out of copy-paste, and `/ ""` hands the accessibility tree
-   an empty string — without it the cover reads "Jack Jack Jack".
-   ───────────────────────────────────────────────────────────────── */
-.reg {
-  position: relative;
-  z-index: 0;
-  display: inline-block;
-  color: var(--ink);
-}
-
-.reg::before,
-.reg::after {
-  content: attr(data-text);
-  content: attr(data-text) / "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  user-select: none;
-}
-
-.reg::before {
-  color: var(--phosphor);
-  transform: translate(var(--reg), var(--reg));
-}
-
-.reg::after {
-  color: var(--signal);
-  transform: translate(var(--reg-signal), calc(var(--reg-signal) * 0.7));
+svg {
+  display: block;
 }
 
 /* ── Focus & skip link ── */
 :focus-visible {
-  outline: 3px solid var(--signal);
-  outline-offset: 2px;
+  outline: 2px solid var(--brick);
+  outline-offset: 3px;
 }
 
 .skip-link {
@@ -182,46 +78,168 @@ body {
   z-index: 200;
   background: var(--ink);
   color: var(--paper);
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: var(--fs-label);
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
   text-decoration: none;
-  padding: 0.7rem 1.1rem;
+  padding: 0.75rem 1.1rem;
 }
 
 .skip-link:focus {
   left: 0;
 }
 
-/* ── Header ── */
+/* ── Shared type ── */
+
+/* Marginalia: tiny stacked words with a short rule, set in the page's
+   margins and over the art like notes on a proof. */
+.note {
+  font-family: var(--font-mono);
+  font-size: var(--fs-note);
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.note::after {
+  content: '';
+  display: block;
+  width: 12px;
+  margin-top: 0.7rem;
+  border-top: 1px solid currentColor;
+}
+
+.note-bottom::after,
+.art-note-bottom::after {
+  display: none;
+}
+
+.note-bottom::before,
+.art-note-bottom::before {
+  content: '';
+  display: block;
+  width: 12px;
+  margin-bottom: 0.7rem;
+  border-top: 1px solid currentColor;
+}
+
+/* Keeps the last word and its full stop together. */
+.nowrap {
+  white-space: nowrap;
+}
+
+/* The full stop, printed as a round brick dot. */
+.dot {
+  display: inline-block;
+  width: 0.15em;
+  height: 0.15em;
+  margin-left: 0.05em;
+  border-radius: 50%;
+  background: var(--brick);
+}
+
+.arrow {
+  display: inline-block;
+  font-family: var(--font-mono);
+  transition: transform var(--dur) var(--ease);
+}
+
+/* An outlined key, tracked caps. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.1rem;
+  font-family: var(--font-label);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+  border: 1px solid var(--ink);
+  padding: 0.85rem 1.4rem;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* A red, underlined, tracked link. */
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-family: var(--font-label);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brick);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding: 0.35rem 0 0.2rem;
+  transition: color var(--dur) var(--ease);
+}
+
+/* Hover only where there is a pointer to hover with; on touch a tap
+   leaves :hover stuck. */
+@media (hover: hover) {
+  .btn:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .btn:hover .arrow,
+  .link:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  a.link:hover {
+    color: var(--ink);
+  }
+
+  .nav-links a:hover {
+    border-bottom-color: var(--brick);
+  }
+
+  .contact-row dd a:hover {
+    color: var(--brick);
+    text-decoration-color: var(--brick);
+  }
+}
+
+/* ── Header ──
+   Sits over the hero: the name on the paper, the links on the sky, one
+   rule running under both. */
 .site-header {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100;
-  background: var(--stock);
-  border-bottom: var(--rule);
+  z-index: 10;
 }
 
-nav {
-  max-width: var(--max-w);
-  margin: 0 auto;
+.nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.25rem 1.5rem;
-  padding: 0 clamp(1rem, 3vw, 2rem);
+  gap: 0.5rem 2rem;
   min-height: var(--header-h);
+  margin: 0 var(--gutter);
+  border-bottom: 1px solid var(--line);
 }
 
 .nav-logo {
-  font-family: var(--font-display);
-  font-size: var(--fs-body);
+  font-family: var(--font-label);
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: 0.34em;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
   color: var(--ink);
   text-decoration: none;
   white-space: nowrap;
@@ -230,882 +248,707 @@ nav {
 .nav-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem 1.35rem;
+  gap: 0.25rem clamp(1.25rem, 2.6vw, 2.5rem);
   list-style: none;
 }
 
 .nav-links a {
   display: block;
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
+  font-family: var(--font-label);
+  font-size: 0.84rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--ink-soft);
-  text-decoration: none;
-  padding: 0.3rem 0;
-  border-bottom: 2px solid transparent;
-  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
-}
-
-.nav-links a:hover,
-.nav-links a.active {
   color: var(--ink);
-  border-bottom-color: var(--signal);
+  text-decoration: none;
+  padding: 0.4rem 0 0.25rem;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--dur) var(--ease);
 }
 
-/* ── Page frame ── */
-main {
-  position: relative;
-  z-index: 2;
-  padding-top: var(--header-h);
-}
-
-section {
-  position: relative;
-  max-width: var(--max-w);
-  margin: 0 auto;
-  padding: clamp(3.25rem, 7vw, 5.5rem) clamp(1rem, 3vw, 2rem);
-}
-
-/* A plate edge, not a web divider. */
-section + section {
-  border-top: var(--rule);
-}
-
-.section-label {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--ink-soft);
-  margin-bottom: 0.65rem;
-}
-
-.section-no {
-  color: var(--signal);
-  font-weight: 500;
-}
-
-.section-heading {
-  font-family: var(--font-display);
-  font-size: clamp(2.1rem, 5.2vw, 3.4rem);
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  margin-bottom: clamp(2rem, 4vw, 3rem);
-}
-
-/* ── Cover plate ──
-   One device, one idea: the CRT is a window, not a display. The sun and
-   the horizon on its screen carry on outside the housing — solid light
-   behind the glass, printed dots on the paper. */
-.cover {
-  padding-top: clamp(2.5rem, 5vw, 4rem);
-}
-
-.cover-panel {
-  position: relative;
-  z-index: 0;
-  overflow: hidden;
-  border: var(--rule);
-  background: var(--stock);
-  padding: clamp(1.75rem, 4vw, 3.25rem) var(--pad) clamp(4.5rem, 7vw, 5.5rem);
-}
-
-.issue-meta {
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: var(--ink-soft);
-  text-align: right;
-  padding-bottom: 0.9rem;
-  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
-  border-bottom: var(--hair-soft);
-}
-
-.cover-grid {
+/* ── Hero ── */
+.hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  gap: clamp(1.5rem, 3vw, 2.5rem);
-  align-items: center;
+  grid-template-columns: minmax(0, 41fr) minmax(0, 59fr);
 }
 
-.cover-name {
+.hero-copy {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  grid-template-rows: auto 1fr auto;
+  column-gap: clamp(1rem, 2vw, 2rem);
+  padding: calc(var(--header-h) + clamp(2.5rem, 7vh, 4.5rem)) clamp(1.5rem, 3vw, 3rem) 2.25rem var(--gutter);
+}
+
+.note-top {
+  grid-column: 1;
+  grid-row: 1;
+  margin-top: 0.4rem;
+}
+
+.hero-text {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  container-type: inline-size;
+}
+
+.note-bottom {
+  grid-column: 1;
+  grid-row: 3;
+  align-self: end;
+  margin-top: 2rem;
+}
+
+.hero-title {
   font-family: var(--font-display);
-  font-size: clamp(2.6rem, 8.2vw, 7.5rem);
-  line-height: 0.82;
-  letter-spacing: -0.035em;
+  font-weight: 400;
+  /* Sized to its own column, so the longest word always fits. */
+  font-size: clamp(2.5rem, 18.5cqi, 6.25rem);
+  line-height: 0.95;
+  letter-spacing: 0.005em;
   text-transform: uppercase;
+  text-wrap: balance;
 }
 
-.cover-role {
-  font-family: var(--font-mono);
-  font-size: clamp(var(--fs-label), 1.6vw, 0.8rem);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--ink-soft);
-  margin-top: 1.35rem;
+.hero-lede {
+  max-width: 36ch;
+  margin-top: clamp(1.5rem, 3vh, 2rem);
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
-.credits {
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--ink-soft);
-  margin-top: 1.5rem;
-  padding-top: 1.1rem;
-  border-top: var(--hair-soft);
+.hero-text .btn {
+  margin-top: clamp(1.75rem, 4vh, 2.5rem);
 }
 
-.credits-key {
-  color: var(--signal);
-  font-weight: 500;
+/* The art runs to the top and right edges of the page. */
+.hero-art {
+  min-height: clamp(520px, 78vh, 820px);
+  overflow: hidden;
+  background: var(--sky);
 }
 
-/* The art bleeds through the panel's right padding so the horizon runs
-   all the way into the frame. */
-.cover-art {
-  margin-right: calc(-1 * var(--pad));
-  min-width: 0;
-}
-
-.cover-art svg,
-.plate-art svg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-/* Caption box, pulled up to overlap the cover panel's lower edge. The
-   fine-dot band across its head is paper tone; the copy starts below it. */
-.caption {
-  position: relative;
-  font-family: var(--font-mono);
-  font-size: clamp(0.76rem, 1.5vw, 0.84rem);
-  line-height: 1.75;
-  background: var(--stock);
-  border: var(--rule);
-  box-shadow: var(--panel-shadow);
-  padding: calc(clamp(1rem, 2vw, 1.35rem) + 12px) clamp(1rem, 2vw, 1.35rem) clamp(1rem, 2vw, 1.35rem);
-}
-
-.caption::before {
-  content: '';
+.hero-art .scene {
   position: absolute;
-  inset: 0 0 auto;
-  height: 10px;
-  border-bottom: var(--rule-hair);
-  opacity: 0.5;
-  background-image:
-    radial-gradient(circle, var(--phosphor) 1.3px, transparent 1.4px),
-    radial-gradient(circle, var(--phosphor) 1.3px, transparent 1.4px);
-  background-size: 5px 5px;
-  background-position: 0 0, 2.5px 2.5px;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
-.cover-caption {
-  z-index: 3;
-  max-width: 46ch;
-  margin: -3.25rem 0 0 clamp(0rem, 2vw, 2.5rem);
+.art-note-top,
+.art-note-bottom {
+  position: absolute;
+  right: var(--gutter);
+  z-index: 2;
 }
 
-.cover-cta {
-  margin-top: clamp(1.75rem, 3vw, 2.25rem);
+/* Top note on the sky's empty left, clear of the cassette. */
+.art-note-top {
+  top: calc(var(--header-h) + 2.5rem);
+  right: auto;
+  left: clamp(1rem, 2vw, 1.75rem);
 }
 
-/* ── Illustration inks ──
-   The plates are inline SVG styled from here, so the palette has one
-   source and the contrast preference can reach them. */
-.i-ink       { fill: var(--ink); }
-.i-paper     { fill: var(--paper); }
-.i-putty     { fill: var(--putty); }
-.i-putty-dk  { fill: var(--putty-dk); }
-.i-phosphor  { fill: var(--phosphor); }
-.i-signal    { fill: var(--signal); }
-.i-soft      { fill: var(--ink-soft); }
-.i-line      { fill: none; stroke: var(--ink); stroke-width: 3; stroke-linejoin: round; }
-.i-line-thin { fill: none; stroke: var(--ink); stroke-width: 1.5; }
-.i-beam      { fill: none; stroke: var(--phosphor); stroke-width: 2; }
-.i-grid      { fill: none; stroke: var(--phosphor); stroke-width: 1; opacity: 0.55; }
-.i-path      { fill: none; stroke: var(--signal); stroke-width: 2.5; stroke-linecap: round; }
-.i-stroke    { stroke: var(--ink); stroke-width: 3; stroke-linejoin: round; }
-.i-stroke-thin { stroke: var(--ink); stroke-width: 1.5; }
+.art-note-bottom {
+  bottom: 1.5rem;
+}
 
-.i-label {
+.tape-text {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 500;
-  letter-spacing: 0.12em;
+  letter-spacing: 1.6px;
   fill: var(--ink);
 }
 
-/* Power-on: the picture opens out of a single scan line, once, on
-   load. It scales around the centre of the glass, not its own box —
-   the clipped sun's box is far bigger than the screen. */
-.crt-picture {
-  transform-box: view-box;
-  transform-origin: 151px 174px;
-  animation: crt-on 700ms var(--ease) 250ms both;
+.tape-big {
+  font-family: var(--font-label);
+  font-size: 15px;
+  font-weight: 500;
+  fill: var(--ink);
 }
 
-@keyframes crt-on {
-  0%   { transform: scale(0.4, 0.012); opacity: 0; }
-  30%  { transform: scale(1, 0.012);   opacity: 1; }
-  100% { transform: none;              opacity: 1; }
-}
-
-/* ── Panels ── */
-.panel {
+/* Print grain over every illustration, so flat vector fills read as
+   ink on paper. */
+.art {
   position: relative;
-  z-index: 0;
-  background: var(--stock);
-  border: var(--rule);
-  padding: var(--pad);
 }
 
-.panel-title {
-  font-family: var(--font-display);
-  font-size: clamp(1.45rem, 3vw, 2.15rem);
-  line-height: 1;
-  letter-spacing: -0.02em;
+.art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--grain-art) 0 0 / 200px 200px repeat;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* One-time: the scene develops in on load, then never moves again. */
+.hero-art .scene {
+  animation: develop 1100ms var(--ease) both;
+}
+
+@keyframes develop {
+  from { opacity: 0; transform: scale(1.025); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── Sections ── */
+.section {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 1.5rem var(--gutter) clamp(3.5rem, 7vw, 6rem);
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 1rem 2rem;
+  padding-top: 1.75rem;
+  margin-bottom: clamp(1.75rem, 3vw, 2.5rem);
+  border-top: 1px solid var(--line);
+}
+
+.section-title {
+  font-family: var(--font-label);
+  font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+  font-weight: 500;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
-  margin-bottom: 0.9rem;
+  white-space: nowrap;
 }
 
-.panel-desc {
-  font-size: var(--fs-body);
-  line-height: 1.7;
+.section-count {
+  margin-left: 0.35em;
+}
+
+.section-rule {
+  flex: 1;
+  border-top: 1px solid var(--line);
+}
+
+.section-tags {
+  font-family: var(--font-label);
+  font-size: 0.74rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.section-tags span {
+  margin: 0 0.9em;
+}
+
+/* ── Work ── */
+.work {
+  padding-top: clamp(1.25rem, 2vw, 1.5rem);
+}
+
+.work-grid {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr) minmax(0, 1fr) 4.75rem;
+  gap: clamp(1.25rem, 2vw, 1.75rem);
+}
+
+.card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.5rem;
+  padding: 7px;
+  background: var(--paper);
+  border: 1px solid var(--line-card);
+}
+
+.card-feature {
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(0.9rem, 1.6vw, 1.25rem) clamp(0.9rem, 1.6vw, 1.4rem) clamp(1rem, 1.6vw, 1.25rem);
+}
+
+.card-no {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  letter-spacing: 0.06em;
+  line-height: 1;
+}
+
+.card-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.8rem, 2.2vw, 2.3rem);
+  line-height: 0.98;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  margin: 0.9rem 0 0.8rem;
+}
+
+.card-feature .card-title {
+  font-size: clamp(2.6rem, 4.6vw, 4.5rem);
+}
+
+.card-desc {
+  font-size: var(--fs-small);
+  line-height: 1.65;
+  max-width: 44ch;
+}
+
+.card-meta {
+  margin-top: 1rem;
+  font-size: var(--fs-note);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--ink-soft);
-  max-width: 62ch;
 }
 
-.panel-links {
+.card-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-top: 1.4rem;
+  gap: 0.75rem 1.75rem;
+  margin-top: auto;
+  padding-top: 1.5rem;
 }
 
-/* ── Signal file: the flagship plate ──
-   A black label strip across the head, the report on the left, the
-   illustration on the right. The one idea here: a link's underline
-   leaves the page and becomes a flight path. */
-.plate-signal {
-  padding: 0 var(--plate-pad);
-  box-shadow: var(--panel-shadow);
+.card-art {
+  min-height: 15rem;
+  overflow: hidden;
+  background: var(--sky);
 }
 
-.plate-strip {
+.card-feature .card-art {
+  min-height: clamp(18rem, 30vw, 26rem);
+}
+
+.card-art svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* The halftone tile hangs off the left margin. */
+.tile {
   display: flex;
+  flex-direction: column;
+  margin-left: calc(-1 * var(--gutter));
+}
+
+.tile-eye {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 150 / 180;
+}
+
+.tile-note {
+  margin: 1.1rem 0 0 var(--gutter);
+}
+
+/* A cassette's side label, standing on end. */
+.deck {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid var(--line-card);
+  padding-top: 0.9rem;
+}
+
+.deck-reel {
+  width: 38px;
+  height: 38px;
+}
+
+.deck-note {
+  align-self: stretch;
+  margin: 1.1rem 0 0 0.85rem;
+  letter-spacing: 0.12em;
+}
+
+.deck-label {
+  margin-top: auto;
+  padding: 1rem 0 0.6rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: 0.04em;
+}
+
+.deck-sides {
+  display: flex;
+  justify-content: center;
+  gap: 0.9rem;
+  align-self: stretch;
+  padding: 0.6rem 0 0.7rem;
+  border-top: 1px solid var(--line-card);
+  font-size: 0.6rem;
+}
+
+.deck-sides span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.box {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--ink);
+}
+
+.box-on {
+  background: var(--ink);
+}
+
+/* ── Coursework ── */
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+}
+
+.course {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 0 1.6rem;
+  border-top: 1px solid var(--line-soft);
+}
+
+.course-top {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin: 0 calc(-1 * var(--plate-pad)) var(--plate-pad);
-  padding: 0.55rem var(--plate-pad);
-  background: var(--ink);
-  color: var(--paper);
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
 }
 
-.plate-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  gap: clamp(1.5rem, 3vw, 2.5rem);
-  align-items: center;
-  padding-bottom: var(--plate-pad);
-}
-
-.plate-signal .panel-title {
-  font-size: clamp(2.1rem, 5.4vw, 3.6rem);
-}
-
-.plate-signal .panel-desc {
-  font-size: var(--fs-lead);
-}
-
-.plate-art {
-  justify-self: end;
-  width: 100%;
-  max-width: 440px;
-}
-
-/* Halftone resolve. With no script the finished screen prints; with
-   script the planet starts on a rough screen and settles onto the
-   finished one the first time it is seen, then never moves again. */
-.ht-rough {
-  opacity: 0;
-}
-
-.js .plate-art .ht-rough,
-.js .plate-art .ht-final {
-  transition: opacity 900ms var(--ease);
-}
-
-.js .plate-art .ht-rough { opacity: 1; }
-.js .plate-art .ht-final { opacity: 0; }
-.js .plate-art.resolved .ht-rough { opacity: 0; }
-.js .plate-art.resolved .ht-final { opacity: 1; }
-
-/* The credits strip bleeds to the plate's trim. */
-.splash-stack {
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--ink-soft);
-  border-top: var(--hair-soft);
-  margin: 0 calc(-1 * var(--plate-pad));
-  padding: 1.1rem var(--plate-pad);
-}
-
-/* ── Cartridges: the secondary work ──
-   Calm modules, deliberately unequal. A putty shell with a notched
-   corner, a grip spine, a paper label carrying the copy, and a cast
-   shadow printed as a line screen rather than a solid block. No
-   illustration — the flagship plate has the page's only idea. */
-.cart-pair {
-  display: grid;
-  grid-template-columns: 1.25fr 1fr;
-  gap: calc(var(--gutter) + 10px);
-  margin-top: calc(var(--gutter) + 12px);
-  padding-right: 8px;
-}
-
-.cart {
-  --notch: 18px;
-  position: relative;
-  z-index: 0;
-  display: flex;
-}
-
-/* The shadow is on the wrapper, so it lands behind the shell rather
-   than on top of the shell's own background. */
-.cart::before {
-  content: '';
-  position: absolute;
-  inset: 8px -8px -8px 8px;
-  z-index: -1;
-  opacity: 0.45;
-  background-image: repeating-linear-gradient(
-    var(--screen-angle),
-    var(--ink) 0 var(--screen-line-w),
-    transparent var(--screen-line-w) 5px
-  );
-  clip-path: polygon(0 0, calc(100% - var(--notch)) 0, 100% var(--notch), 100% 100%, 0 100%);
-}
-
-.cart-shell {
-  position: relative;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background: var(--putty);
-  border: var(--rule);
-  padding: 0 10px 10px;
-  clip-path: polygon(0 0, calc(100% - var(--notch)) 0, 100% var(--notch), 100% 100%, 0 100%);
-}
-
-/* The border along the cut: a band on the notch's diagonal, half of
-   which survives the clip, so the edge reads as one continuous rule. */
-.cart-shell::after {
-  content: '';
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  width: var(--notch);
-  height: var(--notch);
-  background: linear-gradient(to top right,
-    transparent calc(50% - 2px), var(--ink) calc(50% - 2px) calc(50% + 2px), transparent calc(50% + 2px));
-}
-
-.cart-spine {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem calc(var(--notch) - 4px) 0.5rem 0;
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink);
-}
-
-.cart-spine::after {
-  content: '';
-  flex: 1;
-  height: 10px;
-  opacity: 0.55;
-  background-image: repeating-linear-gradient(90deg, var(--ink) 0 1px, transparent 1px 5px);
-}
-
-.cart-label {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background: var(--stock);
-  border: var(--rule);
-  padding: var(--pad);
-}
-
-.cart-label .panel-links {
-  margin-top: auto;
-  padding-top: 1.4rem;
-}
-
-/* ── Buttons ──
-   A physical key: a hard 2px shadow that the key closes over when it
-   is pressed. The press is a transform; the shadow simply goes. */
-.btn {
-  display: inline-block;
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  text-decoration: none;
-  text-align: center;
-  padding: 0.6rem 1.15rem;
-  border: var(--rule);
-  box-shadow: 2px 2px 0 var(--ink);
-  white-space: nowrap;
-  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease),
-              border-color var(--dur) var(--ease), transform var(--dur-press) linear;
-}
-
-.btn:active {
-  transform: translate(2px, 2px);
-  box-shadow: none;
-}
-
-.btn-solid {
-  background: var(--ink);
-  color: var(--paper);
-}
-
-.btn-solid:hover {
-  background: var(--signal);
-  border-color: var(--ink);
-}
-
-/* Opaque, not transparent: an outline key can sit on any field
-   without anything running under its label. */
-.btn-outline {
-  background: var(--paper);
-  color: var(--ink);
-}
-
-.btn-outline:hover {
-  background: var(--ink);
-  color: var(--paper);
-}
-
-/* ── Coursework: the archive register ── */
-.index-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
-  gap: clamp(1.5rem, 4vw, 3.5rem);
-  align-items: start;
-}
-
-.index-margin {
-  position: sticky;
-  top: calc(var(--header-h) + 2.5rem);
-}
-
-.pull-quote {
-  border-left: 3px solid var(--signal);
-  padding-left: 1.1rem;
-}
-
-.pull-quote p {
-  font-family: var(--font-display);
-  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
-  line-height: 1.15;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
-}
-
-/* Fine-dot tone filling the margin column. In flow, not absolute: it is
-   the only screen that occupies space rather than backing it. */
-.index-screen {
-  --d: 0.4;
-  position: relative;
-  z-index: 0;
-  height: 8rem;
-  margin: 1.75rem 0 0 calc(1.1rem + 3px);
-  border-top: var(--hair-soft);
-}
-
-.course-index {
-  border-top: var(--rule);
-}
-
-.course-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.3rem 1.5rem;
-  align-items: baseline;
-  padding: 1rem 0;
-  border-bottom: var(--hair-soft);
-}
-
-/* The course code is a physical label: a small bordered tag. */
-.course-code {
-  grid-column: 1;
-  justify-self: start;
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  color: var(--signal);
-  border: 1px solid rgba(27, 26, 23, 0.4);
-  padding: 0.05rem 0.45rem;
-  line-height: 1.5;
-}
-
-/* Running number: where you are in the register. */
 .course-no {
-  grid-column: 2;
-  justify-self: end;
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
-  letter-spacing: 0.12em;
+  font-size: var(--fs-small);
+  letter-spacing: 0.06em;
   color: var(--ink-soft);
+}
+
+.course-code {
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: var(--brick);
+  border: 1px solid currentColor;
+  padding: 0.1rem 0.5rem;
 }
 
 .course-name {
-  grid-column: 1;
-  font-family: var(--font-sans);
-  font-size: var(--fs-lead);
-  font-weight: 600;
-  line-height: 1.35;
+  font-family: var(--font-label);
+  font-size: 1.3rem;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin: 0.8rem 0 0.35rem;
 }
 
 .course-meta {
-  grid-column: 1 / -1;
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: var(--fs-note);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
   color: var(--ink-soft);
 }
 
-/* A status lamp beside the status word. The word carries the meaning;
-   the lamp only repeats it. */
-.status-lamp {
-  display: inline-block;
-  width: 0.55rem;
-  height: 0.55rem;
-  margin-right: 0.4em;
-  border: 1.5px solid var(--ink);
-  border-radius: 50%;
-  vertical-align: -0.05em;
-  background: var(--phosphor);
+.course-meta .box {
+  width: 7px;
+  height: 7px;
+  border-color: var(--ink-soft);
 }
 
-.status-lamp.is-wip {
-  background: var(--signal);
+.course-meta .box-on {
+  background: var(--ink-soft);
 }
 
 .course-desc {
-  grid-column: 1 / -1;
   font-size: var(--fs-small);
   line-height: 1.6;
-  color: var(--ink-soft);
-  max-width: 62ch;
-  margin-top: 0.2rem;
+  margin: 0.7rem 0 1.1rem;
 }
 
-/* Underline rather than a border, so the padding that lifts this to a
-   usable target size doesn't drag the rule away from the word. */
 .course-link {
-  grid-column: 2;
-  justify-self: end;
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--ink);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-thickness: 1px;
-  white-space: nowrap;
-  padding: 0.45rem 0.35rem;
-  margin: -0.45rem -0.35rem;
-  transition: color var(--dur) var(--ease);
-}
-
-.course-link:hover {
-  color: var(--signal);
+  align-self: flex-start;
+  margin-top: auto;
 }
 
 .course-link-disabled {
   color: var(--ink-soft);
-  text-decoration-style: dotted;
-  opacity: 0.7;
+  border-bottom-style: dotted;
 }
 
 .course-loading,
 .course-error {
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
+  grid-column: 1 / -1;
+  font-size: var(--fs-small);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-soft);
-  padding: 0.95rem 0;
+  padding: 1rem 0;
 }
 
 .course-error {
-  color: var(--signal);
+  color: var(--brick);
 }
 
-/* ── Resume strip ── */
-.panel-strip {
-  display: flex;
+/* ── Resume ── */
+.resume-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 1.25rem 2rem;
-  overflow: hidden;
-  padding-left: calc(var(--pad) + clamp(28px, 4vw, 56px));
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  padding: clamp(1rem, 2vw, 1.5rem) clamp(1rem, 2.5vw, 2rem);
+  background: var(--paper);
+  border: 1px solid var(--line-card);
 }
 
-/* A hardware band in the black pass. The strip's extra left padding is
-   what guarantees no word ever lands on it, at any width. */
-.strip-screen {
-  --d: 0.35;
-  inset: 0 auto 0 0;
-  width: clamp(28px, 4vw, 56px);
-  border-right: var(--rule);
+.resume-icon {
+  width: clamp(84px, 9vw, 120px);
+  height: auto;
 }
 
-.strip-title {
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  line-height: 1;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  margin-bottom: 0.4rem;
-}
-
-.strip-text {
-  font-size: var(--fs-body);
-  color: var(--ink-soft);
-  max-width: 48ch;
+.resume-text .card-title {
+  margin: 0 0 0.4rem;
 }
 
 /* ── Contact ── */
-.contact-headline {
+.contact-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 2rem clamp(2rem, 5vw, 5rem);
+  align-items: end;
+}
+
+.contact-display {
   font-family: var(--font-display);
-  font-size: clamp(2.6rem, 9vw, 5.5rem);
-  line-height: 0.88;
-  letter-spacing: -0.035em;
+  font-size: clamp(3.25rem, 8vw, 7.5rem);
+  line-height: 0.92;
+  letter-spacing: 0.005em;
   text-transform: uppercase;
-}
-
-/* The page's one speech bubble. Tail is two triangles: the ink one sets
-   the outline, the stock one covers its interior and is pulled up over
-   the bubble's own bottom border so the mouth has no seam. */
-.bubble {
-  position: relative;
-  display: inline-block;
-  background: var(--stock);
-  border: var(--rule);
-  padding: clamp(0.9rem, 2vw, 1.4rem) clamp(1.1rem, 2.5vw, 1.8rem);
-  margin-bottom: clamp(2.75rem, 4.5vw, 3.5rem);
-  max-width: 100%;
-}
-
-.bubble::before,
-.bubble::after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-color: transparent;
-  border-bottom-width: 0;
-}
-
-.bubble::before {
-  left: clamp(1.5rem, 4vw, 3rem);
-  border-width: 18px 15px 0;
-  border-top-color: var(--ink);
-}
-
-.bubble::after {
-  left: calc(clamp(1.5rem, 4vw, 3rem) + 3px);
-  border-width: 14px 12px 0;
-  border-top-color: var(--paper);
-  margin-top: -2px;
-}
-
-.contact-list {
-  border-top: var(--rule);
 }
 
 .contact-row {
   display: grid;
-  grid-template-columns: minmax(0, 7rem) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 7.5rem) minmax(0, 1fr);
   gap: 0.25rem 1.5rem;
   align-items: baseline;
-  padding: 1rem 0;
-  border-bottom: var(--hair-soft);
+  padding: 1.05rem 0;
+  border-top: 1px solid var(--line-soft);
+}
+
+.contact-row:last-child {
+  border-bottom: 1px solid var(--line-soft);
 }
 
 .contact-row dt {
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
+  font-family: var(--font-label);
+  font-size: 0.74rem;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
   color: var(--ink-soft);
 }
 
+/* Padding lifts the link to a usable touch target; the negative
+   margin keeps the row's rhythm. */
 .contact-row dd a {
-  font-family: var(--font-mono);
-  font-size: clamp(0.78rem, 1.8vw, 0.92rem);
+  display: inline-block;
+  padding: 0.35rem 0;
+  margin: -0.35rem 0;
+  font-size: clamp(0.85rem, 1.6vw, 1rem);
   color: var(--ink);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
+  text-decoration: underline 1px transparent;
+  text-underline-offset: 4px;
   overflow-wrap: anywhere;
-  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
-}
-
-.contact-row dd a:hover {
-  color: var(--signal);
-  border-bottom-color: var(--signal);
+  transition: color var(--dur) var(--ease), text-decoration-color var(--dur) var(--ease);
 }
 
 /* ── Footer ── */
-footer {
-  position: relative;
-  z-index: 2;
-  background: var(--stock);
-  border-top: var(--rule);
-  color: var(--ink-soft);
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
+.site-footer {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--gutter) 2rem;
+}
+
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+  padding-top: 1.35rem;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-label);
+  font-size: 0.74rem;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  text-align: center;
-  padding: 1.35rem;
+}
+
+.footer-name {
+  font-weight: 500;
+  letter-spacing: 0.34em;
 }
 
 /* ── Responsive ── */
+@media (max-width: 1280px) {
+  /* Narrower margin column, wider copy column: the headline keeps
+     its size as the art column gives way. */
+  .hero {
+    grid-template-columns: minmax(0, 47fr) minmax(0, 53fr);
+  }
+
+  .hero-copy {
+    grid-template-columns: 4.75rem minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 1180px) {
+  /* The tile and the deck step aside; the cards take the row. */
+  .work-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tile,
+  .deck {
+    display: none;
+  }
+
+  .card {
+    grid-template-columns: 1fr;
+  }
+
+  .card-art {
+    order: -1;
+    min-height: 0;
+    aspect-ratio: 4 / 3;
+  }
+
+  .card-feature {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+
+  .card-feature .card-art {
+    order: 0;
+    aspect-ratio: auto;
+  }
+
+  .course-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 900px) {
-  .index-layout {
+  /* The header drops into the flow above a single column. */
+  .site-header {
+    position: relative;
+  }
+
+  .nav {
+    flex-wrap: wrap;
+    padding: 0.85rem 0;
+  }
+
+  .hero {
     grid-template-columns: 1fr;
   }
 
-  .index-margin {
-    position: static;
+  .hero-copy {
+    display: block;
+    padding: clamp(2.25rem, 7vw, 3.5rem) var(--gutter) 2.5rem;
   }
 
-  .index-screen {
-    height: 3rem;
+  .hero-copy .note {
+    display: none;
   }
 
-  /* One column: the art follows the copy, in DOM order. */
-  .cover-grid,
-  .plate-grid {
+  .hero-art {
+    min-height: 0;
+    aspect-ratio: 1000 / 760;
+  }
+
+  .art-note-top {
+    top: 1.25rem;
+  }
+
+  .card-feature {
     grid-template-columns: 1fr;
   }
 
-  .cover-name {
-    font-size: clamp(3rem, 15vw, 7rem);
+  .card-feature .card-art {
+    order: -1;
+    aspect-ratio: 16 / 9;
+    min-height: 0;
   }
 
-  .cover-art {
-    justify-self: end;
-    width: min(100%, 420px);
-  }
-
-  .plate-art {
-    justify-self: center;
-    max-width: 380px;
+  .contact-grid {
+    grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 760px) {
-  .cart-pair {
+@media (max-width: 640px) {
+  .work-grid,
+  .course-grid {
     grid-template-columns: 1fr;
   }
 
-  .cover-caption {
-    margin-left: 0;
-  }
-}
-
-@media (max-width: 560px) {
-  /* The nav stacks under the logo here, so the header is two rows. */
-  :root {
-    --header-h: 76px;
+  .section-head {
+    flex-wrap: wrap;
   }
 
-  nav {
-    flex-direction: column;
-    align-items: flex-start;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    gap: 0.35rem;
+  .section-rule {
+    display: none;
   }
 
-  .nav-links {
-    gap: 0.2rem 1rem;
+  .section-title {
+    white-space: normal;
+    letter-spacing: 0.24em;
   }
 
-  .cover-caption {
-    margin-top: -2.5rem;
+  .section-tags {
+    width: 100%;
   }
 
-  .plate-strip {
-    flex-direction: column;
-    gap: 0.1rem;
-  }
-
-  .cart {
-    --notch: 14px;
-  }
-
-  .cart::before {
-    inset: 6px -6px -6px 6px;
-  }
-
-  /* Shell and label padding nest; in the hand the copy gets the room. */
-  .cart-shell {
-    padding: 0 6px 6px;
-  }
-
-  .cart-label {
-    padding: 1rem;
+  .resume-card {
+    grid-template-columns: 1fr;
+    justify-items: start;
   }
 
   .contact-row {
     grid-template-columns: 1fr;
   }
 
-  /* A pitch that reads as tone on a desk reads as interference in the
-     hand. Every screen steps down to fine dots at the softest density. */
-  .screen {
-    --p: var(--screen-fine);
-    --r: var(--screen-fine-r);
-    --d: var(--screen-soft);
+  .art-note-top,
+  .art-note-bottom {
+    display: none;
   }
 }
 
-/* ── Reduced motion ──
-   Everything prints in its final state: the screen is already on and
-   the planet is already on its finished screen. */
+@media (max-width: 400px) {
+  .nav-logo {
+    letter-spacing: 0.26em;
+  }
+
+  .nav-links {
+    gap: 0.25rem 1.1rem;
+  }
+
+  .nav-links a {
+    letter-spacing: 0.12em;
+  }
+
+  .btn {
+    padding-inline: 1.1rem;
+    letter-spacing: 0.16em;
+  }
+}
+
+/* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -1117,35 +960,20 @@ footer {
     transition-duration: 0.01ms !important;
   }
 
-  .crt-picture {
+  .hero-art .scene {
     animation: none;
-  }
-
-  .js .plate-art .ht-rough { opacity: 0; }
-  .js .plate-art .ht-final { opacity: 1; }
-
-  .btn:active {
-    transform: none;
   }
 }
 
-/* ── More contrast ──
-   Every screen is atmosphere. A reader who has asked for more contrast
-   is asking for less of exactly this, so the dots, the plates and the
-   grain come off the sheet and the illustrations keep only their line. */
+/* ── More contrast ── */
 @media (prefers-contrast: more) {
   :root {
     --stock: var(--paper);
+    --line-card: var(--ink);
+    --line-soft: rgba(27, 33, 48, 0.55);
   }
 
-  .screen,
-  .caption::before,
-  .art-screen {
-    display: none;
-  }
-
-  .reg::before,
-  .reg::after {
+  .art::after {
     display: none;
   }
 }

@@ -8,243 +8,373 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;500&family=Oswald:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
   <a href="#main" class="skip-link">Skip to content</a>
 
   <header class="site-header">
-    <nav aria-label="Primary">
+    <nav class="nav" aria-label="Primary">
       <a href="#home" class="nav-logo">Jack Carey</a>
       <ul class="nav-links">
-        <li><a href="#home" data-nav="home">Cover</a></li>
-        <li><a href="#projects" data-nav="projects">Work</a></li>
-        <li><a href="#coursework" data-nav="coursework">Index</a></li>
-        <li><a href="#resume" data-nav="resume">Resume</a></li>
-        <li><a href="#contact" data-nav="contact">Contact</a></li>
+        <li><a href="#projects">Work</a></li>
+        <li><a href="#coursework">Coursework</a></li>
+        <li><a href="#resume">Resume</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
   </header>
 
   <main id="main">
 
-    <section id="home" class="cover">
-      <div class="cover-panel">
-        <p class="issue-meta">Issue #01 <span aria-hidden="true">·</span> Durham, NC <span aria-hidden="true">·</span> 2026</p>
-        <div class="cover-grid">
-          <div class="cover-type">
-            <h1 class="cover-name"><span class="reg" data-text="Jack">Jack</span><br><span class="reg" data-text="Carey">Carey</span></h1>
-            <p class="cover-role">Computer Science <span aria-hidden="true">·</span> Duke University</p>
-            <p class="credits"><span class="credits-key">Featuring</span> AI / ML <span aria-hidden="true">·</span> Game Design <span aria-hidden="true">·</span> Systems <span aria-hidden="true">·</span> Networks <span aria-hidden="true">·</span> Improv</p>
-          </div>
-          <div class="cover-art" aria-hidden="true">
-            <svg viewBox="0 0 440 370" focusable="false">
-              <defs>
-                <pattern id="crt-dots" width="10" height="10" patternUnits="userSpaceOnUse">
-                  <circle class="i-phosphor" cx="2.5" cy="2.5" r="2.2"/>
-                  <circle class="i-phosphor" cx="7.5" cy="7.5" r="2.2"/>
-                </pattern>
-                <pattern id="crt-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                  <rect class="i-ink" width="1.3" height="6"/>
-                </pattern>
-                <pattern id="crt-grille" width="5" height="4" patternUnits="userSpaceOnUse">
-                  <rect class="i-ink" width="1.5" height="4"/>
-                </pattern>
-                <clipPath id="crt-glass"><rect x="62" y="92" width="178" height="164" rx="20"/></clipPath>
-                <clipPath id="crt-sky"><rect width="440" height="190"/></clipPath>
-              </defs>
-
-              <!-- The world behind the set: the same sun and horizon the screen shows. -->
-              <circle class="art-screen" cx="230" cy="190" r="150" fill="url(#crt-dots)" clip-path="url(#crt-sky)"/>
-              <line class="i-line-thin" x1="0" y1="190" x2="440" y2="190"/>
-              <polygon class="art-screen" fill="url(#crt-hatch)" opacity="0.5" points="44,326 322,316 384,350 16,358"/>
-
-              <!-- Housing -->
-              <polygon class="i-putty i-stroke" points="40,70 62,60 322,60 300,70"/>
-              <polygon class="i-putty-dk i-stroke" points="300,70 322,60 322,308 300,318"/>
-              <rect class="i-putty i-stroke" x="40" y="70" width="260" height="248"/>
-              <rect class="i-ink" x="60" y="318" width="34" height="8"/>
-              <rect class="i-ink" x="246" y="318" width="34" height="8"/>
-
-              <!-- Recessed screen -->
-              <rect class="i-putty-dk i-stroke" x="54" y="84" width="194" height="180" rx="24"/>
-              <rect class="i-ink" x="62" y="92" width="178" height="164" rx="20"/>
-              <g class="crt-picture" clip-path="url(#crt-glass)">
-                <circle class="i-phosphor" cx="230" cy="190" r="150" clip-path="url(#crt-sky)"/>
-                <path class="i-grid" d="M151 190 L20 256 M151 190 L80 256 M151 190 L130 256 M151 190 L172 256 M151 190 L222 256 M151 190 L282 256 M62 198 H240 M62 212 H240 M62 234 H240"/>
-                <line class="i-beam" x1="62" y1="190" x2="240" y2="190"/>
-              </g>
-              <rect class="i-line" x="62" y="92" width="178" height="164" rx="20"/>
-
-              <!-- Controls -->
-              <circle class="i-putty-dk i-stroke" cx="276" cy="110" r="10"/>
-              <line class="i-line-thin" x1="276" y1="110" x2="276" y2="101"/>
-              <circle class="i-putty-dk i-stroke" cx="276" cy="144" r="10"/>
-              <line class="i-line-thin" x1="276" y1="144" x2="283" y2="138"/>
-              <rect class="i-paper i-stroke-thin" x="268" y="170" width="16" height="32"/>
-              <rect class="i-ink" x="272" y="174" width="8" height="12"/>
-              <circle class="i-signal i-stroke-thin" cx="276" cy="226" r="5"/>
-
-              <!-- Label and grille -->
-              <rect class="i-paper i-stroke-thin" x="56" y="278" width="160" height="26"/>
-              <text class="i-label" x="66" y="295">FIELD UNIT JC-01</text>
-              <rect fill="url(#crt-grille)" opacity="0.6" x="230" y="278" width="58" height="26"/>
-            </svg>
-          </div>
+    <section id="home" class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="note note-top" aria-hidden="true">Code<br>Stories<br>Games<br>Systems</p>
+        <div class="hero-text">
+          <h1 id="hero-title" class="hero-title">Creativity&nbsp;&amp; computation belong <span class="nowrap">together<span class="dot" aria-hidden="true"></span></span></h1>
+          <p class="hero-lede">CS student at Duke building games, AI, and technology that matters, with a side of improv and theater.</p>
+          <a href="#projects" class="btn">See the work <span class="arrow" aria-hidden="true">→</span></a>
         </div>
+        <p class="note note-bottom">Duke University<br>Durham,&nbsp;NC</p>
       </div>
-      <p class="caption cover-caption">
-        CS student passionate about video game design, AI, and building technology that matters. At Duke I'm involved in improv and theater. I believe creativity and computation belong together.
-      </p>
-      <a href="#projects" class="btn btn-solid cover-cta">See the work <span aria-hidden="true">↓</span></a>
+
+      <div class="hero-art art" aria-hidden="true">
+        <svg class="scene" viewBox="0 0 1000 760" preserveAspectRatio="xMidYMid slice" focusable="false">
+          <defs>
+            <linearGradient id="h-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8EA8C1"/><stop offset="1" stop-color="#CAD5DB"/></linearGradient>
+            <linearGradient id="h-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9BCCA"/><stop offset="1" stop-color="#6F8CA8"/></linearGradient>
+            <linearGradient id="h-face" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#DFDBD2"/><stop offset="1" stop-color="#C6C4BE"/></linearGradient>
+            <linearGradient id="h-tape" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7E3321"/><stop offset=".4" stop-color="#B04A2F"/></linearGradient>
+            <pattern id="h-speck" width="23" height="19" patternUnits="userSpaceOnUse"><circle cx="3" cy="4" r=".9" fill="#737A82"/><circle cx="14" cy="11" r=".6" fill="#737A82"/><circle cx="19" cy="2" r=".5" fill="#737A82"/><circle cx="8" cy="15" r=".7" fill="#737A82"/></pattern>
+            <mask id="h-arches">
+              <rect width="1000" height="1000" fill="#fff"/>
+              <path fill="#000" d="M15.0 893.8V699.6A55.0 55.0 0 0 1 125.0 699.6V833.5ZM169.0 809.4V634.9A46.0 46.0 0 0 1 261.0 634.9V759.0ZM307.0 733.7V576.9A38.0 38.0 0 0 1 383.0 576.9V692.1ZM424.0 669.6V527.6A31.0 31.0 0 0 1 486.0 527.6V635.6ZM523.0 615.4V485.9A25.0 25.0 0 0 1 573.0 485.9V588.0ZM606.0 569.9V450.9A20.0 20.0 0 0 1 646.0 450.9V548.0ZM674.0 532.6V422.3A16.0 16.0 0 0 1 706.0 422.3V515.1ZM728.0 503.0V399.1A12.0 12.0 0 0 1 752.0 399.1V489.9Z"/>
+            </mask>
+          </defs>
+
+          <!-- Sky, far shore, sea -->
+          <rect width="1000" height="472" fill="url(#h-sky)"/>
+          <rect y="470" width="1000" height="290" fill="url(#h-sea)"/>
+          <path fill="#A7B8C6" d="M0 470V446C40 438 78 444 118 436C166 427 204 440 250 437C300 434 342 444 398 447C452 450 488 462 540 470Z"/>
+          <path fill="#98ABBB" d="M0 470V458C60 452 120 456 180 450C240 446 300 456 360 462C400 466 430 468 460 470Z"/>
+          <path stroke="#C9D5DD" stroke-width="1.2" opacity=".7" d="M560 492H700M620 522H780M800 506H880M860 604H960M700 646H820M540 560H600"/>
+          <path fill="#50677F" d="M790 474L812 452L826 460L848 426L866 448L880 440L902 468L930 462L958 474Z"/>
+          <path fill="#50677F" opacity=".25" d="M790 474L812 492L826 486L848 512L866 496L880 502L902 480L930 484L958 474Z"/>
+
+          <!-- Clouds: shade, body, light -->
+          <g fill="#C3CDD3">
+            <circle cx="364" cy="392" r="20"/><circle cx="400" cy="372" r="30"/><circle cx="444" cy="350" r="40"/><circle cx="494" cy="338" r="46"/><circle cx="544" cy="356" r="36"/><circle cx="586" cy="372" r="28"/><circle cx="620" cy="388" r="18"/><rect x="344" y="382" width="292" height="20" rx="10"/>
+            <circle cx="842" cy="310" r="12"/><circle cx="862" cy="300" r="17"/><circle cx="886" cy="306" r="13"/><circle cx="904" cy="312" r="9"/>
+            <circle cx="124" cy="370" r="10"/><circle cx="144" cy="360" r="15"/><circle cx="166" cy="366" r="11"/>
+          </g>
+          <g fill="#E3E2DC">
+            <circle cx="360" cy="386" r="19"/><circle cx="396" cy="366" r="29"/><circle cx="440" cy="344" r="39"/><circle cx="490" cy="332" r="45"/><circle cx="540" cy="350" r="35"/><circle cx="582" cy="366" r="27"/><circle cx="616" cy="382" r="17"/><rect x="342" y="376" width="290" height="18" rx="9"/>
+            <circle cx="838" cy="305" r="11"/><circle cx="858" cy="295" r="16"/><circle cx="882" cy="301" r="12"/><circle cx="900" cy="307" r="8"/>
+            <circle cx="120" cy="366" r="9"/><circle cx="140" cy="356" r="14"/><circle cx="162" cy="362" r="10"/>
+          </g>
+          <g fill="#F4EFE5">
+            <circle cx="392" cy="358" r="22"/><circle cx="436" cy="336" r="32"/><circle cx="484" cy="322" r="37"/><circle cx="532" cy="340" r="26"/><circle cx="574" cy="358" r="18"/>
+            <circle cx="855" cy="289" r="11"/><circle cx="137" cy="351" r="9"/>
+          </g>
+
+          <!-- The aqueduct: arches cut through, so the far shore shows. -->
+          <g mask="url(#h-arches)">
+            <path fill="url(#h-face)" d="M0 628L770 356V478L0 900Z"/>
+            <path fill="url(#h-speck)" opacity=".55" d="M0 628L770 356V478L0 900Z"/>
+            <path stroke="#B7B5AF" stroke-width="1.2" fill="none" d="M0 652L770 365"/>
+          </g>
+          <path fill="#A8ACAF" d="M15.0 891.8V699.6A55.0 55.0 0 0 1 125.0 699.6V698.7A46.2 46.2 0 0 0 32.6 698.7V882.1ZM169.0 807.4V634.9A46.0 46.0 0 0 1 261.0 634.9V634.1A38.6 38.6 0 0 0 183.7 634.1V799.3ZM307.0 731.7V576.9A38.0 38.0 0 0 1 383.0 576.9V576.3A31.9 31.9 0 0 0 319.2 576.3V725.1ZM424.0 667.6V527.6A31.0 31.0 0 0 1 486.0 527.6V527.1A26.0 26.0 0 0 0 433.9 527.1V662.2ZM523.0 613.4V485.9A25.0 25.0 0 0 1 573.0 485.9V485.5A21.0 21.0 0 0 0 531.0 485.5V609.0ZM606.0 567.9V450.9A20.0 20.0 0 0 1 646.0 450.9V450.6A16.8 16.8 0 0 0 612.4 450.6V564.4ZM674.0 530.6V422.3A16.0 16.0 0 0 1 706.0 422.3V422.0A13.4 13.4 0 0 0 679.1 422.0V527.8ZM728.0 501.0V399.1A12.0 12.0 0 0 1 752.0 399.1V398.9A10.1 10.1 0 0 0 731.8 398.9V498.9Z"/>
+          <path fill="#BCBAB4" d="M770 356L778 353V476L770 478Z"/>
+          <path fill="#EAE6DD" d="M0 578L770 346L778 347L770 356L0 628Z"/>
+          <path fill="#B04A2F" d="M0 586L770 347.5L770 354.5L0 621Z"/>
+          <path fill="#7E3321" opacity=".35" d="M0 611L770 353L770 354.5L0 621Z"/>
+
+          <!-- The tape leaves the cassette and becomes the walkway. -->
+          <path fill="url(#h-tape)" d="M677 236C672 302 792 312 770 347.5L770 354.5C814 312 700 300 697 236Z"/>
+
+          <g transform="translate(300 510) scale(.8)" fill="#1B2130">
+            <path fill="#6F2A1A" opacity=".5" d="M-6 0L34 6L36 2L6 -2Z"/>
+            <circle cx="0" cy="-54" r="6"/>
+            <path d="M-8 -46C-4 -49 4 -49 8 -46L10 -18H6L6 0H2L0 -16L-2 0H-6L-6 -18H-10Z"/>
+          </g>
+
+          <g transform="translate(560 118) rotate(-5)">
+            <rect width="230" height="146" rx="9" fill="#D9D6CE" stroke="#8F959B" stroke-width="1.5"/>
+            <rect x="16" y="13" width="198" height="94" rx="5" fill="#EEEAE0" stroke="#A3A7AB"/>
+            <text class="tape-text" x="115" y="33" text-anchor="middle">CREATIVITY ×</text>
+            <text class="tape-text" x="115" y="46" text-anchor="middle">COMPUTATION</text>
+            <rect x="52" y="56" width="126" height="38" rx="19" fill="#2B313C"/>
+            <rect x="92" y="62" width="46" height="26" fill="#5A2B1E"/>
+            <circle cx="75" cy="75" r="16" fill="#5A2B1E"/>
+            <circle cx="155" cy="75" r="10" fill="#5A2B1E"/>
+            <circle cx="75" cy="75" r="8" fill="#F1EEE7" stroke="#8F959B"/><circle cx="75" cy="75" r="3" fill="#2B313C"/>
+            <circle cx="155" cy="75" r="8" fill="#F1EEE7" stroke="#8F959B"/><circle cx="155" cy="75" r="3" fill="#2B313C"/>
+            <text class="tape-big" x="26" y="88">A</text>
+            <text class="tape-text" x="182" y="103">C-60</text>
+            <path fill="#CCC8C0" stroke="#8F959B" d="M42 146L54 120H176L188 146Z"/>
+            <circle cx="80" cy="136" r="4" fill="#2B313C"/><circle cx="150" cy="136" r="4" fill="#2B313C"/>
+            <g fill="#4E545C"><circle cx="10" cy="10" r="3.2"/><circle cx="220" cy="10" r="3.2"/><circle cx="10" cy="136" r="3.2"/><circle cx="220" cy="136" r="3.2"/><circle cx="115" cy="132" r="3"/></g>
+          </g>
+        </svg>
+        <p class="note art-note-top">Side A<br>Recorded<br>2026</p>
+        <p class="note art-note-bottom">Every<br>link<br>is a<br>bridge</p>
+      </div>
     </section>
 
-    <section id="projects">
-      <p class="section-label"><span class="section-no">01</span> Selected work</p>
-      <h2 class="section-heading"><span class="reg" data-text="Projects">Projects</span></h2>
+    <section id="projects" class="section work">
+      <div class="section-head">
+        <h2 class="section-title">Selected work <span class="section-count">/ 01—03</span></h2>
+        <span class="section-rule" aria-hidden="true"></span>
+        <p class="section-tags">Games <span aria-hidden="true">×</span> Systems <span aria-hidden="true">×</span> Web</p>
+      </div>
 
-      <article class="panel plate-signal">
-        <p class="plate-strip"><span>Signal file 01</span><span>Featured project</span></p>
-        <div class="plate-grid">
-          <div class="plate-body">
-            <h3 class="panel-title">Wikinaut</h3>
-            <p class="panel-desc">A space-themed navigation game for Wikipedia: chart the shortest link-path between two articles, then fly there hop by hop, clicking through the real links on each live page. A Tampermonkey userscript drives the flight and DOM link-matching; a Python/Flask backend does bidirectional BFS over the full English Wikipedia link graph (memory-mapped CSR arrays, deployed on Fly.io).</p>
-            <div class="panel-links">
-              <a href="https://raw.githubusercontent.com/jackcareynapa/wikinaut/main/wikinaut.user.js" target="_blank" rel="noopener" class="btn btn-solid">Install <span aria-hidden="true">↗</span></a>
-              <a href="https://github.com/jackcareynapa/wikinaut" target="_blank" rel="noopener" class="btn btn-outline">GitHub <span aria-hidden="true">↗</span></a>
+      <div class="work-grid">
+        <article class="card card-feature">
+          <div class="card-body">
+            <p class="card-no">01</p>
+            <h3 class="card-title">Wikinaut</h3>
+            <p class="card-desc">A space-themed navigation game for Wikipedia: chart the shortest link-path between two articles, then fly there hop by hop, clicking through the real links on each live page. A Tampermonkey userscript drives the flight and DOM link-matching; a Python/Flask backend does bidirectional BFS over the full English Wikipedia link graph (memory-mapped CSR arrays, deployed on Fly.io).</p>
+            <p class="card-meta">Python · Flask · Userscript · Graph search</p>
+            <div class="card-links">
+              <a href="https://raw.githubusercontent.com/jackcareynapa/wikinaut/main/wikinaut.user.js" target="_blank" rel="noopener" class="link">Install <span class="arrow" aria-hidden="true">→</span></a>
+              <a href="https://github.com/jackcareynapa/wikinaut" target="_blank" rel="noopener" class="link">Source <span class="arrow" aria-hidden="true">→</span></a>
             </div>
           </div>
-          <div class="plate-art" aria-hidden="true">
-            <svg viewBox="0 0 400 340" focusable="false">
+          <div class="card-art art" aria-hidden="true">
+            <svg viewBox="0 0 600 340" preserveAspectRatio="xMidYMid slice" focusable="false">
               <defs>
-                <pattern id="wk-dots-final" width="9" height="9" patternUnits="userSpaceOnUse">
-                  <circle class="i-phosphor" cx="2.25" cy="2.25" r="1.9"/>
-                  <circle class="i-phosphor" cx="6.75" cy="6.75" r="1.9"/>
-                </pattern>
-                <pattern id="wk-dots-rough" width="20" height="20" patternUnits="userSpaceOnUse">
-                  <circle class="i-phosphor" cx="5" cy="5" r="4.4"/>
-                  <circle class="i-phosphor" cx="15" cy="15" r="4.4"/>
-                </pattern>
-                <clipPath id="wk-planet"><circle cx="120" cy="112" r="72"/></clipPath>
+                <linearGradient id="w-sky" x1="0" y1="0" x2="0" y2="1"><stop offset=".45" stop-color="#3E5572"/><stop offset="1" stop-color="#8AA2B8"/></linearGradient>
+                <pattern id="w-speck" width="21" height="17" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r=".8" fill="#737A82"/><circle cx="13" cy="10" r=".55" fill="#737A82"/><circle cx="7" cy="14" r=".6" fill="#737A82"/></pattern>
               </defs>
-
-              <path class="i-line-thin" d="M40 34v12M34 40h12 M252 22v10M247 27h10 M362 118v10M357 123h10 M214 150v8M210 154h8 M30 200v10M25 205h10 M372 214v8M368 218h8"/>
-
-              <g class="art-screen" clip-path="url(#wk-planet)">
-                <rect class="ht-rough" fill="url(#wk-dots-rough)" x="48" y="40" width="144" height="144"/>
-                <rect class="ht-final" fill="url(#wk-dots-final)" x="48" y="40" width="144" height="144"/>
+              <!-- Beyond the last door: night, sea, a moon. -->
+              <rect width="600" height="231" fill="url(#w-sky)"/>
+              <rect y="230" width="600" height="110" fill="#627D97"/>
+              <g fill="#F1ECE2"><circle cx="318" cy="194" r="7"/><circle cx="278" cy="192" r=".9"/><circle cx="296" cy="184" r=".7"/><circle cx="286" cy="206" r=".7"/><circle cx="306" cy="214" r=".6"/><circle cx="330" cy="214" r=".8"/></g>
+              <!-- Third wall, second room -->
+              <path fill="#C4C1B9" fill-rule="evenodd" d="M0 0H600V340H0ZM262.2 262V212.5A37.8 37.8 0 0 1 337.8 212.5V262Z"/>
+              <path fill="#AFACA5" d="M229.1 290H370.9L337.8 262H262.2Z"/>
+              <path fill="#BAB7B0" d="M229.1 290L262.2 262V0H229.1Z"/>
+              <path fill="#A6A5A1" d="M370.9 290L337.8 262V0H370.9Z"/>
+              <!-- Second wall, first room -->
+              <path fill="#D3CFC6" fill-rule="evenodd" d="M0 0H600V340H0ZM229.1 290V197.3A70.9 70.9 0 0 1 370.9 197.3V290Z"/>
+              <path fill="#BFBBB2" d="M170 340H430L370.9 290H229.1Z"/>
+              <path fill="#CCC8BF" d="M170 340L229.1 290V0H170Z"/>
+              <path fill="#B7B4AD" d="M430 340L370.9 290V0H430Z"/>
+              <!-- The link: one red line through every door to the horizon. -->
+              <path fill="#B04A2F" d="M262 340H338L300 230Z"/>
+              <path fill="#7E3321" opacity=".45" d="M288.4 262H311.6L300 230Z"/>
+              <g transform="translate(300 262) scale(.95)" fill="#1B2130">
+                <circle cx="0" cy="-54" r="6"/>
+                <path d="M-8 -46C-4 -49 4 -49 8 -46L10 -18H6L5 0H1.5L0 -16L-1.5 0H-5L-6 -18H-10Z"/>
               </g>
-              <circle class="i-line" cx="120" cy="112" r="72"/>
-
-              <!-- An article lying on the ground plane. -->
-              <g transform="translate(95 232) skewX(-35)">
-                <rect class="i-paper i-stroke" width="270" height="84"/>
-                <g class="i-soft" opacity="0.75">
-                  <rect x="16" y="12" width="230" height="4"/>
-                  <rect x="16" y="26" width="90" height="4"/><rect x="114" y="26" width="132" height="4"/>
-                  <rect x="16" y="40" width="86" height="4"/><rect x="110" y="40" width="50" height="4"/><rect x="168" y="40" width="78" height="4"/>
-                  <rect x="16" y="54" width="96" height="4"/><rect x="120" y="54" width="96" height="4"/>
-                  <rect x="16" y="68" width="150" height="4"/>
-                </g>
-                <rect class="i-signal" x="16" y="33" width="90" height="2"/>
-                <rect class="i-signal" x="120" y="61" width="96" height="2"/>
-              </g>
-
-              <!-- One underline that did not stay on the page. -->
-              <path class="i-path" d="M171.4 280 H221.4 C262 280 306 224 328 84"/>
-              <g transform="translate(331 66) rotate(10)">
-                <path class="i-ink" d="M-7 12 V-2 Q0 -18 7 -2 V12 Z"/>
-                <path class="i-ink" d="M-7 5 L-12 15 H-7 Z M7 5 L12 15 H7 Z"/>
-                <circle class="i-phosphor" cy="0" r="3"/>
-              </g>
+              <!-- Front wall -->
+              <path fill="#E4E0D7" fill-rule="evenodd" d="M0 0H600V340H0ZM170 340V170A130 130 0 0 1 430 170V340Z"/>
+              <path fill="url(#w-speck)" opacity=".6" fill-rule="evenodd" d="M0 0H600V340H0ZM170 340V170A130 130 0 0 1 430 170V340Z"/>
+              <path stroke="#CFCBC2" stroke-width="1" d="M0 92H158M442 92H600M0 214H170M430 214H600"/>
             </svg>
-          </div>
-        </div>
-        <p class="splash-stack"><span class="credits-key">Built with</span> Python <span aria-hidden="true">·</span> Flask <span aria-hidden="true">·</span> Userscript <span aria-hidden="true">·</span> Graph Search</p>
-      </article>
-
-      <div class="cart-pair">
-        <article class="cart">
-          <div class="cart-shell">
-            <p class="cart-spine" aria-hidden="true">Cart 01</p>
-            <div class="cart-label">
-              <h3 class="panel-title">Napa Valley Vineyard</h3>
-              <p class="panel-desc">A vineyard showcase site built with modern web tooling — estate storytelling, responsive layout, and a polished front-end experience deployed on Vercel.</p>
-              <div class="panel-links">
-                <a href="https://napavalleyvineyard.vercel.app/" target="_blank" rel="noopener" class="btn btn-solid">Live <span aria-hidden="true">↗</span></a>
-                <a href="https://github.com/jackcareynapa/napavalleyvineyard" target="_blank" rel="noopener" class="btn btn-outline">GitHub <span aria-hidden="true">↗</span></a>
-              </div>
-            </div>
           </div>
         </article>
 
-        <article class="cart">
-          <div class="cart-shell">
-            <p class="cart-spine" aria-hidden="true">Cart 02</p>
-            <div class="cart-label">
-              <h3 class="panel-title">Serverless Meme Generator</h3>
-              <p class="panel-desc">A serverless meme generator using cloud functions and a lightweight front end — upload, caption, and share memes with zero backend maintenance.</p>
-              <div class="panel-links">
-                <a href="https://serverless-meme-generator.vercel.app/" target="_blank" rel="noopener" class="btn btn-solid">Live <span aria-hidden="true">↗</span></a>
-                <a href="https://github.com/jackcareynapa/serverless-meme-generator" target="_blank" rel="noopener" class="btn btn-outline">GitHub <span aria-hidden="true">↗</span></a>
-              </div>
+        <div class="tile" aria-hidden="true">
+          <svg class="tile-eye" viewBox="0 0 150 180" preserveAspectRatio="xMidYMid slice" focusable="false">
+            <defs>
+              <pattern id="e-l" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="2" cy="2" r=".65" fill="#1B2130"/></pattern>
+              <pattern id="e-m" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="2" cy="2" r="1.1" fill="#1B2130"/></pattern>
+              <pattern id="e-d" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="2" cy="2" r="1.55" fill="#1B2130"/></pattern>
+              <clipPath id="e-almond"><path d="M14 92C42 62 104 60 134 88C104 116 44 118 14 92Z"/></clipPath>
+            </defs>
+            <rect width="150" height="180" fill="#EFEAE0"/>
+            <rect width="150" height="180" fill="url(#e-l)"/>
+            <path fill="url(#e-m)" d="M0 0H150V26C110 12 50 12 0 32Z"/>
+            <path fill="url(#e-d)" d="M6 42C40 20 96 18 140 36L138 46C98 30 42 32 8 52Z"/>
+            <path fill="url(#e-m)" d="M10 74C44 48 102 46 140 70L140 80C102 58 46 60 12 84Z"/>
+            <path fill="#EFEAE0" d="M14 92C42 62 104 60 134 88C104 116 44 118 14 92Z"/>
+            <g clip-path="url(#e-almond)">
+              <path fill="url(#e-l)" d="M14 92C42 62 104 60 134 88V74H14Z"/>
+              <circle cx="76" cy="89" r="22" fill="url(#e-d)"/>
+              <circle cx="76" cy="89" r="22" fill="none" stroke="#1B2130" stroke-width="1.6"/>
+              <circle cx="76" cy="89" r="8.5" fill="#1B2130"/>
+              <circle cx="82" cy="83" r="3.5" fill="#EFEAE0"/>
+            </g>
+            <path fill="none" stroke="#1B2130" stroke-width="3.5" stroke-linecap="round" d="M14 92C42 62 104 60 134 88"/>
+            <path fill="none" stroke="#1B2130" stroke-width="1.2" d="M18 94C46 114 102 112 130 90"/>
+            <path fill="none" stroke="#1B2130" stroke-width="1.6" stroke-linecap="round" d="M21.3 85.3Q18.4 81.5 14.3 80.7M28.7 80.4Q26.0 75.8 22.1 74.0M36.7 76.3Q34.4 71.0 30.9 68.4M45.3 73.0Q43.5 67.2 40.6 63.9M54.4 70.6Q53.0 64.4 51.0 60.5M63.7 69.0Q62.9 62.5 61.8 58.2M73.2 68.2Q73.0 61.7 72.9 57.3M82.8 68.4Q83.2 61.8 84.0 57.5M92.2 69.3Q93.2 63.0 95.0 59.0M101.4 71.2Q102.9 65.2 105.6 61.7M110.3 73.9Q112.2 68.5 115.5 65.6M118.6 77.4Q120.9 72.7 124.7 70.6M126.2 81.9Q128.9 77.9 132.9 76.7"/>
+            <path fill="url(#e-m)" d="M0 128C40 118 100 116 150 124V180H0Z"/>
+          </svg>
+          <p class="note tile-note">Look<br>twice<br>build<br>once</p>
+        </div>
+
+        <article class="card">
+          <div class="card-body">
+            <p class="card-no">02</p>
+            <h3 class="card-title">Napa Valley Vineyard</h3>
+            <p class="card-desc">A vineyard showcase site built with modern web tooling — estate storytelling, responsive layout, and a polished front-end experience deployed on Vercel.</p>
+            <div class="card-links">
+              <a href="https://napavalleyvineyard.vercel.app/" target="_blank" rel="noopener" class="link">Live site <span class="arrow" aria-hidden="true">→</span></a>
+              <a href="https://github.com/jackcareynapa/napavalleyvineyard" target="_blank" rel="noopener" class="link">Source <span class="arrow" aria-hidden="true">→</span></a>
             </div>
           </div>
+          <div class="card-art art" aria-hidden="true">
+            <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" focusable="false">
+              <defs>
+                <linearGradient id="n-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9CB3C8"/><stop offset="1" stop-color="#D6DEE2"/></linearGradient>
+                <pattern id="n-speck" width="21" height="17" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r=".8" fill="#737A82"/><circle cx="13" cy="10" r=".55" fill="#737A82"/><circle cx="7" cy="14" r=".6" fill="#737A82"/></pattern>
+                <clipPath id="n-window"><rect x="120" y="40" width="200" height="150"/></clipPath>
+              </defs>
+              <rect width="400" height="300" fill="#DCD8CF"/>
+              <rect width="400" height="300" fill="url(#n-speck)" opacity=".5"/>
+              <g clip-path="url(#n-window)"><g transform="translate(-30 0)">
+                <rect x="150" y="40" width="200" height="150" fill="url(#n-sky)"/>
+                <circle cx="298" cy="86" r="14" fill="#F4EFE5"/>
+                <path fill="#A7B7C4" d="M150 150C190 128 240 132 280 142C310 150 330 138 350 134V190H150Z"/>
+                <path fill="none" stroke="#93A6B6" d="M150 158C190 138 240 142 280 151C310 158 330 147 350 143M150 166C190 147 240 151 280 160C310 166 330 156 350 152"/>
+                <path fill="#7F97AC" d="M150 168C200 146 262 148 350 170V190H150Z"/>
+                <path fill="none" stroke="#687F95" stroke-width="1.3" d="M150 175C200 154 262 156 350 177M150 182C200 162 262 164 350 184M150 189C200 170 262 172 350 191"/>
+              </g></g>
+              <rect x="218" y="40" width="4" height="150" fill="#DCD8CF"/>
+              <path fill="#C9C5BC" d="M120 40H320L314 47H126Z"/>
+              <path fill="#BEBAB1" d="M120 40L126 47V190H120Z"/>
+              <path fill="#EAE6DD" d="M114 190H326L330 197H110Z"/>
+              <!-- Side wall with a red door -->
+              <path fill="#CAC6BD" d="M0 0L84 26V236L0 300Z"/>
+              <path fill="#A9412A" d="M20 284.8V140C20 112 60 116 60 156V254.3Z"/>
+              <path fill="#7E3321" d="M27 279.5V144C27 125 55 128 55 158V258Z"/>
+              <!-- Floor, with the window's light on it -->
+              <path fill="#C3BFB6" d="M0 300L84 236H400V300Z"/>
+              <path fill="#D7D3CA" d="M138 244H314L342 296H154Z"/>
+              <path fill="#8F8B84" opacity=".55" d="M228 262L182 267L182 264L232 259Z"/>
+              <g transform="translate(232 262) scale(.8)" fill="#1B2130">
+                <circle cx="0" cy="-54" r="6"/>
+                <path d="M-8 -46C-4 -49 4 -49 8 -46L10 -18H6L5 0H1.5L0 -16L-1.5 0H-5L-6 -18H-10Z"/>
+              </g>
+            </svg>
+          </div>
         </article>
+
+        <article class="card">
+          <div class="card-body">
+            <p class="card-no">03</p>
+            <h3 class="card-title">Serverless Meme Generator</h3>
+            <p class="card-desc">A serverless meme generator using cloud functions and a lightweight front end — upload, caption, and share memes with zero backend maintenance.</p>
+            <div class="card-links">
+              <a href="https://serverless-meme-generator.vercel.app/" target="_blank" rel="noopener" class="link">Live site <span class="arrow" aria-hidden="true">→</span></a>
+              <a href="https://github.com/jackcareynapa/serverless-meme-generator" target="_blank" rel="noopener" class="link">Source <span class="arrow" aria-hidden="true">→</span></a>
+            </div>
+          </div>
+          <div class="card-art art" aria-hidden="true">
+            <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" focusable="false">
+              <defs>
+                <linearGradient id="s-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FA9C1"/><stop offset="1" stop-color="#D2DBE0"/></linearGradient>
+                <linearGradient id="s-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A3B7C6"/><stop offset="1" stop-color="#7A95AD"/></linearGradient>
+                <linearGradient id="s-face" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#E6E2D9"/><stop offset="1" stop-color="#CDC9C1"/></linearGradient>
+              </defs>
+              <rect width="400" height="206" fill="url(#s-sky)"/>
+              <rect y="205" width="400" height="95" fill="url(#s-sea)"/>
+              <path fill="#5B7189" d="M320 207L338 196L350 201L362 190L376 205L392 207Z"/>
+              <!-- A staircase to no building at all -->
+              <path fill="#F2EEE6" transform="translate(-14 -10)" d="M40 300V280H66V260H92V240H118V220H144V200H170V180H196V160H222V140H262V160L78 300Z"/>
+              <path fill="url(#s-face)" stroke="#B8B5AE" stroke-width=".8" d="M40 300V280H66V260H92V240H118V220H144V200H170V180H196V160H222V140H262V160L78 300Z"/>
+              <g fill="#C3CDD3"><circle cx="272" cy="146" r="15"/><circle cx="296" cy="136" r="22"/><circle cx="324" cy="144" r="16"/><circle cx="254" cy="152" r="11"/><circle cx="342" cy="152" r="10"/><rect x="244" y="146" width="108" height="12" rx="6"/></g>
+              <g fill="#E3E2DC"><circle cx="268" cy="142" r="14"/><circle cx="292" cy="132" r="21"/><circle cx="320" cy="140" r="15"/><circle cx="250" cy="148" r="10"/><circle cx="338" cy="148" r="9"/><rect x="242" y="142" width="104" height="11" rx="5.5"/></g>
+              <g fill="#F4EFE5"><circle cx="288" cy="126" r="15"/><circle cx="265" cy="138" r="9"/><circle cx="316" cy="134" r="9"/></g>
+              <!-- The one frame, floating: an empty meme, captions waiting -->
+              <g transform="translate(236 58) rotate(6)">
+                <rect x="-40" y="-30" width="80" height="60" fill="#F1ECE2" stroke="#A9412A" stroke-width="3"/>
+                <rect x="-33" y="-23" width="66" height="46" fill="#B9C8D4"/>
+                <path fill="#8BA2B6" d="M-33 23V10C-15 2 5 6 33 14V23Z"/>
+                <rect x="-27" y="-19" width="54" height="5" fill="#FBF9F4" stroke="#1B2130" stroke-width=".6"/>
+                <rect x="-22" y="13" width="44" height="5" fill="#FBF9F4" stroke="#1B2130" stroke-width=".6"/>
+              </g>
+              <g transform="translate(132 220) scale(.62)" fill="#1B2130">
+                <circle cx="2" cy="-54" r="6"/>
+                <path d="M-6 -46C-2 -49 6 -49 10 -46L12 -18H8L20 -32L24 -30L10 -12L5 0H1.5L0 -16L-4 -18H-8Z"/>
+              </g>
+            </svg>
+          </div>
+        </article>
+
+        <div class="deck" aria-hidden="true">
+          <svg class="deck-reel" viewBox="0 0 40 40" focusable="false">
+            <circle cx="20" cy="20" r="18" fill="#1B2130"/>
+            <circle cx="20" cy="10.5" r="5.2" fill="#F1ECE2"/><circle cx="28.2" cy="24.8" r="5.2" fill="#F1ECE2"/><circle cx="11.8" cy="24.8" r="5.2" fill="#F1ECE2"/>
+            <circle cx="20" cy="20" r="2.4" fill="#F1ECE2"/>
+          </svg>
+          <p class="note deck-note">Play<br>it<br>again</p>
+          <p class="deck-label">C-60</p>
+          <div class="deck-sides"><span>A<i class="box box-on"></i></span><span>B<i class="box"></i></span></div>
+        </div>
       </div>
     </section>
 
-    <section id="coursework">
-      <p class="section-label"><span class="section-no">02</span> The index</p>
-      <h2 class="section-heading"><span class="reg" data-text="Coursework">Coursework</span></h2>
-      <div class="index-layout">
-        <div class="index-margin">
-          <blockquote class="pull-quote">
-            <p>Creativity and computation belong together.</p>
-          </blockquote>
-          <div class="screen screen-dots index-screen" aria-hidden="true"></div>
+    <section id="coursework" class="section courses">
+      <div class="section-head">
+        <h2 class="section-title">Coursework <span class="section-count" data-count>/ 01—12</span></h2>
+        <span class="section-rule" aria-hidden="true"></span>
+        <p class="section-tags">Duke <span aria-hidden="true">×</span> Sydney</p>
+      </div>
+      <div class="course-grid"></div>
+    </section>
+
+    <section id="resume" class="section resume">
+      <div class="section-head">
+        <h2 class="section-title">Resume <span class="section-count">/ PDF</span></h2>
+        <span class="section-rule" aria-hidden="true"></span>
+        <p class="section-tags">Side B</p>
+      </div>
+      <div class="resume-card">
+        <svg class="resume-icon" viewBox="0 0 120 78" aria-hidden="true" focusable="false">
+          <rect x="1" y="1" width="118" height="76" rx="5" fill="#E9E3D6" stroke="#1B2130" stroke-width="1.5"/>
+          <rect x="9" y="7" width="102" height="48" rx="3" fill="#F6F2EA" stroke="#1B2130"/>
+          <path stroke="#1B2130" stroke-width=".8" d="M20 16H100M20 22H78"/>
+          <rect x="27" y="28" width="66" height="20" rx="10" fill="#1B2130"/>
+          <rect x="49" y="31" width="22" height="14" fill="#A9412A"/>
+          <circle cx="39" cy="38" r="6" fill="#F6F2EA"/><circle cx="81" cy="38" r="6" fill="#F6F2EA"/>
+          <circle cx="39" cy="38" r="2" fill="#1B2130"/><circle cx="81" cy="38" r="2" fill="#1B2130"/>
+          <path fill="none" stroke="#1B2130" d="M22 77L28 63H92L98 77"/>
+        </svg>
+        <div class="resume-text">
+          <p class="card-title">Full work history</p>
+          <p class="card-desc">Skills, experience, and everything in between, as a single PDF.</p>
         </div>
-        <div class="course-index"></div>
+        <a href="Jack-Carey-Resume.pdf" class="btn">Download PDF <span class="arrow" aria-hidden="true">↓</span></a>
       </div>
     </section>
 
-    <section id="resume">
-      <p class="section-label"><span class="section-no">03</span> Back matter</p>
-      <div class="panel panel-strip">
-        <div class="screen screen-lines screen-ink strip-screen" aria-hidden="true"></div>
-        <div>
-          <h2 class="strip-title">Resume</h2>
-          <p class="strip-text">Full work history, skills, and experience — available as a PDF.</p>
-        </div>
-        <a href="Jack-Carey-Resume.pdf" class="btn btn-solid">Download PDF <span aria-hidden="true">↓</span></a>
+    <section id="contact" class="section contact">
+      <div class="section-head">
+        <h2 class="section-title">Contact</h2>
+        <span class="section-rule" aria-hidden="true"></span>
+        <p class="section-tags">Say hello</p>
       </div>
-    </section>
-
-    <section id="contact">
-      <p class="section-label"><span class="section-no">04</span> To be continued</p>
-      <h2 class="contact-headline bubble"><span class="reg" data-text="Let's">Let's</span><br><span class="reg" data-text="connect.">connect.</span></h2>
-      <dl class="contact-list">
-        <div class="contact-row">
-          <dt>Email</dt>
-          <dd><a href="mailto:jack.carey.napa@gmail.com">jack.carey.napa@gmail.com</a></dd>
-        </div>
-        <div class="contact-row">
-          <dt>GitHub</dt>
-          <dd><a href="https://github.com/jackcareynapa" target="_blank" rel="noopener">github.com/jackcareynapa</a></dd>
-        </div>
-        <div class="contact-row">
-          <dt>LinkedIn</dt>
-          <dd><a href="https://linkedin.com/in/jack-carey-50386b379" target="_blank" rel="noopener">linkedin.com/in/jack-carey-50386b379</a></dd>
-        </div>
-      </dl>
+      <div class="contact-grid">
+        <p class="contact-display">Let's <span class="nowrap">connect<span class="dot" aria-hidden="true"></span></span></p>
+        <dl class="contact-list">
+          <div class="contact-row">
+            <dt>Email</dt>
+            <dd><a href="mailto:jack.carey.napa@gmail.com">jack.carey.napa@gmail.com</a></dd>
+          </div>
+          <div class="contact-row">
+            <dt>GitHub</dt>
+            <dd><a href="https://github.com/jackcareynapa" target="_blank" rel="noopener">github.com/jackcareynapa</a></dd>
+          </div>
+          <div class="contact-row">
+            <dt>LinkedIn</dt>
+            <dd><a href="https://linkedin.com/in/jack-carey-50386b379" target="_blank" rel="noopener">linkedin.com/in/jack-carey-50386b379</a></dd>
+          </div>
+        </dl>
+      </div>
     </section>
 
   </main>
 
-  <footer>&copy; 2026 Jack Carey</footer>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-name">Jack Carey</p>
+      <p class="footer-meta">&copy; 2026 <span aria-hidden="true">·</span> Durham, NC</p>
+    </div>
+  </footer>
 
   <script src="ui.js" defer></script>
 </body>
