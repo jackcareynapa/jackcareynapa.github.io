@@ -32,40 +32,37 @@ Running numbers are generated from array position, so reordering the file reorde
 
 | File | Purpose |
 |------|---------|
-| `index.html` | Page structure |
-| `styles.css` | Design tokens and layout |
-| `ui.js` | Nav, scroll reveal, course renderer |
+| `index.html` | Page structure and the two inline SVG plates |
+| `styles.css` | Design tokens, layout, illustration inks |
+| `ui.js` | Scroll spy, course renderer, the one-shot halftone resolve |
 | `courses.json` | Coursework data |
 
 ## The print system
 
-The page is set as a two-ink job on toned stock. Three things carry that: the
-palette, the halftone screens, and the misregistration plates.
+The page is set as an illustrated field manual: black ink and putty hardware on warm
+stock, with one phosphor ink and one signal ink. The comic foundation — halftone
+screens, misregistered display type, hard shadows, the speech bubble — carries over.
 
 ### Inks
 
-Measured against the *rendered* sheet (nominal `--paper` darkened by the grain layer):
-
-| Token | Hex | Contrast on sheet | Use |
+| Token | Hex | Contrast on paper | Use |
 |-------|-----|------------------|-----|
-| `--ink` | `#181A17` | 11.92:1 | Body copy, rules, panel borders |
-| `--spot` | `#2440C4` | 5.48:1 | Links, labels, focus rings |
-| `--ink-soft` | `#5A594F` | 4.80:1 | Secondary copy, meta rows |
-| `--graphic` | `#FF4FA3` | **2.18:1** | Screens only — **never** carries a word |
+| `--paper` | `#E5DECD` | — | The stock |
+| `--ink` | `#1B1A17` | 12.98:1 | Body copy, rules, borders |
+| `--ink-soft` | `#57534A` | 5.71:1 | Secondary copy — **paper only** (3.76:1 on putty) |
+| `--putty` | `#BDB5A2` | — | Hardware bodies; takes `--ink` text at 8.53:1 |
+| `--signal` | `#A8321B` | 4.99:1 | Links, labels, focus rings, lamps |
+| `--phosphor` | `#E09A2B` | **1.77:1** | Screen light and every dot — **never** carries a word |
 
-Three rules keep the page from drifting, and each one is a single value you can check:
+`--signal` carries words, `--phosphor` carries light and dots, and neither does both.
 
-- **One screen ink.** Every halftone prints in `--graphic`. `--spot` carries words,
-  `--graphic` carries dots, and neither does both. An earlier pass had the index margin
-  printing in blue and the resume band in black, which put the text ink and the black pass
-  to work as graphics.
-- **One stock.** Every bordered surface — cover panel, project panels, caption, credits
-  strip, bubble, buttons, header, footer — prints on `--paper`. `--paper-lit` is *not* a
-  second stock; it is the knockout highlight on the ghost numeral, and nothing else.
-- **One type scale.** Four sizes, and every fixed size is one of them.
+### Paper grain
 
-`--ink-soft` clears AA with about 0.3 of headroom. It is the tightest token on the
-page, so darkening the stock or the grain any further will break it.
+The grain is part of the stock, not an overlay: `--stock` is a faint
+`feTurbulence` tile (alpha baked in) layered over `--paper`. Every opaque surface —
+body, header, panels, caption, bubble, footer — sets `background: var(--stock)`, so
+nothing punches a flat hole in the sheet and nothing sits between the reader and the
+type. Under `prefers-contrast: more` the stock goes flat.
 
 ### Type scale
 
@@ -76,67 +73,72 @@ page, so darkening the stock or the grain any further will break it.
 | `--fs-body` | 0.95rem | Body copy |
 | `--fs-lead` | 1rem | The splash description, course names |
 
-0.72rem is a floor, not a preference. The mono furniture used to run from 0.66 to
-0.78rem across seven values — differences of a third of a pixel, which read as
-sloppiness rather than as hierarchy. It is also where IBM Plex Mono stops holding up:
-measured at 0.66rem, `--ink-soft` rendered at **2.4:1** through antialiasing even though
-the specified colour is 4.8:1. Verified against a grain-off control, so it is the stroke
-weight doing that, not the texture.
+0.72rem is a floor: below it IBM Plex Mono's strokes thin out enough that `--ink-soft`
+renders well under its specified contrast.
 
 ### Halftone screens
 
-A screen is a **standalone empty element**, never a wrapper around copy:
+Three screens, three jobs:
+
+| Screen | Where |
+|--------|-------|
+| Fine dots | Paper tone — the caption's head band, the index margin |
+| Coarse dots | Behind a focal visual only — the sun outside the CRT, the Wikinaut planet |
+| Line screen (ink) | Shadows cast by hardware — under the CRT, behind the cartridges, the resume band |
+
+A CSS screen is a **standalone empty element**, never a wrapper around copy:
 
 ```html
-<div class="screen screen-dots splash-screen" aria-hidden="true"></div>
+<div class="screen screen-dots index-screen" aria-hidden="true"></div>
 ```
 
 `.screen` sets position, blend and density; `.screen-dots` or `.screen-lines` sets the
-pattern. Geometry comes from four custom properties — `--p` (pitch), `--r` (dot radius),
-`--d` (density), `--sc` (ink) — so a new screen is a placement, not a new gradient.
+pattern; `.screen-ink` switches it to the black pass. Geometry comes from `--p`
+(pitch), `--r` (dot radius), `--d` (density) and `--sc` (ink). Dots are two offset
+`radial-gradient` layers so the lattice is staggered like a real screen. Every host
+needs `position: relative; z-index: 0`.
 
-Dots are **two** `radial-gradient` layers offset by half a pitch. That staggered lattice
-is what makes them read as Ben-Day rather than as a square grid of circles; a single
-`repeating-radial-gradient` was what the previous version used and it rendered as a flat
-pink wash.
+**The hard rule: a screen never sits behind running text.** Below 560px every CSS
+screen steps down to fine dots at the softest density.
 
-Every host element needs `position: relative; z-index: 0` — the screen sits at
-`z-index: -1`, which lands it above the host's background and below its content, and
-confines the `multiply` blend to that host.
+### Plates
 
-### Paper grain
+The illustrations are inline SVG, `aria-hidden`, coloured by classes (`.i-ink`,
+`.i-putty`, `.i-phosphor`, …) so the palette has one source. Only two places get an
+idea of their own:
 
-`body::before` is fixed at `z-index: 150`, which puts it above the panels and the header
-and below the skip link. It has to be above them: tooth belongs to the sheet, and anything
-carrying a background of its own would otherwise punch a flat hole in the page. Measured
-before it was raised, panel interiors had a pixel std-dev of 0.0 against the sheet's 1.49,
-and read about 15 levels lighter.
+- **Cover** — the CRT is a window, not a display: the sun and horizon on its screen
+  carry on outside the housing, solid light behind the glass, printed dots on paper.
+- **Wikinaut** — one link underline leaves the article and becomes the flight path.
 
-Because it now sits over the type as well, it lifts entirely under
-`prefers-contrast: more` — at that point it is not texture, it is something between the
-reader and the words. It is `pointer-events: none`, so it intercepts nothing.
-
-**The hard rule: a screen never sits behind running text.** It backs display type, ghost
-numerals, empty fields and panel edges. Where a control or a strip has to cross a screen,
-it is given an opaque background so the dots stop at its edge — see `.btn-outline` and
-`.splash-stack`. Below 560px every screen steps down to fine dots at the softest density,
-because a pitch that reads as tone on a desk reads as interference in the hand.
-
-Both `prefers-reduced-motion: reduce` and `prefers-contrast: more` are handled: the first
-prints the screens immediately at their density instead of fading them in, the second
-removes every screen and plate and leaves flat black on stock.
+The secondary projects are **cartridges**: putty shell, notched corner, grip spine,
+paper label, line-screen shadow. No illustration. Dot-filled SVG parts carry
+`.art-screen` and are removed under `prefers-contrast: more`.
 
 ### Misregistration
 
-`.reg` prints display type three times — pink plate, blue plate, black pass — offset by
-`--reg`, which is in `em` so the slip scales with the type.
+`.reg` prints display type three times — phosphor plate, signal plate, black pass —
+offset by `--reg`, which is in `em` so the slip scales with the type.
 
 ```html
 <span class="reg" data-text="Jack">Jack</span>
 ```
 
-The `data-text` value **must** match the element's text. The plates are pseudo-elements
-so they stay out of copy and paste, but generated content is still announced, so the rule
-uses `content: attr(data-text) / ""` to hand the accessibility tree an empty string. Drop
+The `data-text` value **must** match the element's text. The plates use
+`content: attr(data-text) / ""` so the accessibility tree gets an empty string; drop
 the `/ ""` and the cover announces as "Jack Jack Jack Carey Carey Carey". A line break
-needs its own `.reg` span per line, or the plates wrap differently from the ink pass.
+needs its own `.reg` span per line.
+
+### Motion
+
+Everything is one-time and local, and only `transform` / `opacity` move:
+
+| Motion | Trigger |
+|--------|---------|
+| CRT power-on — the picture opens out of a scan line | Once, on load (CSS) |
+| Wikinaut planet resolves from a rough screen to its finished one | Once, first time in view (`ui.js`) |
+| Key press — buttons close over their 2px shadow | `:active` |
+| Colour changes on links, nav and buttons | Hover |
+
+Nothing loops, nothing moves on scroll, and content is never hidden waiting for a
+reveal. Under `prefers-reduced-motion: reduce` everything prints in its final state.

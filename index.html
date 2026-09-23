@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
@@ -30,13 +31,70 @@
 
   <main id="main">
 
-    <section id="home" class="cover reveal-section">
+    <section id="home" class="cover">
       <div class="cover-panel">
-        <div class="screen screen-dots cover-screen reveal-item" aria-hidden="true"></div>
         <p class="issue-meta">Issue #01 <span aria-hidden="true">·</span> Durham, NC <span aria-hidden="true">·</span> 2026</p>
-        <h1 class="cover-name"><span class="reg" data-text="Jack">Jack</span><br><span class="reg" data-text="Carey">Carey</span></h1>
-        <p class="cover-role">Computer Science <span aria-hidden="true">·</span> Duke University</p>
-        <p class="credits"><span class="credits-key">Featuring</span> AI / ML <span aria-hidden="true">·</span> Game Design <span aria-hidden="true">·</span> Systems <span aria-hidden="true">·</span> Networks <span aria-hidden="true">·</span> Improv</p>
+        <div class="cover-grid">
+          <div class="cover-type">
+            <h1 class="cover-name"><span class="reg" data-text="Jack">Jack</span><br><span class="reg" data-text="Carey">Carey</span></h1>
+            <p class="cover-role">Computer Science <span aria-hidden="true">·</span> Duke University</p>
+            <p class="credits"><span class="credits-key">Featuring</span> AI / ML <span aria-hidden="true">·</span> Game Design <span aria-hidden="true">·</span> Systems <span aria-hidden="true">·</span> Networks <span aria-hidden="true">·</span> Improv</p>
+          </div>
+          <div class="cover-art" aria-hidden="true">
+            <svg viewBox="0 0 440 370" focusable="false">
+              <defs>
+                <pattern id="crt-dots" width="10" height="10" patternUnits="userSpaceOnUse">
+                  <circle class="i-phosphor" cx="2.5" cy="2.5" r="2.2"/>
+                  <circle class="i-phosphor" cx="7.5" cy="7.5" r="2.2"/>
+                </pattern>
+                <pattern id="crt-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                  <rect class="i-ink" width="1.3" height="6"/>
+                </pattern>
+                <pattern id="crt-grille" width="5" height="4" patternUnits="userSpaceOnUse">
+                  <rect class="i-ink" width="1.5" height="4"/>
+                </pattern>
+                <clipPath id="crt-glass"><rect x="62" y="92" width="178" height="164" rx="20"/></clipPath>
+                <clipPath id="crt-sky"><rect width="440" height="190"/></clipPath>
+              </defs>
+
+              <!-- The world behind the set: the same sun and horizon the screen shows. -->
+              <circle class="art-screen" cx="230" cy="190" r="150" fill="url(#crt-dots)" clip-path="url(#crt-sky)"/>
+              <line class="i-line-thin" x1="0" y1="190" x2="440" y2="190"/>
+              <polygon class="art-screen" fill="url(#crt-hatch)" opacity="0.5" points="44,326 322,316 384,350 16,358"/>
+
+              <!-- Housing -->
+              <polygon class="i-putty i-stroke" points="40,70 62,60 322,60 300,70"/>
+              <polygon class="i-putty-dk i-stroke" points="300,70 322,60 322,308 300,318"/>
+              <rect class="i-putty i-stroke" x="40" y="70" width="260" height="248"/>
+              <rect class="i-ink" x="60" y="318" width="34" height="8"/>
+              <rect class="i-ink" x="246" y="318" width="34" height="8"/>
+
+              <!-- Recessed screen -->
+              <rect class="i-putty-dk i-stroke" x="54" y="84" width="194" height="180" rx="24"/>
+              <rect class="i-ink" x="62" y="92" width="178" height="164" rx="20"/>
+              <g class="crt-picture" clip-path="url(#crt-glass)">
+                <circle class="i-phosphor" cx="230" cy="190" r="150" clip-path="url(#crt-sky)"/>
+                <path class="i-grid" d="M151 190 L20 256 M151 190 L80 256 M151 190 L130 256 M151 190 L172 256 M151 190 L222 256 M151 190 L282 256 M62 198 H240 M62 212 H240 M62 234 H240"/>
+                <line class="i-beam" x1="62" y1="190" x2="240" y2="190"/>
+              </g>
+              <rect class="i-line" x="62" y="92" width="178" height="164" rx="20"/>
+
+              <!-- Controls -->
+              <circle class="i-putty-dk i-stroke" cx="276" cy="110" r="10"/>
+              <line class="i-line-thin" x1="276" y1="110" x2="276" y2="101"/>
+              <circle class="i-putty-dk i-stroke" cx="276" cy="144" r="10"/>
+              <line class="i-line-thin" x1="276" y1="144" x2="283" y2="138"/>
+              <rect class="i-paper i-stroke-thin" x="268" y="170" width="16" height="32"/>
+              <rect class="i-ink" x="272" y="174" width="8" height="12"/>
+              <circle class="i-signal i-stroke-thin" cx="276" cy="226" r="5"/>
+
+              <!-- Label and grille -->
+              <rect class="i-paper i-stroke-thin" x="56" y="278" width="160" height="26"/>
+              <text class="i-label" x="66" y="295">FIELD UNIT JC-01</text>
+              <rect fill="url(#crt-grille)" opacity="0.6" x="230" y="278" width="58" height="26"/>
+            </svg>
+          </div>
+        </div>
       </div>
       <p class="caption cover-caption">
         CS student passionate about video game design, AI, and building technology that matters. At Duke I'm involved in improv and theater. I believe creativity and computation belong together.
@@ -44,50 +102,102 @@
       <a href="#projects" class="btn btn-solid cover-cta">See the work <span aria-hidden="true">↓</span></a>
     </section>
 
-    <section id="projects" class="reveal-section">
+    <section id="projects">
       <p class="section-label"><span class="section-no">01</span> Selected work</p>
       <h2 class="section-heading"><span class="reg" data-text="Projects">Projects</span></h2>
 
-      <article class="panel panel-splash reveal-item">
-        <div class="screen screen-dots splash-screen" aria-hidden="true"></div>
-        <div class="splash-body">
-          <h3 class="panel-title">Wikinaut</h3>
-          <p class="panel-desc">A space-themed navigation game for Wikipedia: chart the shortest link-path between two articles, then fly there hop by hop, clicking through the real links on each live page. A Tampermonkey userscript drives the flight and DOM link-matching; a Python/Flask backend does bidirectional BFS over the full English Wikipedia link graph (memory-mapped CSR arrays, deployed on Fly.io).</p>
-        </div>
-        <div class="splash-links">
-          <a href="https://raw.githubusercontent.com/jackcareynapa/wikinaut/main/wikinaut.user.js" target="_blank" rel="noopener" class="btn btn-solid">Install <span aria-hidden="true">↗</span></a>
-          <a href="https://github.com/jackcareynapa/wikinaut" target="_blank" rel="noopener" class="btn btn-outline">GitHub <span aria-hidden="true">↗</span></a>
+      <article class="panel plate-signal">
+        <p class="plate-strip"><span>Signal file 01</span><span>Featured project</span></p>
+        <div class="plate-grid">
+          <div class="plate-body">
+            <h3 class="panel-title">Wikinaut</h3>
+            <p class="panel-desc">A space-themed navigation game for Wikipedia: chart the shortest link-path between two articles, then fly there hop by hop, clicking through the real links on each live page. A Tampermonkey userscript drives the flight and DOM link-matching; a Python/Flask backend does bidirectional BFS over the full English Wikipedia link graph (memory-mapped CSR arrays, deployed on Fly.io).</p>
+            <div class="panel-links">
+              <a href="https://raw.githubusercontent.com/jackcareynapa/wikinaut/main/wikinaut.user.js" target="_blank" rel="noopener" class="btn btn-solid">Install <span aria-hidden="true">↗</span></a>
+              <a href="https://github.com/jackcareynapa/wikinaut" target="_blank" rel="noopener" class="btn btn-outline">GitHub <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+          <div class="plate-art" aria-hidden="true">
+            <svg viewBox="0 0 400 340" focusable="false">
+              <defs>
+                <pattern id="wk-dots-final" width="9" height="9" patternUnits="userSpaceOnUse">
+                  <circle class="i-phosphor" cx="2.25" cy="2.25" r="1.9"/>
+                  <circle class="i-phosphor" cx="6.75" cy="6.75" r="1.9"/>
+                </pattern>
+                <pattern id="wk-dots-rough" width="20" height="20" patternUnits="userSpaceOnUse">
+                  <circle class="i-phosphor" cx="5" cy="5" r="4.4"/>
+                  <circle class="i-phosphor" cx="15" cy="15" r="4.4"/>
+                </pattern>
+                <clipPath id="wk-planet"><circle cx="120" cy="112" r="72"/></clipPath>
+              </defs>
+
+              <path class="i-line-thin" d="M40 34v12M34 40h12 M252 22v10M247 27h10 M362 118v10M357 123h10 M214 150v8M210 154h8 M30 200v10M25 205h10 M372 214v8M368 218h8"/>
+
+              <g class="art-screen" clip-path="url(#wk-planet)">
+                <rect class="ht-rough" fill="url(#wk-dots-rough)" x="48" y="40" width="144" height="144"/>
+                <rect class="ht-final" fill="url(#wk-dots-final)" x="48" y="40" width="144" height="144"/>
+              </g>
+              <circle class="i-line" cx="120" cy="112" r="72"/>
+
+              <!-- An article lying on the ground plane. -->
+              <g transform="translate(95 232) skewX(-35)">
+                <rect class="i-paper i-stroke" width="270" height="84"/>
+                <g class="i-soft" opacity="0.75">
+                  <rect x="16" y="12" width="230" height="4"/>
+                  <rect x="16" y="26" width="90" height="4"/><rect x="114" y="26" width="132" height="4"/>
+                  <rect x="16" y="40" width="86" height="4"/><rect x="110" y="40" width="50" height="4"/><rect x="168" y="40" width="78" height="4"/>
+                  <rect x="16" y="54" width="96" height="4"/><rect x="120" y="54" width="96" height="4"/>
+                  <rect x="16" y="68" width="150" height="4"/>
+                </g>
+                <rect class="i-signal" x="16" y="33" width="90" height="2"/>
+                <rect class="i-signal" x="120" y="61" width="96" height="2"/>
+              </g>
+
+              <!-- One underline that did not stay on the page. -->
+              <path class="i-path" d="M171.4 280 H221.4 C262 280 306 224 328 84"/>
+              <g transform="translate(331 66) rotate(10)">
+                <path class="i-ink" d="M-7 12 V-2 Q0 -18 7 -2 V12 Z"/>
+                <path class="i-ink" d="M-7 5 L-12 15 H-7 Z M7 5 L12 15 H7 Z"/>
+                <circle class="i-phosphor" cy="0" r="3"/>
+              </g>
+            </svg>
+          </div>
         </div>
         <p class="splash-stack"><span class="credits-key">Built with</span> Python <span aria-hidden="true">·</span> Flask <span aria-hidden="true">·</span> Userscript <span aria-hidden="true">·</span> Graph Search</p>
       </article>
 
-      <div class="panel-pair">
-        <article class="panel panel-wide reveal-item">
-          <div class="numeral-wrap" aria-hidden="true">
-            <div class="screen screen-dots numeral-screen"></div>
-            <p class="panel-no panel-no-big" aria-hidden="true">01</p>
-          </div>
-          <h3 class="panel-title">Napa Valley Vineyard</h3>
-          <p class="panel-desc">A vineyard showcase site built with modern web tooling — estate storytelling, responsive layout, and a polished front-end experience deployed on Vercel.</p>
-          <div class="panel-links">
-            <a href="https://napavalleyvineyard.vercel.app/" target="_blank" rel="noopener" class="btn btn-solid">Live <span aria-hidden="true">↗</span></a>
-            <a href="https://github.com/jackcareynapa/napavalleyvineyard" target="_blank" rel="noopener" class="btn btn-outline">GitHub <span aria-hidden="true">↗</span></a>
+      <div class="cart-pair">
+        <article class="cart">
+          <div class="cart-shell">
+            <p class="cart-spine" aria-hidden="true">Cart 01</p>
+            <div class="cart-label">
+              <h3 class="panel-title">Napa Valley Vineyard</h3>
+              <p class="panel-desc">A vineyard showcase site built with modern web tooling — estate storytelling, responsive layout, and a polished front-end experience deployed on Vercel.</p>
+              <div class="panel-links">
+                <a href="https://napavalleyvineyard.vercel.app/" target="_blank" rel="noopener" class="btn btn-solid">Live <span aria-hidden="true">↗</span></a>
+                <a href="https://github.com/jackcareynapa/napavalleyvineyard" target="_blank" rel="noopener" class="btn btn-outline">GitHub <span aria-hidden="true">↗</span></a>
+              </div>
+            </div>
           </div>
         </article>
 
-        <article class="panel panel-narrow reveal-item">
-          <p class="panel-no" aria-hidden="true">02</p>
-          <h3 class="panel-title">Serverless Meme Generator</h3>
-          <p class="panel-desc">A serverless meme generator using cloud functions and a lightweight front end — upload, caption, and share memes with zero backend maintenance.</p>
-          <div class="panel-links">
-            <a href="https://serverless-meme-generator.vercel.app/" target="_blank" rel="noopener" class="btn btn-solid">Live <span aria-hidden="true">↗</span></a>
-            <a href="https://github.com/jackcareynapa/serverless-meme-generator" target="_blank" rel="noopener" class="btn btn-outline">GitHub <span aria-hidden="true">↗</span></a>
+        <article class="cart">
+          <div class="cart-shell">
+            <p class="cart-spine" aria-hidden="true">Cart 02</p>
+            <div class="cart-label">
+              <h3 class="panel-title">Serverless Meme Generator</h3>
+              <p class="panel-desc">A serverless meme generator using cloud functions and a lightweight front end — upload, caption, and share memes with zero backend maintenance.</p>
+              <div class="panel-links">
+                <a href="https://serverless-meme-generator.vercel.app/" target="_blank" rel="noopener" class="btn btn-solid">Live <span aria-hidden="true">↗</span></a>
+                <a href="https://github.com/jackcareynapa/serverless-meme-generator" target="_blank" rel="noopener" class="btn btn-outline">GitHub <span aria-hidden="true">↗</span></a>
+              </div>
+            </div>
           </div>
         </article>
       </div>
     </section>
 
-    <section id="coursework" class="reveal-section">
+    <section id="coursework">
       <p class="section-label"><span class="section-no">02</span> The index</p>
       <h2 class="section-heading"><span class="reg" data-text="Coursework">Coursework</span></h2>
       <div class="index-layout">
@@ -95,16 +205,16 @@
           <blockquote class="pull-quote">
             <p>Creativity and computation belong together.</p>
           </blockquote>
-          <div class="screen screen-lines index-screen" aria-hidden="true"></div>
+          <div class="screen screen-dots index-screen" aria-hidden="true"></div>
         </div>
         <div class="course-index"></div>
       </div>
     </section>
 
-    <section id="resume" class="reveal-section">
+    <section id="resume">
       <p class="section-label"><span class="section-no">03</span> Back matter</p>
-      <div class="panel panel-strip reveal-item">
-        <div class="screen screen-lines strip-screen" aria-hidden="true"></div>
+      <div class="panel panel-strip">
+        <div class="screen screen-lines screen-ink strip-screen" aria-hidden="true"></div>
         <div>
           <h2 class="strip-title">Resume</h2>
           <p class="strip-text">Full work history, skills, and experience — available as a PDF.</p>
@@ -113,19 +223,19 @@
       </div>
     </section>
 
-    <section id="contact" class="reveal-section">
+    <section id="contact">
       <p class="section-label"><span class="section-no">04</span> To be continued</p>
       <h2 class="contact-headline bubble"><span class="reg" data-text="Let's">Let's</span><br><span class="reg" data-text="connect.">connect.</span></h2>
       <dl class="contact-list">
-        <div class="contact-row reveal-item">
+        <div class="contact-row">
           <dt>Email</dt>
           <dd><a href="mailto:jack.carey.napa@gmail.com">jack.carey.napa@gmail.com</a></dd>
         </div>
-        <div class="contact-row reveal-item">
+        <div class="contact-row">
           <dt>GitHub</dt>
           <dd><a href="https://github.com/jackcareynapa" target="_blank" rel="noopener">github.com/jackcareynapa</a></dd>
         </div>
-        <div class="contact-row reveal-item">
+        <div class="contact-row">
           <dt>LinkedIn</dt>
           <dd><a href="https://linkedin.com/in/jack-carey-50386b379" target="_blank" rel="noopener">linkedin.com/in/jack-carey-50386b379</a></dd>
         </div>

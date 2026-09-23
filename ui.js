@@ -1,9 +1,6 @@
 (function () {
   'use strict';
 
-  // Arm the reveal styles. Without JS the content stays visible in CSS.
-  document.documentElement.classList.add('js');
-
   const navLinks = document.querySelectorAll('.nav-links a[data-nav]');
   const sections = [...navLinks]
     .map((link) => ({
@@ -41,6 +38,13 @@
       }
     }
 
+    // The last section is too short to reach the header line, so at the
+    // foot of the page it is the one being read.
+    const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+    if (atBottom && sections.length) {
+      current = sections[sections.length - 1].id;
+    }
+
     setActiveNav(current);
   }
 
@@ -60,7 +64,7 @@
     const statusLabel = isDone ? 'Completed' : 'In progress';
 
     const row = document.createElement('article');
-    row.className = 'course-row reveal-item';
+    row.className = 'course-row';
 
     row.appendChild(createTextEl('p', 'course-code', course.id));
 
@@ -87,9 +91,12 @@
       row.appendChild(note);
     }
 
-    row.appendChild(
-      createTextEl('p', 'course-meta', `${course.institution} · ${statusLabel}`)
-    );
+    // The lamp repeats the status word; the word carries the meaning.
+    const meta = createTextEl('p', 'course-meta', `${course.institution} · `);
+    const lamp = createTextEl('span', isDone ? 'status-lamp' : 'status-lamp is-wip', '');
+    lamp.setAttribute('aria-hidden', 'true');
+    meta.append(lamp, statusLabel);
+    row.appendChild(meta);
     row.appendChild(createTextEl('p', 'course-desc', course.description));
 
     return row;
@@ -119,40 +126,27 @@
     }
   }
 
-  function revealAll() {
-    document.querySelectorAll('.reveal-section, .reveal-item').forEach((el) => {
-      el.classList.add('visible');
-    });
-  }
+  // The planet settles from a rough screen onto its finished one the
+  // first time it is on screen, then the observer lets go. Nothing else
+  // on the page moves on scroll.
+  function initHalftoneResolve() {
+    const art = document.querySelector('.plate-art');
+    if (!art) return;
 
-  function initScrollReveal() {
     if (reducedMotion || !('IntersectionObserver' in window)) {
-      revealAll();
+      art.classList.add('resolved');
       return;
     }
 
     const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add('visible');
-          entry.target.querySelectorAll('.reveal-item').forEach((item) => {
-            item.classList.add('visible');
-          });
-          obs.unobserve(entry.target);
-        });
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        art.classList.add('resolved');
+        observer.disconnect();
       },
-      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+      { threshold: 0.4 }
     );
-
-    document.querySelectorAll('.reveal-section').forEach((section) => {
-      if (section.id === 'home') {
-        section.classList.add('visible');
-        section.querySelectorAll('.reveal-item').forEach((item) => item.classList.add('visible'));
-      } else {
-        observer.observe(section);
-      }
-    });
+    observer.observe(art);
   }
 
   let scrollTicking = false;
@@ -175,8 +169,8 @@
   });
 
   async function init() {
+    initHalftoneResolve();
     await renderCourses();
-    initScrollReveal();
     updateScrollSpy();
   }
 
