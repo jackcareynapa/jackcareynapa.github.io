@@ -12,23 +12,15 @@
     return typeof url === 'string' && url.startsWith('https://');
   }
 
-  function pad(n) {
-    return String(n).padStart(2, '0');
-  }
-
-  function createCourse(course, position) {
+  function createCourse(course) {
     const isDone = course.status === 'done';
 
     const card = document.createElement('article');
     card.className = 'course';
 
-    // Running number and code tag. The number is where you are in the
-    // list, which a screen reader already knows, so it is hidden.
     const top = document.createElement('p');
     top.className = 'course-top';
-    const no = createTextEl('span', 'course-no', pad(position + 1));
-    no.setAttribute('aria-hidden', 'true');
-    top.append(no, createTextEl('span', 'course-code', course.id));
+    top.append(createTextEl('span', 'course-code', course.id));
     card.appendChild(top);
 
     card.appendChild(createTextEl('h3', 'course-name', course.name));
@@ -79,8 +71,6 @@
       const courses = await response.json();
       grid.replaceChildren(...courses.map(createCourse));
 
-      const count = document.querySelector('[data-count]');
-      if (count) count.textContent = `/ 01—${pad(courses.length)}`;
     } catch (err) {
       console.error('Failed to load courses:', err);
       showCourseMessage(grid, 'course-error', 'Couldn’t load courses.');
