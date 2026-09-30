@@ -257,6 +257,7 @@
                 <linearGradient id="s-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FA9C1"/><stop offset="1" stop-color="#D2DBE0"/></linearGradient>
                 <linearGradient id="s-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A3B7C6"/><stop offset="1" stop-color="#7A95AD"/></linearGradient>
                 <linearGradient id="s-face" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#E6E2D9"/><stop offset="1" stop-color="#CDC9C1"/></linearGradient>
+                <radialGradient id="s-mist"><stop offset=".35" stop-color="#E3E2DC"/><stop offset="1" stop-color="#E3E2DC" stop-opacity="0"/></radialGradient>
               </defs>
               <rect width="400" height="206" fill="url(#s-sky)"/>
               <rect y="205" width="400" height="95" fill="url(#s-sea)"/>
@@ -264,9 +265,11 @@
               <!-- A staircase to no building at all -->
               <path fill="#F2EEE6" transform="translate(-14 -10)" d="M40 300V280H66V260H92V240H118V220H144V200H170V180H196V160H222V140H262V160L78 300Z"/>
               <path fill="url(#s-face)" stroke="#B8B5AE" stroke-width=".8" d="M40 300V280H66V260H92V240H118V220H144V200H170V180H196V160H222V140H262V160L78 300Z"/>
-              <g transform="translate(-68 0)" fill="#C3CDD3"><circle cx="272" cy="146" r="15"/><circle cx="296" cy="136" r="22"/><circle cx="324" cy="144" r="16"/><circle cx="254" cy="152" r="11"/><circle cx="342" cy="152" r="10"/><rect x="244" y="146" width="108" height="12" rx="6"/></g>
-              <g transform="translate(-68 0)" fill="#E3E2DC"><circle cx="268" cy="142" r="14"/><circle cx="292" cy="132" r="21"/><circle cx="320" cy="140" r="15"/><circle cx="250" cy="148" r="10"/><circle cx="338" cy="148" r="9"/><rect x="242" y="142" width="104" height="11" rx="5.5"/></g>
-              <g transform="translate(-68 0)" fill="#F4EFE5"><circle cx="288" cy="126" r="15"/><circle cx="265" cy="138" r="9"/><circle cx="316" cy="134" r="9"/></g>
+              <!-- Mist under the cloud, so the top steps fade into it -->
+              <ellipse cx="240" cy="168" rx="62" ry="22" fill="url(#s-mist)"/>
+              <g transform="translate(-68 8)" fill="#C3CDD3"><circle cx="272" cy="146" r="15"/><circle cx="296" cy="136" r="22"/><circle cx="324" cy="144" r="16"/><circle cx="254" cy="152" r="11"/><circle cx="342" cy="152" r="10"/><rect x="244" y="146" width="108" height="12" rx="6"/></g>
+              <g transform="translate(-68 8)" fill="#E3E2DC"><circle cx="268" cy="142" r="14"/><circle cx="292" cy="132" r="21"/><circle cx="320" cy="140" r="15"/><circle cx="250" cy="148" r="10"/><circle cx="338" cy="148" r="9"/><rect x="242" y="142" width="104" height="11" rx="5.5"/></g>
+              <g transform="translate(-68 8)" fill="#F4EFE5"><circle cx="288" cy="126" r="15"/><circle cx="265" cy="138" r="9"/><circle cx="316" cy="128" r="12"/></g>
               <!-- The one frame, floating: an empty meme, captions waiting -->
               <g transform="translate(204 58) rotate(6)">
                 <rect x="-40" y="-30" width="80" height="60" fill="#F1ECE2" stroke="#A9412A" stroke-width="3"/>
