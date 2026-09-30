@@ -1,7 +1,7 @@
 /* ── Design tokens ────────────────────────────────────────────────
    An editorial sheet: cream stock, navy ink, one brick-red accent,
    dusty-blue illustrations. Hairline rules, no radius, no shadows.
-   Condensed display type, wide-tracked labels, typewriter copy.
+   Serif display type, wide-tracked labels, grotesk copy.
    ───────────────────────────────────────────────────────────────── */
 :root {
   /* Measured against --paper: --ink 13.65:1, --ink-soft 6.67:1,
@@ -26,9 +26,9 @@
   --header-h: 64px;
   --max-w: 1520px;
 
-  --font-display: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
-  --font-label: 'Oswald', 'Arial Narrow', sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-display: 'Gloock', Georgia, serif;
+  --font-label: 'Hanken Grotesk', system-ui, sans-serif;
+  --font-mono: 'Hanken Grotesk', system-ui, sans-serif;
 
   --fs-note: 0.66rem;    /* marginalia */
   --fs-label: 0.78rem;   /* tracked labels, links */
@@ -360,9 +360,9 @@ a.link:active {
   font-weight: 400;
   /* Sized to its own column, so the longest word always fits. */
   font-size: clamp(2.5rem, 18.5cqi, 6.25rem);
-  line-height: 0.95;
-  letter-spacing: 0.005em;
-  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-transform: none;
   text-wrap: balance;
 }
 
@@ -544,9 +544,9 @@ a.link:active {
   font-family: var(--font-display);
   font-weight: 400;
   font-size: clamp(1.8rem, 2.2vw, 2.3rem);
-  line-height: 0.98;
-  letter-spacing: 0.005em;
-  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-transform: none;
   margin: 0.9rem 0 0.8rem;
 }
 
@@ -795,9 +795,9 @@ a.link:active {
 .contact-display {
   font-family: var(--font-display);
   font-size: clamp(3.25rem, 8vw, 7.5rem);
-  line-height: 0.92;
-  letter-spacing: 0.005em;
-  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-transform: none;
 }
 
 .contact-row {
