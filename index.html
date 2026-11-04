@@ -167,32 +167,37 @@
           </div>
         </article>
 
+        <!-- The halftone eye: drawn symmetric about (75 90). Its bands run
+             far past the viewBox, so the print fills the frame at any row
+             height while the eye stays centred. -->
         <div class="tile" aria-hidden="true">
-          <svg class="tile-eye" viewBox="0 0 150 180" preserveAspectRatio="xMidYMid slice" focusable="false">
-            <defs>
-              <pattern id="e-l" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="2" cy="2" r=".65" fill="#1B2130"/></pattern>
-              <pattern id="e-m" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="2" cy="2" r="1.1" fill="#1B2130"/></pattern>
-              <pattern id="e-d" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="2" cy="2" r="1.55" fill="#1B2130"/></pattern>
-              <clipPath id="e-almond"><path d="M14 92C42 62 104 60 134 88C104 116 44 118 14 92Z"/></clipPath>
-            </defs>
-            <rect width="150" height="180" fill="#EFEAE0"/>
-            <rect width="150" height="180" fill="url(#e-l)"/>
-            <path fill="url(#e-m)" d="M0 0H150V26C110 12 50 12 0 32Z"/>
-            <path fill="url(#e-d)" d="M6 42C40 20 96 18 140 36L138 46C98 30 42 32 8 52Z"/>
-            <path fill="url(#e-m)" d="M10 74C44 48 102 46 140 70L140 80C102 58 46 60 12 84Z"/>
-            <path fill="#EFEAE0" d="M14 92C42 62 104 60 134 88C104 116 44 118 14 92Z"/>
-            <g clip-path="url(#e-almond)">
-              <path fill="url(#e-l)" d="M14 92C42 62 104 60 134 88V74H14Z"/>
-              <circle cx="76" cy="89" r="22" fill="url(#e-d)"/>
-              <circle cx="76" cy="89" r="22" fill="none" stroke="#1B2130" stroke-width="1.6"/>
-              <circle cx="76" cy="89" r="8.5" fill="#1B2130"/>
-              <circle cx="82" cy="83" r="3.5" fill="#EFEAE0"/>
-            </g>
-            <path fill="none" stroke="#1B2130" stroke-width="3.5" stroke-linecap="round" d="M14 92C42 62 104 60 134 88"/>
-            <path fill="none" stroke="#1B2130" stroke-width="1.2" d="M18 94C46 114 102 112 130 90"/>
-            <path fill="none" stroke="#1B2130" stroke-width="1.6" stroke-linecap="round" d="M21.3 85.3Q18.4 81.5 14.3 80.7M28.7 80.4Q26.0 75.8 22.1 74.0M36.7 76.3Q34.4 71.0 30.9 68.4M45.3 73.0Q43.5 67.2 40.6 63.9M54.4 70.6Q53.0 64.4 51.0 60.5M63.7 69.0Q62.9 62.5 61.8 58.2M73.2 68.2Q73.0 61.7 72.9 57.3M82.8 68.4Q83.2 61.8 84.0 57.5M92.2 69.3Q93.2 63.0 95.0 59.0M101.4 71.2Q102.9 65.2 105.6 61.7M110.3 73.9Q112.2 68.5 115.5 65.6M118.6 77.4Q120.9 72.7 124.7 70.6M126.2 81.9Q128.9 77.9 132.9 76.7"/>
-            <path fill="url(#e-m)" d="M0 128C40 118 100 116 150 124V180H0Z"/>
-          </svg>
+          <div class="tile-art">
+            <svg class="tile-eye" viewBox="0 0 150 180" preserveAspectRatio="xMidYMid meet" focusable="false">
+              <defs>
+                <pattern id="e-l" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="2" cy="2" r=".65" fill="#1B2130"/></pattern>
+                <pattern id="e-m" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="2" cy="2" r="1.1" fill="#1B2130"/></pattern>
+                <pattern id="e-d" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="2" cy="2" r="1.55" fill="#1B2130"/></pattern>
+                <clipPath id="e-almond"><path d="M15 90C43 62 107 62 135 90C107 118 43 118 15 90Z"/></clipPath>
+              </defs>
+              <rect x="-50" y="-400" width="250" height="980" fill="#EFEAE0"/>
+              <rect x="-50" y="-400" width="250" height="980" fill="url(#e-l)"/>
+              <path fill="url(#e-m)" d="M-50 -400H200V26H150C110 12 40 12 0 26H-50Z"/>
+              <path fill="url(#e-d)" d="M8 46C40 22 110 22 142 46L140 56C108 34 42 34 10 56Z"/>
+              <path fill="url(#e-m)" d="M10 74C42 46 108 46 140 74L138 84C106 58 44 58 12 84Z"/>
+              <path fill="#EFEAE0" d="M15 90C43 62 107 62 135 90C107 118 43 118 15 90Z"/>
+              <g clip-path="url(#e-almond)">
+                <path fill="url(#e-l)" d="M15 90C43 62 107 62 135 90C107 72 43 72 15 90Z"/>
+                <circle cx="75" cy="90" r="22" fill="url(#e-d)"/>
+                <circle cx="75" cy="90" r="22" fill="none" stroke="#1B2130" stroke-width="1.6"/>
+                <circle cx="75" cy="90" r="8.5" fill="#1B2130"/>
+                <circle cx="81" cy="84" r="3.5" fill="#EFEAE0"/>
+              </g>
+              <path fill="none" stroke="#1B2130" stroke-width="3.5" stroke-linecap="round" d="M15 90C43 62 107 62 135 90"/>
+              <path fill="none" stroke="#1B2130" stroke-width="1.2" d="M15 90C43 118 107 118 135 90"/>
+              <path fill="none" stroke="#1B2130" stroke-width="1.6" stroke-linecap="round" d="M22.7 82.1Q17.5 80.2 15.5 77.1M30.2 77.7Q25.5 74.6 23.6 71.1M38.3 74.2Q34.3 70.1 32.8 66.1M47.0 71.4Q43.9 66.6 42.7 62.3M56.1 69.4Q54.0 64.0 53.1 59.5M65.5 68.2Q64.4 62.5 64.0 57.9M75.0 67.8Q75.0 62.0 75.0 57.3M84.5 68.2Q85.6 62.5 86.0 57.9M93.9 69.4Q96.0 64.0 96.9 59.5M103.0 71.4Q106.1 66.6 107.3 62.3M111.7 74.2Q115.7 70.1 117.2 66.1M119.8 77.7Q124.5 74.6 126.4 71.1M127.3 82.1Q132.5 80.2 134.5 77.1"/>
+              <path fill="url(#e-m)" d="M-50 128H0C40 120 110 120 150 128H200V580H-50Z"/>
+            </svg>
+          </div>
         </div>
 
         <article class="card">
@@ -244,41 +249,66 @@
 
         <article class="card">
           <div class="card-body">
-            <h3 class="card-title">Serverless Meme Generator</h3>
-            <p class="card-desc">A serverless meme generator using cloud functions and a lightweight front end — upload, caption, and share memes with zero backend maintenance.</p>
+            <h3 class="card-title">The Worst Tutorial Ever</h3>
+            <p class="card-desc">A PICO-8 platformer whose tutorial falls apart as you play it: the friendly narrator starts lying, the screen glitches, and the controls swap, lock and reshuffle.</p>
             <div class="card-links">
-              <a href="https://serverless-meme-generator.vercel.app/" target="_blank" rel="noopener" class="link">Live site <span class="arrow" aria-hidden="true">→</span></a>
-              <a href="https://github.com/jackcareynapa/serverless-meme-generator" target="_blank" rel="noopener" class="link">Source <span class="arrow" aria-hidden="true">→</span></a>
+              <a href="https://jackcarey.itch.io/worst-tutorial-ever" target="_blank" rel="noopener" class="link">Play on itch.io <span class="arrow" aria-hidden="true">→</span></a>
             </div>
           </div>
           <div class="card-art art" aria-hidden="true">
             <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" focusable="false">
               <defs>
-                <linearGradient id="s-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FA9C1"/><stop offset="1" stop-color="#D2DBE0"/></linearGradient>
-                <linearGradient id="s-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A3B7C6"/><stop offset="1" stop-color="#7A95AD"/></linearGradient>
-                <linearGradient id="s-face" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#E6E2D9"/><stop offset="1" stop-color="#CDC9C1"/></linearGradient>
+                <linearGradient id="t-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FA9C1"/><stop offset="1" stop-color="#D2DBE0"/></linearGradient>
+                <linearGradient id="t-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A3B7C6"/><stop offset="1" stop-color="#7A95AD"/></linearGradient>
+                <linearGradient id="t-face" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#E6E2D9"/><stop offset="1" stop-color="#CDC9C1"/></linearGradient>
+                <pattern id="t-speck" width="21" height="17" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r=".8" fill="#737A82"/><circle cx="13" cy="10" r=".55" fill="#737A82"/><circle cx="7" cy="14" r=".6" fill="#737A82"/></pattern>
+                <pattern id="t-grid" width="25" height="25" patternUnits="userSpaceOnUse"><path fill="none" stroke="#E4E9EC" stroke-width=".7" d="M25 0V25H0"/></pattern>
+                <clipPath id="t-band-a"><rect x="-40" y="135" width="480" height="7"/></clipPath>
+                <clipPath id="t-band-b"><rect x="-40" y="241" width="480" height="5"/></clipPath>
               </defs>
-              <rect width="400" height="206" fill="url(#s-sky)"/>
-              <rect y="205" width="400" height="95" fill="url(#s-sea)"/>
-              <path fill="#5B7189" d="M320 207L338 196L350 201L362 190L376 205L392 207Z"/>
-              <!-- A staircase to no building at all -->
-              <path fill="#F2EEE6" transform="translate(-14 -10)" d="M-12 300V280H14V260H40V240H66V220H92V200H118V180H144V160H170V140H196V120H222V100H252V120L20 300Z"/>
-              <path fill="url(#s-face)" stroke="#B8B5AE" stroke-width=".8" d="M-12 300V280H14V260H40V240H66V220H92V200H118V180H144V160H170V140H196V120H222V100H252V120L20 300Z"/>
-              <g transform="translate(-68 -32)" fill="#C3CDD3"><circle cx="272" cy="146" r="15"/><circle cx="296" cy="136" r="22"/><circle cx="324" cy="144" r="16"/><circle cx="254" cy="152" r="11"/><circle cx="342" cy="152" r="10"/><rect x="244" y="146" width="108" height="12" rx="6"/></g>
-              <g transform="translate(-68 -32)" fill="#E3E2DC"><circle cx="268" cy="142" r="14"/><circle cx="292" cy="132" r="21"/><circle cx="320" cy="140" r="15"/><circle cx="250" cy="148" r="10"/><circle cx="338" cy="148" r="9"/><rect x="242" y="142" width="104" height="11" rx="5.5"/></g>
-              <g transform="translate(-68 -32)" fill="#F4EFE5"><circle cx="288" cy="126" r="15"/><circle cx="265" cy="138" r="9"/><circle cx="316" cy="128" r="12"/></g>
-              <!-- The one frame, floating: an empty meme, captions waiting -->
-              <g transform="translate(200 38) rotate(6)">
-                <rect x="-40" y="-30" width="80" height="60" fill="#F1ECE2" stroke="#A9412A" stroke-width="3"/>
-                <rect x="-33" y="-23" width="66" height="46" fill="#B9C8D4"/>
-                <path fill="#8BA2B6" d="M-33 23V10C-15 2 5 6 33 14V23Z"/>
-                <rect x="-27" y="-19" width="54" height="5" fill="#FBF9F4" stroke="#1B2130" stroke-width=".6"/>
-                <rect x="-22" y="13" width="44" height="5" fill="#FBF9F4" stroke="#1B2130" stroke-width=".6"/>
+              <g id="t-scene">
+                <!-- Sky ruled as a level grid, sea, far headland -->
+                <rect width="400" height="206" fill="url(#t-sky)"/>
+                <rect width="400" height="206" fill="url(#t-grid)" opacity=".45"/>
+                <rect y="205" width="400" height="95" fill="url(#t-sea)"/>
+                <path fill="#5B7189" d="M320 207L338 196L350 201L362 190L376 205L392 207Z"/>
+                <g fill="#C3CDD3"><circle cx="318" cy="120" r="10"/><circle cx="334" cy="113" r="14"/><circle cx="352" cy="119" r="10"/><rect x="306" y="120" width="56" height="9" rx="4.5"/></g>
+                <g fill="#E3E2DC"><circle cx="315" cy="117" r="9"/><circle cx="331" cy="110" r="13"/><circle cx="349" cy="116" r="9"/><rect x="305" y="117" width="54" height="8" rx="4"/></g>
+                <g fill="#F4EFE5"><circle cx="328" cy="106" r="9"/><circle cx="314" cy="114" r="5"/></g>
+                <!-- Their shadows on the water -->
+                <g fill="#6F8CA8" opacity=".35"><rect x="36" y="262" width="88" height="3"/><rect x="146" y="226" width="60" height="2.5"/><rect x="268" y="212" width="58" height="2"/></g>
+                <!-- Three floating slabs, the last one out of reach -->
+                <path fill="#EAE6DD" d="M30 236L36 232H134L128 236ZM140 204L146 200H216L210 204ZM262 172L268 168H336L330 172Z"/>
+                <path fill="#BCBAB4" d="M128 236L134 232V246L128 250ZM210 204L216 200V214L210 218ZM330 172L336 168V182L330 186Z"/>
+                <path fill="url(#t-face)" stroke="#B8B5AE" stroke-width=".8" d="M30 236H128V250H30ZM140 204H210V218H140ZM262 172H330V186H262Z"/>
+                <path fill="url(#t-speck)" opacity=".55" d="M30 236H128V250H30ZM140 204H210V218H140ZM262 172H330V186H262Z"/>
+                <!-- The tutorial's sign points back the way you came -->
+                <rect x="158.5" y="154" width="3" height="48" fill="#4E545C"/>
+                <rect x="138" y="126" width="44" height="28" fill="#F1ECE2" stroke="#A9412A" stroke-width="2.5"/>
+                <path fill="#1B2130" d="M152.5 132.5h3v3h-3ZM149.5 135.5h3v3h-3ZM152.5 135.5h3v3h-3ZM146.5 138.5h3v3h-3ZM149.5 138.5h3v3h-3ZM152.5 138.5h3v3h-3ZM155.5 138.5h3v3h-3ZM158.5 138.5h3v3h-3ZM161.5 138.5h3v3h-3ZM164.5 138.5h3v3h-3ZM167.5 138.5h3v3h-3ZM170.5 138.5h3v3h-3ZM149.5 141.5h3v3h-3ZM152.5 141.5h3v3h-3ZM152.5 144.5h3v3h-3Z"/>
+                <!-- Z and X, mid-swap -->
+                <path fill="none" stroke="#1B2130" stroke-width="1.2" stroke-linecap="round" d="M152 66Q188 40 222 54M218.5 49.8L222 54L216.5 54.5M224 92Q190 116 154 104M157.8 108L154 104L159.4 103.1"/>
+                <g transform="translate(132 84) rotate(-10)">
+                  <rect x="-17" y="-15" width="34" height="32" rx="4" fill="#CCC8C0" stroke="#8F959B"/>
+                  <rect x="-13" y="-14" width="26" height="24" rx="3" fill="#F1ECE2" stroke="#A3A7AB" stroke-width=".8"/>
+                  <path fill="none" stroke="#1B2130" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M-6 -8H6L-6 4H6"/>
+                </g>
+                <g transform="translate(244 72) rotate(9)">
+                  <rect x="-17" y="-15" width="34" height="32" rx="4" fill="#7E3321"/>
+                  <rect x="-13" y="-14" width="26" height="24" rx="3" fill="#A9412A"/>
+                  <path fill="none" stroke="#F1ECE2" stroke-width="2.4" stroke-linecap="round" d="M-6 -8L6 4M6 -8L-6 4"/>
+                </g>
+                <!-- The player, at the lip of the gap -->
+                <path fill="#8F8B84" opacity=".5" d="M200 202L178 203.4L178.4 202.2L201 200.8Z"/>
+                <g transform="translate(200 202) scale(.6)" fill="#1B2130">
+                  <circle cx="0" cy="-54" r="6"/>
+                  <path d="M-8 -46C-4 -49 4 -49 8 -46L10 -18H6L5 0H1.5L0 -16L-1.5 0H-5L-6 -18H-10Z"/>
+                </g>
               </g>
-              <g transform="translate(150 155) scale(.62)" fill="#1B2130">
-                <circle cx="0" cy="-54" r="6"/>
-                <path d="M-8 -46C-4 -49 4 -49 8 -46L10 -18H6L5 0H1.5L0 -16L-1.5 0H-5L-6 -18H-10Z"/>
-              </g>
+              <!-- The screen glitches: two slices of the scene slip sideways -->
+              <use href="#t-scene" clip-path="url(#t-band-a)" transform="translate(9 0)"/>
+              <use href="#t-scene" clip-path="url(#t-band-b)" transform="translate(-14 0)"/>
+              <path stroke="#F4EFE5" stroke-width=".6" opacity=".7" d="M0 135H400M0 241H400"/>
             </svg>
           </div>
         </article>
@@ -301,14 +331,14 @@
       <div class="course-grid"></div>
     </section>
 
-    <section id="" class="section ">
+    <section id="resume" class="section resume">
       <div class="section-head">
-        <h2 class="section-title"></h2>
+        <h2 class="section-title">Resume</h2>
         <span class="section-rule" aria-hidden="true"></span>
         <p class="section-tags">Side B</p>
       </div>
-      <div class="-card">
-        <svg class="-icon" viewBox="0 0 120 78" aria-hidden="true" focusable="false">
+      <div class="resume-card">
+        <svg class="resume-icon" viewBox="0 0 120 78" aria-hidden="true" focusable="false">
           <rect x="1" y="1" width="118" height="76" rx="5" fill="#E9E3D6" stroke="#1B2130" stroke-width="1.5"/>
           <rect x="9" y="7" width="102" height="48" rx="3" fill="#F6F2EA" stroke="#1B2130"/>
           <path stroke="#1B2130" stroke-width=".8" d="M20 16H100M20 22H78"/>
@@ -318,7 +348,7 @@
           <circle cx="39" cy="38" r="2" fill="#1B2130"/><circle cx="81" cy="38" r="2" fill="#1B2130"/>
           <path fill="none" stroke="#1B2130" d="M22 77L28 63H92L98 77"/>
         </svg>
-        <div class="-text">
+        <div class="resume-text">
           <p class="card-title">Full work history</p>
           <p class="card-desc">Skills, experience, and everything in between, as a single PDF.</p>
         </div>

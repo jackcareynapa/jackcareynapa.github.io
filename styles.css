@@ -305,8 +305,10 @@ a.link:active {
 .hero-title {
   font-family: var(--font-display);
   font-weight: 400;
-  /* Sized to its own column, so the longest word always fits. */
-  font-size: clamp(2.5rem, 18.5cqi, 6.25rem);
+  /* Sized to its own column, so the longest word always fits:
+     "computation" sets 5.9em wide in Gloock, so 16.5cqi fills about
+     97% of the column. */
+  font-size: clamp(2.25rem, 16.5cqi, 6.25rem);
   line-height: 1;
   letter-spacing: -0.01em;
   text-transform: none;
@@ -493,17 +495,28 @@ a.link:active {
   transition: transform 250ms var(--ease);
 }
 
-/* The halftone tile hangs off the left margin. */
+/* The halftone eye, framed like a card and as tall as its row. Its
+   print runs past the viewBox, so the frame is always filled and the
+   eye sits on the row's centre line. */
 .tile {
-  display: flex;
-  flex-direction: column;
-  margin-left: calc(-1 * var(--gutter));
+  padding: 7px;
+  background: var(--paper);
+  border: 1px solid var(--line-card);
+}
+
+.tile-art {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background: #EFEAE0;
 }
 
 .tile-eye {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: auto;
-  aspect-ratio: 150 / 180;
+  height: 100%;
+  overflow: visible;
 }
 
 /* A cassette's side label, standing on end. */

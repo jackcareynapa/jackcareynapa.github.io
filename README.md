@@ -74,9 +74,11 @@ typed full stop; `.nowrap` keeps it on the same line as the last word.
 Inline SVG, `aria-hidden`, and original to this site: an aqueduct whose walkway is the
 tape pulled out of a floating cassette (hero); a corridor of doorways with a red line
 running through them to the horizon (Wikinaut, one link after another); a window onto
-vineyard rows, drawn as dotted lines of vines (Napa Valley Vineyard); a staircase that climbs into a cloud with no
-building at the top (Serverless Meme Generator). A halftone eye tile and a cassette
-side-label (`.deck`) sit in the margins of the work grid at wide widths.
+vineyard rows, drawn as dotted lines of vines (Napa Valley Vineyard); floating slabs under
+a level grid, with a sign pointing back the way you came, Z and X keys mid-swap, and two
+slices of the scene glitched sideways (The Worst Tutorial Ever). A framed halftone eye
+tile (`.tile`) and a cassette side-label (`.deck`) close the ends of the work grid's
+second row at wide widths.
 
 Every `.art` container gets a stronger grain tile laid over it (`--grain-art`,
 `mix-blend-mode: multiply`) so the flat fills read as print. The page itself carries a

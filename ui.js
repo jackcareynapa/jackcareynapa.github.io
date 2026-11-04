@@ -79,14 +79,15 @@
     }
   }
 
-  // Project cards and the resume card rise in once as they scroll into
-  // view. Only panels still below the fold are hidden, so nothing on
-  // screen at load flashes out and back.
+  // Project cards, the eye tile, the deck and the resume card rise in
+  // once as they scroll into view, so a row always arrives together.
+  // Only panels still below the fold are hidden, so nothing on screen at
+  // load flashes out and back.
   function revealPanels() {
     if (!('IntersectionObserver' in window)) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const panels = [...document.querySelectorAll('.card, .resume-card')]
+    const panels = [...document.querySelectorAll('.card, .tile, .deck, .resume-card')]
       .filter((panel) => panel.getBoundingClientRect().top > window.innerHeight);
     if (!panels.length) return;
 
