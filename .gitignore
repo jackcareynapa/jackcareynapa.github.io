@@ -1,3 +1,9 @@
 .playwright-mcp/
 .DS_Store
 UIUX_REVIEW.md
+.private-research/
+# Unapproved concept boards: review only, never publish with the site
+design-review/
+# Working documents: never publish with the site
+CREATIVE_SPECIFICATION.md
+vis_ref.png

@@ -1,0 +1,26 @@
+{
+  "tape": "contact",
+  "_review": "Approved by the owner for launch (2026-11-24).",
+  "chapters": [
+    {
+      "slug": "postcard",
+      "title": "Postcard",
+      "pages": [
+        {
+          "blocks": [
+            {
+              "t": "p",
+              "text": "Say hello."
+            },
+            {
+              "t": "email"
+            },
+            {
+              "t": "links"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

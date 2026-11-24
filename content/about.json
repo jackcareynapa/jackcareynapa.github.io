@@ -1,0 +1,52 @@
+{
+  "tape": "about",
+  "_review": "Approved by the owner for launch (2026-11-24).",
+  "chapters": [
+    {
+      "slug": "side-a",
+      "title": "Side A",
+      "pages": [
+        {
+          "blocks": [
+            { "t": "h", "text": "Napa, California" },
+            { "t": "p", "text": "I grew up in Napa, among vineyards that change with the seasons: green in spring, gold at harvest, bare by winter. The hills around them go gold every summer, and I've spent a lot of summers finding out what's past the next one." },
+            { "t": "p", "text": "My idea of a good afternoon is driving around with no particular plan. I go on Google Earth looking for swimming holes, then go and see whether they're real. Some of them come with cliffs. I jump." },
+            { "t": "p", "text": "My favourite place in the world is Mt. Tamalpais at sunset." }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "side-b",
+      "title": "Side B",
+      "pages": [
+        {
+          "blocks": [
+            { "t": "h", "text": "Creativity and computation" },
+            { "t": "p", "text": "It started with Minecraft: a world where you could build anything, which made me want to build the world itself. Now I study computer science at Duke, and I believe creativity and computation belong together." },
+            { "t": "p", "text": "The other half of my week is improv and theater, with Duke Improv and Hoof 'n' Horn. Improv taught me that the best moment in a scene is the one nobody saw coming, and that's how I design: subvert the expectation, stay unpredictable, keep people on their toes." },
+            { "t": "p", "text": "The purest version so far is The Worst Tutorial Ever, a PICO-8 tutorial that lies to you, swaps your controls and never lets you skip it." }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "credits",
+      "title": "Credits",
+      "pages": [
+        {
+          "blocks": [
+            { "t": "meta", "rows": [
+              ["Recorded at", "Napa, California and Durham, North Carolina"],
+              ["Mixed on", "Mt. Tamalpais, at sunset"],
+              ["Influences", "Minecraft · improv · anything that surprises me"],
+              ["Instruments", "PICO-8 · Lua · Python · JavaScript · three.js · an improv stage"],
+              ["Thanks", "My family, Duke Improv, Hoof 'n' Horn, and everyone who playtested"]
+            ] },
+            { "t": "credit", "text": "Written and performed by Jack Carey." }
+          ]
+        }
+      ]
+    }
+  ]
+}

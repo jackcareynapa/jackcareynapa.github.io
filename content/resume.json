@@ -1,0 +1,182 @@
+{
+  "tape": "resume",
+  "_review": "Approved by the owner for launch (2026-11-24).",
+  "chapters": [
+    {
+      "slug": "sheet",
+      "title": "Résumé",
+      "pages": [
+        {
+          "blocks": [
+            {
+              "t": "h",
+              "text": "Jack Carey"
+            },
+            {
+              "t": "p",
+              "text": "Software Engineer · Napa, CA"
+            },
+            {
+              "t": "meta",
+              "rows": [
+                [
+                  "Now",
+                  "Full Stack Developer, TerraBid · Oct 2025 – Present"
+                ],
+                [
+                  "Summer 2026",
+                  "Software Engineer Intern, Everything Set"
+                ],
+                [
+                  "Education",
+                  "B.S. Computer Science, Duke University · 2023 – 2027"
+                ],
+                [
+                  "Skills",
+                  "Python · JavaScript · React · Next.js · Flask · AWS · Docker"
+                ]
+              ]
+            },
+            {
+              "t": "actions",
+              "items": [
+                {
+                  "label": "Download PDF",
+                  "href": "@pdf",
+                  "kind": "primary"
+                },
+                {
+                  "label": "Full text",
+                  "href": "@text#resume",
+                  "kind": "secondary"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "textEdition": [
+    {
+      "slug": "field-service",
+      "title": "Field Service",
+      "pages": [
+        {
+          "blocks": [
+            {
+              "t": "kicker",
+              "text": "Section 2 · Field service record"
+            },
+            {
+              "t": "entries",
+              "items": [
+                {
+                  "title": "Software Engineer Intern",
+                  "org": "Everything Set",
+                  "where": "St. Helena, CA",
+                  "when": "Jun 2026 – Aug 2026",
+                  "bullets": [
+                    "Planned the migration of a HIPAA-regulated, 640M-document Elasticsearch cluster to Amazon OpenSearch; found 390 of 394 indices could not be snapshot-restored and designed a reindex-from-remote approach",
+                    "Kept AWS costs down by right-sizing the cluster, skipping a ~$348/month warm tier, and archiving to S3 Glacier",
+                    "Documented the full system architecture (Lambda, EKS, IoT Core, Auth0) using Claude Code to mine Slack and Miro",
+                    "Refactored legacy services and traced bugs across the codebase using Claude Code and Cursor"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "blocks": [
+            {
+              "t": "kicker",
+              "text": "Section 2 · continued"
+            },
+            {
+              "t": "entries",
+              "items": [
+                {
+                  "title": "Full Stack Developer",
+                  "org": "TerraBid",
+                  "where": "Remote",
+                  "when": "Oct 2025 – Present",
+                  "bullets": [
+                    "Build AI agents that help landowners draft contracts and offers for solar development",
+                    "Build front-end interfaces and integrate REST APIs for a platform comparing renewable energy developers",
+                    "Redesigned platform navigation to streamline key user flows, increasing user engagement and retention"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "calibration",
+      "title": "Calibration",
+      "pages": [
+        {
+          "blocks": [
+            {
+              "t": "kicker",
+              "text": "Section 4 · Calibration (education)"
+            },
+            {
+              "t": "entries",
+              "items": [
+                {
+                  "title": "Bachelor of Science: Computer Science",
+                  "org": "Duke University",
+                  "where": "Durham, NC",
+                  "when": "Aug 2023 – May 2027",
+                  "bullets": [
+                    "Study Abroad: University of Sydney, Fall 2025",
+                    "Concentration: Artificial Intelligence & Machine Learning · Minor: Theater Studies",
+                    "Activities: Pi Kappa Alpha Head Social Chair, Duke University Improv President, Hoof ’n’ Horn, Creator Lab"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "parts-list",
+      "title": "Parts List",
+      "pages": [
+        {
+          "blocks": [
+            {
+              "t": "kicker",
+              "text": "Section 5 · Parts list (skills)"
+            },
+            {
+              "t": "meta",
+              "rows": [
+                [
+                  "Languages",
+                  "Python, JavaScript, Lua, Java, C, SQL, HTML/CSS"
+                ],
+                [
+                  "Frameworks",
+                  "React, Next.js, Node.js, Flask, NumPy, scikit-learn, pytest, Tailwind CSS"
+                ],
+                [
+                  "Cloud & Data",
+                  "AWS, GCE, Elastic Cloud, Docker, Fly.io, Vercel, SQLite"
+                ],
+                [
+                  "Tools",
+                  "Git, GitHub Actions, Claude Code, Cursor, PICO-8, Unity"
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

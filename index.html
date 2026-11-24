@@ -1,394 +1,48 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Jack Carey — CS student at Duke University. Portfolio showcasing coursework, projects, and experience in AI, game design, and systems.">
-  <title>Jack Carey — Portfolio</title>
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jack Carey</title>
+<meta name="description" content="Jack Carey&#x27;s listening station: liner notes, projects, a résumé and a postcard, played on a late-1970s cassette deck.">
+<link rel="canonical" href="https://jackcareynapa.github.io/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Jack Carey">
+<meta property="og:description" content="Jack Carey&#x27;s listening station: liner notes, projects, a résumé and a postcard, played on a late-1970s cassette deck.">
+<meta property="og:url" content="https://jackcareynapa.github.io/">
+<meta property="og:image" content="https://jackcareynapa.github.io/assets/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#120b07">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Caveat:wght@500;600;700&family=Jost:wght@500;600&family=Pinyon+Script&family=Barlow+Semi+Condensed:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Michroma&display=swap">
+<script type="importmap">{"imports":{"three":"/assets/vendor/three/three.module.min.js"}}</script>
+<link rel="modulepreload" href="/assets/vendor/three/three.module.min.js">
+<link rel="stylesheet" href="/assets/station.css">
+<script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
-
-  <a href="#main" class="skip-link">Skip to content</a>
-
-  <header class="site-header">
-    <nav class="nav" aria-label="Primary">
-      <a href="#home" class="nav-logo">Jack Carey</a>
-      <ul class="nav-links">
-        <li><a href="#projects">Work</a></li>
-        <li><a href="#coursework">Coursework</a></li>
-        <li><a href="#resume">Resume</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <main id="main">
-
-    <section id="home" class="hero" aria-labelledby="hero-title">
-      <div class="hero-copy">
-        <div class="hero-text">
-          <h1 id="hero-title" class="hero-title">Creativity&nbsp;&amp; computation belong <span class="nowrap">together<span class="dot" aria-hidden="true"></span></span></h1>
-          <p class="hero-lede">CS student at Duke building games, AI, and technology that matters, with a side of improv and theater.</p>
-          <a href="#projects" class="btn">See the work <span class="arrow" aria-hidden="true">→</span></a>
-        </div>
-      </div>
-
-      <div class="hero-art art" aria-hidden="true">
-        <svg class="scene" viewBox="0 0 1000 760" preserveAspectRatio="xMidYMid slice" focusable="false">
-          <defs>
-            <linearGradient id="h-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8EA8C1"/><stop offset="1" stop-color="#CAD5DB"/></linearGradient>
-            <linearGradient id="h-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9BCCA"/><stop offset="1" stop-color="#6F8CA8"/></linearGradient>
-            <linearGradient id="h-face" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#DFDBD2"/><stop offset="1" stop-color="#C6C4BE"/></linearGradient>
-            <linearGradient id="h-tape" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7E3321"/><stop offset=".4" stop-color="#B04A2F"/></linearGradient>
-            <pattern id="h-speck" width="23" height="19" patternUnits="userSpaceOnUse"><circle cx="3" cy="4" r=".9" fill="#737A82"/><circle cx="14" cy="11" r=".6" fill="#737A82"/><circle cx="19" cy="2" r=".5" fill="#737A82"/><circle cx="8" cy="15" r=".7" fill="#737A82"/></pattern>
-            <mask id="h-arches">
-              <rect width="1000" height="1000" fill="#fff"/>
-              <path fill="#000" d="M15.0 893.8V699.6A55.0 55.0 0 0 1 125.0 699.6V833.5ZM169.0 809.4V634.9A46.0 46.0 0 0 1 261.0 634.9V759.0ZM307.0 733.7V576.9A38.0 38.0 0 0 1 383.0 576.9V692.1ZM424.0 669.6V527.6A31.0 31.0 0 0 1 486.0 527.6V635.6ZM523.0 615.4V485.9A25.0 25.0 0 0 1 573.0 485.9V588.0ZM606.0 569.9V450.9A20.0 20.0 0 0 1 646.0 450.9V548.0ZM674.0 532.6V422.3A16.0 16.0 0 0 1 706.0 422.3V515.1ZM728.0 503.0V399.1A12.0 12.0 0 0 1 752.0 399.1V489.9Z"/>
-            </mask>
-          </defs>
-
-          <!-- Sky, far shore, sea -->
-          <rect width="1000" height="472" fill="url(#h-sky)"/>
-          <rect y="470" width="1000" height="290" fill="url(#h-sea)"/>
-          <path fill="#A7B8C6" d="M0 470V446C40 438 78 444 118 436C166 427 204 440 250 437C300 434 342 444 398 447C452 450 488 462 540 470Z"/>
-          <path fill="#98ABBB" d="M0 470V458C60 452 120 456 180 450C240 446 300 456 360 462C400 466 430 468 460 470Z"/>
-          <path stroke="#C9D5DD" stroke-width="1.2" opacity=".7" d="M560 492H700M620 522H780M800 506H880M860 604H960M700 646H820M540 560H600"/>
-          <path fill="#50677F" d="M790 474L812 452L826 460L848 426L866 448L880 440L902 468L930 462L958 474Z"/>
-          <path fill="#50677F" opacity=".25" d="M790 474L812 492L826 486L848 512L866 496L880 502L902 480L930 484L958 474Z"/>
-
-          <!-- Clouds: shade, body, light -->
-          <g fill="#C3CDD3">
-            <circle cx="364" cy="392" r="20"/><circle cx="400" cy="372" r="30"/><circle cx="444" cy="350" r="40"/><circle cx="494" cy="338" r="46"/><circle cx="544" cy="356" r="36"/><circle cx="586" cy="372" r="28"/><circle cx="620" cy="388" r="18"/><rect x="344" y="382" width="292" height="20" rx="10"/>
-            <circle cx="842" cy="310" r="12"/><circle cx="862" cy="300" r="17"/><circle cx="886" cy="306" r="13"/><circle cx="904" cy="312" r="9"/>
-            <circle cx="124" cy="370" r="10"/><circle cx="144" cy="360" r="15"/><circle cx="166" cy="366" r="11"/>
-          </g>
-          <g fill="#E3E2DC">
-            <circle cx="360" cy="386" r="19"/><circle cx="396" cy="366" r="29"/><circle cx="440" cy="344" r="39"/><circle cx="490" cy="332" r="45"/><circle cx="540" cy="350" r="35"/><circle cx="582" cy="366" r="27"/><circle cx="616" cy="382" r="17"/><rect x="342" y="376" width="290" height="18" rx="9"/>
-            <circle cx="838" cy="305" r="11"/><circle cx="858" cy="295" r="16"/><circle cx="882" cy="301" r="12"/><circle cx="900" cy="307" r="8"/>
-            <circle cx="120" cy="366" r="9"/><circle cx="140" cy="356" r="14"/><circle cx="162" cy="362" r="10"/>
-          </g>
-          <g fill="#F4EFE5">
-            <circle cx="392" cy="358" r="22"/><circle cx="436" cy="336" r="32"/><circle cx="484" cy="322" r="37"/><circle cx="532" cy="340" r="26"/><circle cx="574" cy="358" r="18"/>
-            <circle cx="855" cy="289" r="11"/><circle cx="137" cy="351" r="9"/>
-          </g>
-
-          <!-- The aqueduct: arches cut through, so the far shore shows. -->
-          <g mask="url(#h-arches)">
-            <path fill="url(#h-face)" d="M0 628L770 356V478L0 900Z"/>
-            <path fill="url(#h-speck)" opacity=".55" d="M0 628L770 356V478L0 900Z"/>
-            <path stroke="#B7B5AF" stroke-width="1.2" fill="none" d="M0 652L770 365"/>
-          </g>
-          <path fill="#A8ACAF" d="M15.0 891.8V699.6A55.0 55.0 0 0 1 125.0 699.6V698.7A46.2 46.2 0 0 0 32.6 698.7V882.1ZM169.0 807.4V634.9A46.0 46.0 0 0 1 261.0 634.9V634.1A38.6 38.6 0 0 0 183.7 634.1V799.3ZM307.0 731.7V576.9A38.0 38.0 0 0 1 383.0 576.9V576.3A31.9 31.9 0 0 0 319.2 576.3V725.1ZM424.0 667.6V527.6A31.0 31.0 0 0 1 486.0 527.6V527.1A26.0 26.0 0 0 0 433.9 527.1V662.2ZM523.0 613.4V485.9A25.0 25.0 0 0 1 573.0 485.9V485.5A21.0 21.0 0 0 0 531.0 485.5V609.0ZM606.0 567.9V450.9A20.0 20.0 0 0 1 646.0 450.9V450.6A16.8 16.8 0 0 0 612.4 450.6V564.4ZM674.0 530.6V422.3A16.0 16.0 0 0 1 706.0 422.3V422.0A13.4 13.4 0 0 0 679.1 422.0V527.8ZM728.0 501.0V399.1A12.0 12.0 0 0 1 752.0 399.1V398.9A10.1 10.1 0 0 0 731.8 398.9V498.9Z"/>
-          <path fill="#BCBAB4" d="M770 356L778 353V476L770 478Z"/>
-          <path fill="#EAE6DD" d="M0 578L770 346L778 347L770 356L0 628Z"/>
-          <path fill="#B04A2F" d="M0 586L770 347.5L770 354.5L0 621Z"/>
-          <path fill="#7E3321" opacity=".35" d="M0 611L770 353L770 354.5L0 621Z"/>
-
-          <!-- The tape leaves the cassette and becomes the walkway. -->
-          <path fill="url(#h-tape)" d="M677 236C672 302 792 312 770 347.5L770 354.5C814 312 700 300 697 236Z"/>
-
-          <g transform="translate(300 510) scale(.8)" fill="#1B2130">
-            <path fill="#6F2A1A" opacity=".5" d="M-6 0L14.2 3L22.4 .2L6 -2Z"/>
-            <circle cx="0" cy="-54" r="6"/>
-            <path d="M-8 -46C-4 -49 4 -49 8 -46L10 -18H6L6 0H2L0 -16L-2 0H-6L-6 -18H-10Z"/>
-          </g>
-
-          <g transform="translate(560 118) rotate(-5)">
-            <rect width="230" height="146" rx="9" fill="#D9D6CE" stroke="#8F959B" stroke-width="1.5"/>
-            <rect x="16" y="13" width="198" height="94" rx="5" fill="#EEEAE0" stroke="#A3A7AB"/>
-            <rect x="52" y="56" width="126" height="38" rx="19" fill="#2B313C"/>
-            <rect x="92" y="62" width="46" height="26" fill="#5A2B1E"/>
-            <circle cx="75" cy="75" r="16" fill="#5A2B1E"/>
-            <circle cx="155" cy="75" r="10" fill="#5A2B1E"/>
-            <circle cx="75" cy="75" r="8" fill="#F1EEE7" stroke="#8F959B"/><circle cx="75" cy="75" r="3" fill="#2B313C"/>
-            <circle cx="155" cy="75" r="8" fill="#F1EEE7" stroke="#8F959B"/><circle cx="155" cy="75" r="3" fill="#2B313C"/>
-            <path fill="#CCC8C0" stroke="#8F959B" d="M42 146L54 120H176L188 146Z"/>
-            <circle cx="80" cy="136" r="4" fill="#2B313C"/><circle cx="150" cy="136" r="4" fill="#2B313C"/>
-            <g fill="#4E545C"><circle cx="10" cy="10" r="3.2"/><circle cx="220" cy="10" r="3.2"/><circle cx="10" cy="136" r="3.2"/><circle cx="220" cy="136" r="3.2"/><circle cx="115" cy="132" r="3"/></g>
-          </g>
-        </svg>
-      </div>
-    </section>
-
-    <section id="projects" class="section work">
-      <div class="section-head">
-        <h2 class="section-title">Selected work</h2>
-        <span class="section-rule" aria-hidden="true"></span>
-      </div>
-
-      <div class="work-grid">
-        <article class="card card-feature">
-          <div class="card-body">
-            <h3 class="card-title">Wikinaut</h3>
-            <p class="card-desc">A space-themed navigation game for Wikipedia: chart the shortest link-path between two articles, then fly there hop by hop, clicking through the real links on each live page. A Tampermonkey userscript drives the flight and DOM link-matching; a Python/Flask backend does bidirectional BFS over the full English Wikipedia link graph (memory-mapped CSR arrays, deployed on Fly.io).</p>
-            <p class="card-meta">Python · Flask · Userscript · Graph&nbsp;search</p>
-            <div class="card-links">
-              <a href="https://raw.githubusercontent.com/jackcareynapa/wikinaut/main/wikinaut.user.js" target="_blank" rel="noopener" class="link">Install <span class="arrow" aria-hidden="true">→</span></a>
-              <a href="https://github.com/jackcareynapa/wikinaut" target="_blank" rel="noopener" class="link">Source <span class="arrow" aria-hidden="true">→</span></a>
-            </div>
-          </div>
-          <div class="card-art art" aria-hidden="true">
-            <svg viewBox="0 0 600 340" preserveAspectRatio="xMidYMid slice" focusable="false">
-              <defs>
-                <linearGradient id="w-sky" x1="0" y1="0" x2="0" y2="1"><stop offset=".45" stop-color="#3E5572"/><stop offset="1" stop-color="#8AA2B8"/></linearGradient>
-                <pattern id="w-speck" width="21" height="17" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r=".8" fill="#737A82"/><circle cx="13" cy="10" r=".55" fill="#737A82"/><circle cx="7" cy="14" r=".6" fill="#737A82"/></pattern>
-              </defs>
-              <!-- Beyond the last door: night, sea, a moon. -->
-              <rect width="600" height="231" fill="url(#w-sky)"/>
-              <rect y="230" width="600" height="110" fill="#627D97"/>
-              <g fill="#F1ECE2"><circle cx="318" cy="194" r="7"/><circle cx="278" cy="192" r=".9"/><circle cx="296" cy="184" r=".7"/><circle cx="286" cy="206" r=".7"/><circle cx="306" cy="214" r=".6"/><circle cx="330" cy="214" r=".8"/></g>
-              <!-- Third wall, second room -->
-              <path fill="#C4C1B9" fill-rule="evenodd" d="M0 0H600V340H0ZM262.2 262V212.5A37.8 37.8 0 0 1 337.8 212.5V262Z"/>
-              <path fill="#AFACA5" d="M229.1 290H370.9L337.8 262H262.2Z"/>
-              <path fill="#BAB7B0" d="M229.1 290L262.2 262V0H229.1Z"/>
-              <path fill="#A6A5A1" d="M370.9 290L337.8 262V0H370.9Z"/>
-              <!-- Second wall, first room -->
-              <path fill="#D3CFC6" fill-rule="evenodd" d="M0 0H600V340H0ZM229.1 290V197.3A70.9 70.9 0 0 1 370.9 197.3V290Z"/>
-              <path fill="#BFBBB2" d="M170 340H430L370.9 290H229.1Z"/>
-              <path fill="#CCC8BF" d="M170 340L229.1 290V0H170Z"/>
-              <path fill="#B7B4AD" d="M430 340L370.9 290V0H430Z"/>
-              <!-- The link: one red line through every door to the horizon. -->
-              <path fill="#B04A2F" d="M262 340H338L300 230Z"/>
-              <path fill="#7E3321" opacity=".45" d="M288.4 262H311.6L300 230Z"/>
-              <g transform="translate(300 262) scale(.95)" fill="#1B2130">
-                <circle cx="0" cy="-54" r="6"/>
-                <path d="M-8 -46C-4 -49 4 -49 8 -46L10 -18H6L5 0H1.5L0 -16L-1.5 0H-5L-6 -18H-10Z"/>
-              </g>
-              <!-- Front wall -->
-              <path fill="#E4E0D7" fill-rule="evenodd" d="M0 0H600V340H0ZM170 340V170A130 130 0 0 1 430 170V340Z"/>
-              <path fill="url(#w-speck)" opacity=".6" fill-rule="evenodd" d="M0 0H600V340H0ZM170 340V170A130 130 0 0 1 430 170V340Z"/>
-              <path stroke="#CFCBC2" stroke-width="1" d="M0 92H158M442 92H600M0 214H170M430 214H600"/>
-            </svg>
-          </div>
-        </article>
-
-        <!-- The halftone eye: drawn symmetric about (75 90). Its bands run
-             far past the viewBox, so the print fills the frame at any row
-             height while the eye stays centred. -->
-        <div class="tile" aria-hidden="true">
-          <div class="tile-art">
-            <svg class="tile-eye" viewBox="0 0 150 180" preserveAspectRatio="xMidYMid meet" focusable="false">
-              <defs>
-                <pattern id="e-l" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="2" cy="2" r=".65" fill="#1B2130"/></pattern>
-                <pattern id="e-m" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="2" cy="2" r="1.1" fill="#1B2130"/></pattern>
-                <pattern id="e-d" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="2" cy="2" r="1.55" fill="#1B2130"/></pattern>
-                <clipPath id="e-almond"><path d="M15 90C43 62 107 62 135 90C107 118 43 118 15 90Z"/></clipPath>
-              </defs>
-              <rect x="-50" y="-400" width="250" height="980" fill="#EFEAE0"/>
-              <rect x="-50" y="-400" width="250" height="980" fill="url(#e-l)"/>
-              <path fill="url(#e-m)" d="M-50 -400H200V26H150C110 12 40 12 0 26H-50Z"/>
-              <path fill="url(#e-d)" d="M8 46C40 22 110 22 142 46L140 56C108 34 42 34 10 56Z"/>
-              <path fill="url(#e-m)" d="M10 74C42 46 108 46 140 74L138 84C106 58 44 58 12 84Z"/>
-              <path fill="#EFEAE0" d="M15 90C43 62 107 62 135 90C107 118 43 118 15 90Z"/>
-              <g clip-path="url(#e-almond)">
-                <path fill="url(#e-l)" d="M15 90C43 62 107 62 135 90C107 72 43 72 15 90Z"/>
-                <circle cx="75" cy="90" r="22" fill="url(#e-d)"/>
-                <circle cx="75" cy="90" r="22" fill="none" stroke="#1B2130" stroke-width="1.6"/>
-                <circle cx="75" cy="90" r="8.5" fill="#1B2130"/>
-                <circle cx="81" cy="84" r="3.5" fill="#EFEAE0"/>
-              </g>
-              <path fill="none" stroke="#1B2130" stroke-width="3.5" stroke-linecap="round" d="M15 90C43 62 107 62 135 90"/>
-              <path fill="none" stroke="#1B2130" stroke-width="1.2" d="M15 90C43 118 107 118 135 90"/>
-              <path fill="none" stroke="#1B2130" stroke-width="1.6" stroke-linecap="round" d="M22.7 82.1Q17.5 80.2 15.5 77.1M30.2 77.7Q25.5 74.6 23.6 71.1M38.3 74.2Q34.3 70.1 32.8 66.1M47.0 71.4Q43.9 66.6 42.7 62.3M56.1 69.4Q54.0 64.0 53.1 59.5M65.5 68.2Q64.4 62.5 64.0 57.9M75.0 67.8Q75.0 62.0 75.0 57.3M84.5 68.2Q85.6 62.5 86.0 57.9M93.9 69.4Q96.0 64.0 96.9 59.5M103.0 71.4Q106.1 66.6 107.3 62.3M111.7 74.2Q115.7 70.1 117.2 66.1M119.8 77.7Q124.5 74.6 126.4 71.1M127.3 82.1Q132.5 80.2 134.5 77.1"/>
-              <path fill="url(#e-m)" d="M-50 128H0C40 120 110 120 150 128H200V580H-50Z"/>
-            </svg>
-          </div>
-        </div>
-
-        <article class="card">
-          <div class="card-body">
-            <h3 class="card-title">Napa Valley Vineyard</h3>
-            <p class="card-desc">A vineyard showcase site built with modern web tooling — estate storytelling, responsive layout, and a polished front-end experience deployed on Vercel.</p>
-            <div class="card-links">
-              <a href="https://napavalleyvineyard.vercel.app/" target="_blank" rel="noopener" class="link">Live site <span class="arrow" aria-hidden="true">→</span></a>
-              <a href="https://github.com/jackcareynapa/napavalleyvineyard" target="_blank" rel="noopener" class="link">Source <span class="arrow" aria-hidden="true">→</span></a>
-            </div>
-          </div>
-          <div class="card-art art" aria-hidden="true">
-            <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" focusable="false">
-              <defs>
-                <linearGradient id="n-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9CB3C8"/><stop offset="1" stop-color="#D6DEE2"/></linearGradient>
-                <pattern id="n-speck" width="21" height="17" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r=".8" fill="#737A82"/><circle cx="13" cy="10" r=".55" fill="#737A82"/><circle cx="7" cy="14" r=".6" fill="#737A82"/></pattern>
-                <clipPath id="n-window"><rect x="120" y="40" width="200" height="150"/></clipPath>
-              </defs>
-              <rect width="400" height="300" fill="#DCD8CF"/>
-              <rect width="400" height="300" fill="url(#n-speck)" opacity=".5"/>
-              <g clip-path="url(#n-window)"><g transform="translate(-30 0)">
-                <rect x="150" y="40" width="200" height="150" fill="url(#n-sky)"/>
-                <circle cx="298" cy="86" r="14" fill="#F4EFE5"/>
-                <path fill="#A7B7C4" d="M150 150C190 128 240 132 280 142C310 150 330 138 350 134V190H150Z"/>
-                <!-- Vine rows: dotted, so each row reads as planted vines, not water. -->
-                <path fill="none" stroke="#7F97AC" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="0 4" d="M150 150C190 130 240 134 280 144C310 151 330 140 350 136M150 158C190 138 240 142 280 151C310 158 330 147 350 143M150 166C190 147 240 151 280 160C310 166 330 156 350 152"/>
-                <path fill="#7F97AC" d="M150 168C200 146 262 148 350 170V190H150Z"/>
-                <path fill="none" stroke="#4E6680" stroke-width="3" stroke-linecap="round" stroke-dasharray="0 6.5" d="M150 175C200 154 262 156 350 177M150 182C200 162 262 164 350 184M150 189C200 170 262 172 350 191"/>
-              </g></g>
-              <rect x="218" y="40" width="4" height="150" fill="#DCD8CF"/>
-              <path fill="#C9C5BC" d="M120 40H320L314 47H126Z"/>
-              <path fill="#BEBAB1" d="M120 40L126 47V190H120Z"/>
-              <path fill="#EAE6DD" d="M114 190H326L330 197H110Z"/>
-              <!-- Side wall with a red door -->
-              <path fill="#CAC6BD" d="M0 0L84 26V236L0 300Z"/>
-              <path fill="#A9412A" d="M20 284.8V140C20 112 60 116 60 156V254.3Z"/>
-              <path fill="#7E3321" d="M27 279.5V144C27 125 55 128 55 158V258Z"/>
-              <!-- Floor, with the window's light on it -->
-              <path fill="#C3BFB6" d="M0 300L84 236H400V300Z"/>
-              <path fill="#D7D3CA" d="M138 244H314L342 296H154Z"/>
-              <path fill="#8F8B84" opacity=".55" d="M228 262L182 267L182 264L232 259Z"/>
-              <g transform="translate(232 262) scale(.8)" fill="#1B2130">
-                <circle cx="0" cy="-54" r="6"/>
-                <path d="M-8 -46C-4 -49 4 -49 8 -46L10 -18H6L5 0H1.5L0 -16L-1.5 0H-5L-6 -18H-10Z"/>
-              </g>
-            </svg>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-body">
-            <h3 class="card-title">The Worst Tutorial Ever</h3>
-            <p class="card-desc">A PICO-8 platformer whose tutorial falls apart as you play it: the friendly narrator starts lying, the screen glitches, and the controls swap, lock and reshuffle.</p>
-            <div class="card-links">
-              <a href="https://jackcarey.itch.io/worst-tutorial-ever" target="_blank" rel="noopener" class="link">Play on itch.io <span class="arrow" aria-hidden="true">→</span></a>
-            </div>
-          </div>
-          <div class="card-art art" aria-hidden="true">
-            <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" focusable="false">
-              <defs>
-                <linearGradient id="t-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FA9C1"/><stop offset="1" stop-color="#D2DBE0"/></linearGradient>
-                <linearGradient id="t-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A3B7C6"/><stop offset="1" stop-color="#7A95AD"/></linearGradient>
-                <linearGradient id="t-face" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#E6E2D9"/><stop offset="1" stop-color="#CDC9C1"/></linearGradient>
-                <pattern id="t-speck" width="21" height="17" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r=".8" fill="#737A82"/><circle cx="13" cy="10" r=".55" fill="#737A82"/><circle cx="7" cy="14" r=".6" fill="#737A82"/></pattern>
-                <pattern id="t-grid" width="25" height="25" patternUnits="userSpaceOnUse"><path fill="none" stroke="#E4E9EC" stroke-width=".7" d="M25 0V25H0"/></pattern>
-                <clipPath id="t-band-a"><rect x="-40" y="135" width="480" height="7"/></clipPath>
-                <clipPath id="t-band-b"><rect x="-40" y="241" width="480" height="5"/></clipPath>
-              </defs>
-              <g id="t-scene">
-                <!-- Sky ruled as a level grid, sea, far headland -->
-                <rect width="400" height="206" fill="url(#t-sky)"/>
-                <rect width="400" height="206" fill="url(#t-grid)" opacity=".45"/>
-                <rect y="205" width="400" height="95" fill="url(#t-sea)"/>
-                <path fill="#5B7189" d="M320 207L338 196L350 201L362 190L376 205L392 207Z"/>
-                <g fill="#C3CDD3"><circle cx="318" cy="120" r="10"/><circle cx="334" cy="113" r="14"/><circle cx="352" cy="119" r="10"/><rect x="306" y="120" width="56" height="9" rx="4.5"/></g>
-                <g fill="#E3E2DC"><circle cx="315" cy="117" r="9"/><circle cx="331" cy="110" r="13"/><circle cx="349" cy="116" r="9"/><rect x="305" y="117" width="54" height="8" rx="4"/></g>
-                <g fill="#F4EFE5"><circle cx="328" cy="106" r="9"/><circle cx="314" cy="114" r="5"/></g>
-                <!-- Their shadows on the water -->
-                <g fill="#6F8CA8" opacity=".35"><rect x="36" y="262" width="88" height="3"/><rect x="146" y="226" width="60" height="2.5"/><rect x="268" y="212" width="58" height="2"/></g>
-                <!-- Three floating slabs, the last one out of reach -->
-                <path fill="#EAE6DD" d="M30 236L36 232H134L128 236ZM140 204L146 200H216L210 204ZM262 172L268 168H336L330 172Z"/>
-                <path fill="#BCBAB4" d="M128 236L134 232V246L128 250ZM210 204L216 200V214L210 218ZM330 172L336 168V182L330 186Z"/>
-                <path fill="url(#t-face)" stroke="#B8B5AE" stroke-width=".8" d="M30 236H128V250H30ZM140 204H210V218H140ZM262 172H330V186H262Z"/>
-                <path fill="url(#t-speck)" opacity=".55" d="M30 236H128V250H30ZM140 204H210V218H140ZM262 172H330V186H262Z"/>
-                <!-- The tutorial's sign points back the way you came -->
-                <rect x="158.5" y="154" width="3" height="48" fill="#4E545C"/>
-                <rect x="138" y="126" width="44" height="28" fill="#F1ECE2" stroke="#A9412A" stroke-width="2.5"/>
-                <path fill="#1B2130" d="M152.5 132.5h3v3h-3ZM149.5 135.5h3v3h-3ZM152.5 135.5h3v3h-3ZM146.5 138.5h3v3h-3ZM149.5 138.5h3v3h-3ZM152.5 138.5h3v3h-3ZM155.5 138.5h3v3h-3ZM158.5 138.5h3v3h-3ZM161.5 138.5h3v3h-3ZM164.5 138.5h3v3h-3ZM167.5 138.5h3v3h-3ZM170.5 138.5h3v3h-3ZM149.5 141.5h3v3h-3ZM152.5 141.5h3v3h-3ZM152.5 144.5h3v3h-3Z"/>
-                <!-- Z and X, mid-swap -->
-                <path fill="none" stroke="#1B2130" stroke-width="1.2" stroke-linecap="round" d="M152 66Q188 40 222 54M218.5 49.8L222 54L216.5 54.5M224 92Q190 116 154 104M157.8 108L154 104L159.4 103.1"/>
-                <g transform="translate(132 84) rotate(-10)">
-                  <rect x="-17" y="-15" width="34" height="32" rx="4" fill="#CCC8C0" stroke="#8F959B"/>
-                  <rect x="-13" y="-14" width="26" height="24" rx="3" fill="#F1ECE2" stroke="#A3A7AB" stroke-width=".8"/>
-                  <path fill="none" stroke="#1B2130" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M-6 -8H6L-6 4H6"/>
-                </g>
-                <g transform="translate(244 72) rotate(9)">
-                  <rect x="-17" y="-15" width="34" height="32" rx="4" fill="#7E3321"/>
-                  <rect x="-13" y="-14" width="26" height="24" rx="3" fill="#A9412A"/>
-                  <path fill="none" stroke="#F1ECE2" stroke-width="2.4" stroke-linecap="round" d="M-6 -8L6 4M6 -8L-6 4"/>
-                </g>
-                <!-- The player, at the lip of the gap -->
-                <path fill="#8F8B84" opacity=".5" d="M200 202L178 203.4L178.4 202.2L201 200.8Z"/>
-                <g transform="translate(200 202) scale(.6)" fill="#1B2130">
-                  <circle cx="0" cy="-54" r="6"/>
-                  <path d="M-8 -46C-4 -49 4 -49 8 -46L10 -18H6L5 0H1.5L0 -16L-1.5 0H-5L-6 -18H-10Z"/>
-                </g>
-              </g>
-              <!-- The screen glitches: two slices of the scene slip sideways -->
-              <use href="#t-scene" clip-path="url(#t-band-a)" transform="translate(9 0)"/>
-              <use href="#t-scene" clip-path="url(#t-band-b)" transform="translate(-14 0)"/>
-              <path stroke="#F4EFE5" stroke-width=".6" opacity=".7" d="M0 135H400M0 241H400"/>
-            </svg>
-          </div>
-        </article>
-
-        <div class="deck" aria-hidden="true">
-          <svg class="deck-reel" viewBox="0 0 40 40" focusable="false">
-            <circle cx="20" cy="20" r="18" fill="#1B2130"/>
-            <circle cx="20" cy="10.5" r="5.2" fill="#F1ECE2"/><circle cx="28.2" cy="24.8" r="5.2" fill="#F1ECE2"/><circle cx="11.8" cy="24.8" r="5.2" fill="#F1ECE2"/>
-            <circle cx="20" cy="20" r="2.4" fill="#F1ECE2"/>
-          </svg>
-        </div>
-      </div>
-    </section>
-
-    <section id="coursework" class="section courses">
-      <div class="section-head">
-        <h2 class="section-title">Coursework</h2>
-        <span class="section-rule" aria-hidden="true"></span>
-      </div>
-      <div class="course-grid"></div>
-    </section>
-
-    <section id="resume" class="section resume">
-      <div class="section-head">
-        <h2 class="section-title">Resume</h2>
-        <span class="section-rule" aria-hidden="true"></span>
-        <p class="section-tags">Side B</p>
-      </div>
-      <div class="resume-card">
-        <svg class="resume-icon" viewBox="0 0 120 78" aria-hidden="true" focusable="false">
-          <rect x="1" y="1" width="118" height="76" rx="5" fill="#E9E3D6" stroke="#1B2130" stroke-width="1.5"/>
-          <rect x="9" y="7" width="102" height="48" rx="3" fill="#F6F2EA" stroke="#1B2130"/>
-          <path stroke="#1B2130" stroke-width=".8" d="M20 16H100M20 22H78"/>
-          <rect x="27" y="28" width="66" height="20" rx="10" fill="#1B2130"/>
-          <rect x="49" y="31" width="22" height="14" fill="#A9412A"/>
-          <circle cx="39" cy="38" r="6" fill="#F6F2EA"/><circle cx="81" cy="38" r="6" fill="#F6F2EA"/>
-          <circle cx="39" cy="38" r="2" fill="#1B2130"/><circle cx="81" cy="38" r="2" fill="#1B2130"/>
-          <path fill="none" stroke="#1B2130" d="M22 77L28 63H92L98 77"/>
-        </svg>
-        <div class="resume-text">
-          <p class="card-title">Full work history</p>
-          <p class="card-desc">Skills, experience, and everything in between, as a single PDF.</p>
-        </div>
-        <a href="Jack_Carey_Resume.pdf" class="btn">Download PDF <span class="arrow" aria-hidden="true">↓</span></a>
-      </div>
-    </section>
-
-    <section id="contact" class="section contact">
-      <div class="section-head">
-        <h2 class="section-title">Contact</h2>
-        <span class="section-rule" aria-hidden="true"></span>
-      </div>
-      <div class="contact-grid">
-        <p class="contact-display">Let's <span class="nowrap">connect<span class="dot" aria-hidden="true"></span></span></p>
-        <dl class="contact-list">
-          <div class="contact-row">
-            <dt>Email</dt>
-            <dd><a href="mailto:jack.carey.napa@gmail.com">jack.carey.napa@gmail.com</a></dd>
-          </div>
-          <div class="contact-row">
-            <dt>GitHub</dt>
-            <dd><a href="https://github.com/jackcareynapa" target="_blank" rel="noopener">github.com/jackcareynapa</a></dd>
-          </div>
-          <div class="contact-row">
-            <dt>LinkedIn</dt>
-            <dd><a href="https://linkedin.com/in/jack-carey-50386b379" target="_blank" rel="noopener">linkedin.com/in/jack-carey-50386b379</a></dd>
-          </div>
-        </dl>
-      </div>
-    </section>
-
+<a class="skip-link" href="#display">Skip to the display</a>
+<nav class="text-nav" aria-label="Text navigation">
+  <button type="button" class="index-plate" id="index-open" aria-haspopup="dialog">Index</button>
+  <button type="button" class="index-plate" data-act="sound" role="switch" aria-checked="true"><i class="dot" aria-hidden="true"></i>Sound</button>
+</nav>
+<div class="viewport">
+  <main class="stage" id="stage" aria-labelledby="station-title">
+    <h1 class="sr-only" id="station-title">Jack Carey: listening station</h1>
+    <div class="scene" id="scene"></div>
+    <noscript><div class="noscript-doc"><h2>Jack Carey</h2><p>Jack Carey&#x27;s listening station: liner notes, projects, a résumé and a postcard, played on a late-1970s cassette deck.</p><p><a href="/text/">Read the whole site as plain text</a></p></div></noscript>
   </main>
-
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <p class="footer-name">Jack Carey</p>
-      <p class="footer-meta">&copy; 2026</p>
-    </div>
-  </footer>
-
-  <script src="ui.js" defer></script>
+  <section class="display" id="display" aria-label="Now playing" hidden></section>
+</div>
+<dialog class="index-dialog" id="index-dialog" aria-labelledby="index-title"></dialog>
+<p class="sr-only" id="announcer" aria-live="polite"></p>
+<script src="/assets/content.js"></script>
+<script src="/assets/art.js"></script>
+<script src="/assets/music.js"></script>
+<script type="module" src="/assets/deck3d.js"></script>
+<script type="module" src="/assets/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,6 @@
+[
+  { "id": "about", "title": "About Me", "short": "About", "code": "JC-01", "status": "awaiting-interview" },
+  { "id": "projects", "title": "Projects", "short": "Projects", "code": "JC-02", "status": "draft-for-review" },
+  { "id": "resume", "title": "Résumé / Experience", "short": "Résumé", "code": "JC-03", "status": "draft-for-review" },
+  { "id": "contact", "title": "Contact", "short": "Contact", "code": "JC-04", "status": "draft-for-review" }
+]

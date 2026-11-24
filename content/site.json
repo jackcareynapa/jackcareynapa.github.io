@@ -1,0 +1,17 @@
+{
+  "owner": "Jack Carey",
+  "manufacturer": "JACK CAREY",
+  "model": "JC-04",
+  "siteUrl": "https://jackcareynapa.github.io",
+  "base": "/",
+  "title": "Jack Carey",
+  "description": "Jack Carey's listening station: liner notes, projects, a résumé and a postcard, played on a late-1970s cassette deck.",
+  "email": "jack.carey.napa@gmail.com",
+  "links": [
+    { "label": "GitHub", "url": "https://github.com/jackcareynapa", "handle": "github.com/jackcareynapa" },
+    { "label": "LinkedIn", "url": "https://linkedin.com/in/jack-carey-50386b379", "handle": "linkedin.com/in/jack-carey-50386b379" },
+    { "label": "itch.io", "url": "https://jackcarey.itch.io", "handle": "jackcarey.itch.io" }
+  ],
+  "resumePdf": "Jack_Carey_Resume.pdf",
+  "_review": "Approved by the owner for launch (2026-11-24)."
+}

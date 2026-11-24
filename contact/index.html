@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Contact · Jack Carey</title>
+<meta name="description" content="Say hello.">
+<link rel="canonical" href="https://jackcareynapa.github.io/contact/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Contact · Jack Carey">
+<meta property="og:description" content="Say hello.">
+<meta property="og:url" content="https://jackcareynapa.github.io/contact/">
+<meta property="og:image" content="https://jackcareynapa.github.io/assets/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#120b07">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Caveat:wght@500;600;700&family=Jost:wght@500;600&family=Pinyon+Script&family=Barlow+Semi+Condensed:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Michroma&display=swap">
+<script type="importmap">{"imports":{"three":"/assets/vendor/three/three.module.min.js"}}</script>
+<link rel="modulepreload" href="/assets/vendor/three/three.module.min.js">
+<link rel="stylesheet" href="/assets/station.css">
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+<a class="skip-link" href="#display">Skip to the display</a>
+<nav class="text-nav" aria-label="Text navigation">
+  <button type="button" class="index-plate" id="index-open" aria-haspopup="dialog">Index</button>
+  <button type="button" class="index-plate" data-act="sound" role="switch" aria-checked="true"><i class="dot" aria-hidden="true"></i>Sound</button>
+</nav>
+<div class="viewport">
+  <main class="stage" id="stage" aria-labelledby="station-title">
+    <h1 class="sr-only" id="station-title">Jack Carey: listening station</h1>
+    <div class="scene" id="scene"></div>
+    <noscript><div class="noscript-doc"><h2>Contact</h2><h3>Postcard</h3><p class="p">Say hello.</p><p><a href="mailto:jack.carey.napa@gmail.com">jack.carey.napa@gmail.com</a></p><ul><li><a href="https://github.com/jackcareynapa" target="_blank" rel="noopener">GitHub: github.com/jackcareynapa</a></li><li><a href="https://linkedin.com/in/jack-carey-50386b379" target="_blank" rel="noopener">LinkedIn: linkedin.com/in/jack-carey-50386b379</a></li><li><a href="https://jackcarey.itch.io" target="_blank" rel="noopener">itch.io: jackcarey.itch.io</a></li></ul><p><a href="/text/">Read the whole site as plain text</a></p></div></noscript>
+  </main>
+  <section class="display" id="display" aria-label="Now playing" hidden></section>
+</div>
+<dialog class="index-dialog" id="index-dialog" aria-labelledby="index-title"></dialog>
+<p class="sr-only" id="announcer" aria-live="polite"></p>
+<script src="/assets/content.js"></script>
+<script src="/assets/art.js"></script>
+<script src="/assets/music.js"></script>
+<script type="module" src="/assets/deck3d.js"></script>
+<script type="module" src="/assets/app.js"></script>
+</body>
+</html>
